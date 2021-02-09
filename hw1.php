@@ -1,6 +1,6 @@
 <?php
 
-require_once 'common.php';
+require_once 'vendor/php-test-framework/public-api.php';
 
 if ($argc < 2) {
     die('Pass directory to scan as an argument.' . PHP_EOL);
@@ -32,9 +32,6 @@ if (!$json['lastName']) {
 if (!$json['passwordHash']) {
     $errors[] = 'passwordHash is missing';
 }
-//if ($json['studyProgram'] !== 'D' && $json['studyProgram'] !== 'O') {
-//    $errors[] = 'studyProgram must be D or O';
-//}
 if ($json['iHaveReadTheRulesOfTheCourse'] !== true) {
     $errors[] = 'iHaveReadTheRulesOfTheCourse must be true';
 }

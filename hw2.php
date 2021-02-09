@@ -1,49 +1,65 @@
 <?php
 
-require_once 'common.php';
+require_once 'vendor/php-test-framework/public-api.php';
 
-if ($argc < 2) {
-    die('Pass directory to scan as an argument' . PHP_EOL);
-} else {
-    $path = realpath($argv[1]);
-}
+const BASE_URL = 'http://localhost:8080';
 
-if ($path === false) {
-    die('Argument is not a correct directory');
-}
+setBaseUrl(BASE_URL);
 
-$it = new RecursiveDirectoryIterator($path);
-$it = new RecursiveIteratorIterator($it);
-$it = new RegexIterator($it, '/\.(\w+)$/i', RecursiveRegexIterator::GET_MATCH);
+function containsIndex() {
+    navigateTo('/index.html');
 
-$counts = getCounts($it);
-
-if (!isset($counts['css'])
-    || !isset($counts['html'])
-    || $counts['css'] < 1
-    || $counts['html'] < 4) {
-
-    print 'Repository must contain at least four files with html '
-        . 'extension and one file with css extension'
-        . PHP_EOL;
-
-    die(sprintf(RESULT_PATTERN, 0, MAX_POINTS));
-
-} else {
-    printf(RESULT_PATTERN, MAX_POINTS, MAX_POINTS);
-}
-
-
-function getCounts($it) {
-    $counts = [];
-
-    foreach($it as $each) {
-        $ext = strtolower($each[1]);
-
-        $counts[$ext] = isset($counts[$ext])
-            ? $counts[$ext] + 1
-            : 1;
+    if (getResponseCode() !== 200) {
+        fail(ERROR_C01, "Did not find file named index.html from root directory");
     }
-
-    return $counts;
 }
+
+function defaultPageIsBookList() {
+    navigateTo('/index.html');
+
+    assertThat(getPageId(), is('book-list-page'));
+}
+
+function bookListPageContainsCorrectMenu() {
+    navigateTo('/index.html');
+
+    assertPageContainsLinkWithId('book-list-link');
+    assertPageContainsLinkWithId('book-form-link');
+    assertPageContainsLinkWithId('author-list-link');
+    assertPageContainsLinkWithId('author-form-link');
+}
+
+function bookFormPageContainsCorrectMenu() {
+    navigateTo('/index.html');
+
+    clickLinkById('book-form-link');
+
+    assertPageContainsLinkWithId('book-list-link');
+    assertPageContainsLinkWithId('book-form-link');
+    assertPageContainsLinkWithId('author-list-link');
+    assertPageContainsLinkWithId('author-form-link');
+}
+
+function authorListPageContainsCorrectMenu() {
+    navigateTo('/index.html');
+
+    clickLinkById('author-list-link');
+
+    assertPageContainsLinkWithId('book-list-link');
+    assertPageContainsLinkWithId('book-form-link');
+    assertPageContainsLinkWithId('author-list-link');
+    assertPageContainsLinkWithId('author-form-link');
+}
+
+function authorFormPageContainsCorrectMenu() {
+    navigateTo('/index.html');
+
+    clickLinkById('author-form-link');
+
+    assertPageContainsLinkWithId('book-list-link');
+    assertPageContainsLinkWithId('book-form-link');
+    assertPageContainsLinkWithId('author-list-link');
+    assertPageContainsLinkWithId('author-form-link');
+}
+
+stf\runTests();

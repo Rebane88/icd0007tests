@@ -5,6 +5,7 @@ require_once 'util.php';
 require_once 'dsl.php';
 require_once 'constants.php';
 require_once 'browser/Browser.php';
+include_once 'PointsReporter.php';
 require_once 'Settings.php';
 
 function assertThrows($function): void {

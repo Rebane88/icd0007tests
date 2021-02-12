@@ -76,13 +76,13 @@ function cssIsCorrect() {
     exec($cmd, $output, $exitCode);
 
     if ($exitCode !== 0) {
-        printf("error on test 2\n");
+        printf("error on running chrome\n");
         return;
     }
 
     $source = implode("\n", $output);
 
-    if (strpos($source, '1 of 5 correct') === false) {
+    if (strpos($source, '5 of 5 correct') === false) {
         fail(ERROR_C01, "Css is not correct");
     }
 }

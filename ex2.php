@@ -2,44 +2,44 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://localhost:8080/ex2/nav/';
 
 setBaseUrl(BASE_URL);
 
 function indexToA() {
-    navigateTo('/nav/');
+    navigateTo(BASE_URL . '');
 
     clickLinkByText("a.html");
 
-    assertCurrentUrl(BASE_URL . "/nav/a/a.html");
+    assertCurrentUrl(BASE_URL . "a/a.html");
 }
 
 function aToE() {
-    navigateTo('/nav/a/a.html');
+    navigateTo(BASE_URL . 'a/a.html');
 
     clickLinkByText("e.html");
 
-    assertCurrentUrl(BASE_URL . "/nav/a/b/c/d/e/e.html");
+    assertCurrentUrl(BASE_URL . "a/b/c/d/e/e.html");
 }
 
 function eToD() {
-    navigateTo('/nav/a/b/c/d/e/e.html');
+    navigateTo(BASE_URL . 'a/b/c/d/e/e.html');
 
     clickLinkByText("d.html");
 
-    assertCurrentUrl(BASE_URL . "/nav/a/b/c/d/d.html");
+    assertCurrentUrl(BASE_URL . "a/b/c/d/d.html");
 }
 
 function dToB() {
-    navigateTo('/nav/a/b/c/d/d.html');
+    navigateTo(BASE_URL . 'a/b/c/d/d.html');
 
     clickLinkByText("b.html");
 
-    assertCurrentUrl(BASE_URL . "/nav/a/b/b.html");
+    assertCurrentUrl(BASE_URL . "a/b/b.html");
 }
 
 function emptyLink() {
-    navigateTo('/nav/a/b/c/d/e/f/f.html');
+    navigateTo(BASE_URL . 'a/b/c/d/e/f/f.html');
 
     $linkText = "shortest self";
 
@@ -47,14 +47,14 @@ function emptyLink() {
 
     clickLinkByText($linkText);
 
-    assertCurrentUrl(BASE_URL . "/nav/a/b/c/d/e/f/f.html");
+    assertCurrentUrl(BASE_URL . "a/b/c/d/e/f/f.html");
 
     assertThat(strlen($href), is(0),
         sprintf("%s is not the shortest link possible", $href));
 }
 
 function directoryLink() {
-    navigateTo('/nav/a/b/c/d/e/f/f.html');
+    navigateTo(BASE_URL . 'a/b/c/d/e/f/f.html');
 
     $linkText = "shortest f/index.html";
 
@@ -62,14 +62,14 @@ function directoryLink() {
 
     clickLinkByText($linkText);
 
-    assertCurrentUrl(BASE_URL . "/nav/a/b/c/d/e/f/");
+    assertCurrentUrl(BASE_URL . "a/b/c/d/e/f/");
 
     assertThat(strlen($href), is(1),
         sprintf("%s is not the shortest link possible", $href));
 }
 
 function cssIsCorrect() {
-    $url = sprintf("%s/css/css.html", BASE_URL);
+    $url = "http://localhost:8080/ex2/css/css.html";
     $cmd = sprintf(
         'google-chrome --headless --disable-gpu --no-sandbox --dump-dom %s', $url);
 

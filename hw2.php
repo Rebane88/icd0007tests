@@ -32,7 +32,7 @@ function bookListPageContainsCorrectMenu() {
 function bookFormPageContainsCorrectMenu() {
     navigateTo('/index.html');
 
-    clickLinkById('book-form-link');
+    clickLinkWithId('book-form-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');
@@ -43,7 +43,7 @@ function bookFormPageContainsCorrectMenu() {
 function authorListPageContainsCorrectMenu() {
     navigateTo('/index.html');
 
-    clickLinkById('author-list-link');
+    clickLinkWithId('author-list-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');
@@ -54,7 +54,7 @@ function authorListPageContainsCorrectMenu() {
 function authorFormPageContainsCorrectMenu() {
     navigateTo('/index.html');
 
-    clickLinkById('author-form-link');
+    clickLinkWithId('author-form-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');

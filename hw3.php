@@ -32,23 +32,23 @@ function bookListPageContainsCorrectMenu() {
 function bookFormPageContainsCorrectElements() {
     navigateTo('/index.html');
 
-    clickLinkById('book-form-link');
+    clickLinkWithId('book-form-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');
     assertPageContainsLinkWithId('author-list-link');
     assertPageContainsLinkWithId('author-form-link');
 
-    assertPageContainsInputWithName('title');
-    assertPageContainsInputWithName('grade');
-    assertPageContainsInputWithName('isRead');
+    assertPageContainsTextFieldWithName('title');
+    assertPageContainsRadioWithName('grade');
+    assertPageContainsCheckboxWithName('isRead');
     assertPageContainsButtonWithName('submitButton');
 }
 
 function authorListPageContainsCorrectMenu() {
     navigateTo('/index.html');
 
-    clickLinkById('author-list-link');
+    clickLinkWithId('author-list-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');
@@ -59,16 +59,16 @@ function authorListPageContainsCorrectMenu() {
 function authorFormPageContainsCorrectElements() {
     navigateTo('/index.html');
 
-    clickLinkById('author-form-link');
+    clickLinkWithId('author-form-link');
 
     assertPageContainsLinkWithId('book-list-link');
     assertPageContainsLinkWithId('book-form-link');
     assertPageContainsLinkWithId('author-list-link');
     assertPageContainsLinkWithId('author-form-link');
 
-    assertPageContainsInputWithName('firstName');
-    assertPageContainsInputWithName('lastName');
-    assertPageContainsInputWithName('grade');
+    assertPageContainsTextFieldWithName('firstName');
+    assertPageContainsTextFieldWithName('lastName');
+    assertPageContainsRadioWithName('grade');
     assertPageContainsButtonWithName('submitButton');
 }
 

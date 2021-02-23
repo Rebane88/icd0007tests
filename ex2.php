@@ -9,7 +9,7 @@ setBaseUrl(BASE_URL);
 function indexToA() {
     navigateTo(BASE_URL . '');
 
-    clickLinkByText("a.html");
+    clickLinkWithText("a.html");
 
     assertCurrentUrl(BASE_URL . "a/a.html");
 }
@@ -17,7 +17,7 @@ function indexToA() {
 function aToE() {
     navigateTo(BASE_URL . 'a/a.html');
 
-    clickLinkByText("e.html");
+    clickLinkWithText("e.html");
 
     assertCurrentUrl(BASE_URL . "a/b/c/d/e/e.html");
 }
@@ -25,7 +25,7 @@ function aToE() {
 function eToD() {
     navigateTo(BASE_URL . 'a/b/c/d/e/e.html');
 
-    clickLinkByText("d.html");
+    clickLinkWithText("d.html");
 
     assertCurrentUrl(BASE_URL . "a/b/c/d/d.html");
 }
@@ -33,7 +33,7 @@ function eToD() {
 function dToB() {
     navigateTo(BASE_URL . 'a/b/c/d/d.html');
 
-    clickLinkByText("b.html");
+    clickLinkWithText("b.html");
 
     assertCurrentUrl(BASE_URL . "a/b/b.html");
 }
@@ -43,14 +43,14 @@ function emptyLink() {
 
     $linkText = "shortest self";
 
-    $href = getLinkHrefByText($linkText);
+    $href = getHrefFromLinkWithText($linkText);
 
-    clickLinkByText($linkText);
+    clickLinkWithText($linkText);
 
     assertCurrentUrl(BASE_URL . "a/b/c/d/e/f/f.html");
 
     assertThat(strlen($href), is(0),
-        sprintf("%s is not the shortest link possible", $href));
+        sprintf("'%s' is not the shortest link possible", $href));
 }
 
 function directoryLink() {
@@ -58,14 +58,14 @@ function directoryLink() {
 
     $linkText = "shortest f/index.html";
 
-    $href = getLinkHrefByText($linkText);
+    $href = getHrefFromLinkWithText($linkText);
 
-    clickLinkByText($linkText);
+    clickLinkWithText($linkText);
 
     assertCurrentUrl(BASE_URL . "a/b/c/d/e/f/");
 
     assertThat(strlen($href), is(1),
-        sprintf("%s is not the shortest link possible", $href));
+        sprintf("'%s' is not the shortest link possible", $href));
 }
 
 function cssIsCorrect() {

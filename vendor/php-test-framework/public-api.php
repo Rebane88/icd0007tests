@@ -2,12 +2,16 @@
 
 require_once 'runner.php';
 require_once 'util.php';
-require_once 'dsl.php';
+require_once 'domain.php';
+require_once 'internals.php';
 require_once 'constants.php';
-require_once 'browser/Browser.php';
 require_once 'browser/page/Form.php';
 include_once 'PointsReporter.php';
-require_once 'Settings.php';
+
+require_once 'matchers/ContainsMatcher.php';
+require_once 'matchers/ContainsStringMatcher.php';
+require_once 'matchers/ContainsNotStringMatcher.php';
+require_once 'matchers/IsMatcher.php';
 
 function assertThrows($function): void {
     try {
@@ -23,71 +27,58 @@ function fail($code, $message): void {
     throw new stf\FrameworkException($code, $message);
 }
 
-function assertThat($actual, $expected, $message = ''): void {
-    if ($actual === $expected) {
+function assertThat($actual, stf\AbstractMatcher $matcher, $message = null): void {
+    if ($matcher->matches($actual)) {
         return;
     }
 
-    $message = $message ?? sprintf("Expected %s but was %s",
-            stf\asString($expected), stf\asString($actual));
+    if ($message) {
+        throw new stf\FrameworkException(ERROR_C01, $message);
+    }
 
-    throw new stf\FrameworkException(ERROR_C02, $message);
+    $error = $matcher->getError($actual);
+
+    throw new stf\FrameworkException($error->getCode(), $error->getMessage());
 }
 
-function is($value) {
-    return $value;
+function is($value) : stf\AbstractMatcher {
+    return new stf\IsMatcher($value);
 }
 
 function setBaseUrl(string $url) : void {
-    getBrowser()->setCurrentUrl($url);
+    stf\getGlobals()->currentUrl = new stf\Url($url);
 }
 
 function logRequests(bool $flag) : void {
-    getSettings()->logRequests = $flag;
+    stf\getGlobals()->logRequests = $flag;
 }
 
-function getBrowser() : stf\Browser {
-    $key = "---STF-BROWSER---";
-
-    return $GLOBALS[$key] = $GLOBALS[$key] ?? new stf\Browser(getSettings());
-}
-
-function getSettings() : stf\Settings {
-    $key = "---STF-SETTINGS---";
-
-    return $GLOBALS[$key] = $GLOBALS[$key] ?? new stf\Settings();
+function logPostParameters(bool $flag) : void {
+    stf\getGlobals()->logPostParameters = $flag;
 }
 
 function getResponseCode() : int {
-    return getBrowser()->getResponseCode();
-}
-
-function getForm() : stf\Form {
-    $form = getBrowser()->getPage()->getForm();
-
-    if ($form === null) {
-        fail(ERROR_W07, "Current page does not contain form");
-    }
-
-    return $form;
+    return stf\getGlobals()->responseCode;
 }
 
 function getCurrentUrl() : string {
-    return getBrowser()->getCurrentUrl();
+    return stf\getGlobals()->currentUrl->asString();
 }
 
 function printPageSource() : void {
-    $page = getBrowser()->getPage();
-    print $page->getSource() . PHP_EOL;
+    print stf\getGlobals()->page->getSource() . PHP_EOL;
 }
 
 function printPageText() : void {
-    $page = getBrowser()->getPage();
-    print $page->getText() . PHP_EOL;
+    print getPageText() . PHP_EOL;
+}
+
+function getPageText() : string {
+    return stf\getGlobals()->page->getText();
 }
 
 function assertPageContainsLinkWithId($linkId) : void {
-    $link = getBrowser()->getPage()->getLinkById($linkId);
+    $link = stf\getGlobals()->page->getLinkById($linkId);
 
     if ($link === null) {
         fail(ERROR_W03,
@@ -95,28 +86,63 @@ function assertPageContainsLinkWithId($linkId) : void {
     }
 }
 
-function assertPageContainsInputWithName($name) : void {
-    $field = getForm()->getFieldByName($name);
-
-    if ($field === null) {
-        fail(ERROR_W05,
-            sprintf("Current page does not contain input with name '%s'.",
-                $name));
+function assertPageContainsTextFieldWithName($name) : void {
+    if (stf\getForm()->getTextFieldByName($name) !== null) {
+        return;
     }
+
+    fail(ERROR_W13,
+        sprintf("Current page does not contain text field with name '%s'.", $name));
+}
+
+function assertPageContainsRadioWithName($name) : void {
+    if (stf\getForm()->getRadioByName($name) !== null) {
+        return;
+    }
+
+    fail(ERROR_W14,
+        sprintf("Current page does not contain radio with name '%s'.", $name));
+}
+
+function assertPageContainsFieldWithName($name) : void {
+    if (stf\getForm()->getFieldByName($name) !== null) {
+        return;
+    }
+
+    fail(ERROR_W05,
+        sprintf("Current page does not contain field with name '%s'.", $name));
+}
+
+function assertPageDoesNotContainFieldWithName($name) : void {
+    if (stf\getForm()->getFieldByName($name) === null) {
+        return;
+    }
+
+    fail(ERROR_W18,
+        sprintf("Current page should not contain field with name '%s'.", $name));
+}
+
+function assertPageContainsCheckboxWithName($name) : void {
+    if (stf\getForm()->getCheckboxByName($name) !== null) {
+        return;
+    }
+
+    fail(ERROR_W15,
+        sprintf("Current page does not contain checkbox with name '%s'.", $name));
 }
 
 function assertPageContainsButtonWithName($name) : void {
-    $field = getForm()->getButtonByName($name);
-
-    if ($field === null) {
-        fail(ERROR_W06,
-            sprintf("Current page does not contain button with name '%s'.",
-                $name));
+    if (stf\getForm()->getButtonByName($name) !== null) {
+        return;
     }
+
+    fail(ERROR_W06,
+        sprintf("Current page does not contain button with name '%s'.",
+            $name));
 }
 
 function assertPageContainsLinkWithText($text) : void {
-    $link = getBrowser()->getPage()->getLinkByText($text);
+    $link = stf\getGlobals()->page->getLinkByText($text);
 
     if ($link === null) {
         fail(ERROR_W03,
@@ -124,55 +150,122 @@ function assertPageContainsLinkWithText($text) : void {
     }
 }
 
+function assertPageContainsElementWithId($id) : void {
+    $element = stf\getElementWithId($id);
+
+    if ($element) {
+        return;
+    }
+
+    fail(ERROR_W08,
+        sprintf("Current page does not contain element with id '%s'.", $id));
+}
+
+function assertPageDoesNotContainElementWithId($id) : void {
+    $element = stf\getElementWithId($id);
+
+    if (!$element) {
+        return;
+    }
+
+    fail(ERROR_W17,
+        sprintf("Current page should not contain element with id '%s'.", $id));
+}
+
 function assertPageContainsText($textToBeFound) : void {
-    $pageText = getBrowser()->getPage()->getText();
+    $pageText = stf\getGlobals()->page->getText();
 
     if (strpos($pageText, $textToBeFound) !== false) {
         return;
     }
 
-    fail(ERROR_C01, sprintf("Did not find text %s on current page", $textToBeFound));
+    fail(ERROR_H04, sprintf("Did not find text '%s' on current page.",
+        $textToBeFound));
 }
 
 function assertCurrentUrl($expected) : void {
-    $actual = getBrowser()->getCurrentUrl();
+    $actual = stf\getGlobals()->currentUrl->asString();
 
     if ($actual !== $expected) {
-        fail(ERROR_W10, sprintf("Expected url to be %s but was %s",
+        fail(ERROR_H03, sprintf("Expected url to be '%s' but was '%s'",
             $expected, $actual));
     }
 }
 
-function clickLinkByText($text) : void {
+function clickLinkWithText($text) : void {
     assertPageContainsLinkWithText($text);
 
-    $link = getBrowser()->getPage()->getLinkByText($text);
+    $link = stf\getGlobals()->page->getLinkByText($text);
 
-    getBrowser()->navigateTo($link->getHref());
+    stf\navigateTo($link->getHref());
 }
 
-function getLinkHrefByText($text) : string {
+function getHrefFromLinkWithText($text) : string {
     assertPageContainsLinkWithText($text);
 
-    return getBrowser()->getPage()->getLinkByText($text)->getHref();
+    return stf\getGlobals()->page->getLinkByText($text)->getHref();
 }
 
-function clickLinkById($linkId) : void {
+function clickLinkWithId($linkId) : void {
     assertPageContainsLinkWithId($linkId);
 
-    $link = getBrowser()->getPage()->getLinkById($linkId);
+    $link = stf\getGlobals()->page->getLinkById($linkId);
 
     navigateTo($link->getHref());
 }
 
 function navigateTo(string $url) {
-    getBrowser()->navigateTo($url);
+    stf\navigateTo($url);
 }
 
 function clickButton(string $buttonName) {
-    getBrowser()->submitFormByButtonPress($buttonName);
+    stf\submitFormByButtonPress($buttonName);
 }
 
-function setFieldValue(string $fieldName, string $value) {
-    getForm()->setFieldValue($fieldName, $value);
+function setTextFieldValue(string $fieldName, string $value) {
+    assertPageContainsTextFieldWithName($fieldName);
+
+    stf\getForm()->getTextFieldByName($fieldName)->setValue($value);
+}
+
+function setCheckboxValue(string $fieldName, bool $value) {
+    assertPageContainsCheckboxWithName($fieldName);
+
+    stf\getForm()->getCheckboxByName($fieldName)->check($value);
+}
+
+function setRadioFieldValue(string $fieldName, string $value) {
+    assertPageContainsRadioWithName($fieldName);
+
+    $field = stf\getForm()->getRadioByName($fieldName);
+
+    if ($field->hasOption($value)) {
+        $field->selectOption($value);
+    } else {
+        fail(ERROR_W11, sprintf("radio with name '%s' does not have option '%s'",
+            $fieldName, $value));
+    }
+
+}
+
+function getFieldValue(string $fieldName) {
+    assertPageContainsFieldWithName($fieldName);
+
+    $field = stf\getForm()->getFieldByName($fieldName);
+
+    return $field instanceof stf\Checkbox
+        ? $field->isChecked()
+        : $field->getValue();
+}
+
+function containsString(string $needle) : stf\AbstractMatcher {
+    return new stf\ContainsStringMatcher($needle);
+}
+
+function contains(array $needleArray) : stf\AbstractMatcher {
+    return new stf\ContainsMatcher($needleArray);
+}
+
+function doesNotContainString(string $needle) : stf\AbstractMatcher {
+    return new stf\ContainsNotStringMatcher($needle);
 }

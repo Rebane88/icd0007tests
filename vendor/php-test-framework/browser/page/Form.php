@@ -2,6 +2,10 @@
 
 namespace stf;
 
+require_once 'RadioGroup.php';
+require_once 'Checkbox.php';
+require_once 'TextField.php';
+
 class Form {
 
     private string $action = '';
@@ -21,10 +25,6 @@ class Form {
         return $this->fields;
     }
 
-    public function setFieldValue(string $fieldName, string $value) : void {
-        $this->getFieldByName($fieldName)->setValue($value);
-    }
-
     public function getButtonByName($buttonName) : ?Button {
         $buttons = array_filter($this->buttons, function ($button) use ($buttonName) {
             return $button->getName() === $buttonName;
@@ -35,14 +35,31 @@ class Form {
         return $button ?? null;
     }
 
-    public function getFieldByName($fieldName) : ?Input {
-        $fields = array_filter($this->fields, function ($field) use ($fieldName) {
-            return $field->getName() === $fieldName;
+    public function getTextFieldByName($fieldName) : ?TextField {
+        return $this->getFieldByNameCommon($fieldName, TextField::class);
+    }
+
+    private function getFieldByNameCommon($fieldName, $type) {
+        $fields = array_filter($this->fields, function ($field) use ($fieldName, $type) {
+            return $field->getName() === $fieldName
+                    && (get_class($field) === $type || is_subclass_of($field, $type));
         });
 
         $field = array_shift($fields);
 
         return $field ?? null;
+    }
+
+    public function getRadioByName($fieldName) : ?RadioGroup {
+        return $this->getFieldByNameCommon($fieldName, RadioGroup::class);
+    }
+
+    public function getFieldByName($fieldName) : ?AbstractInput {
+        return $this->getFieldByNameCommon($fieldName, AbstractInput::class);
+    }
+
+    public function getCheckboxByName($fieldName) : Checkbox {
+        return $this->getFieldByNameCommon($fieldName, Checkbox::class);
     }
 
     public function getAction() : ?string {

@@ -2,7 +2,7 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-const PROJECT_DIRECTORY = '/home/mkalmo/git/php/icd0007';
+const PROJECT_DIRECTORY = '';
 const BASE_URL = 'http://localhost:8080';
 
 function canSavePosts() {

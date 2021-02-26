@@ -74,4 +74,4 @@ function canHandleDifferentSymbolsInAuthorNames() {
     assertPageContainsText($lastName);
 }
 
-stf\runTests();
+stf\runTests(new stf\PointsReporter([4 => 5]));

@@ -139,4 +139,4 @@ function getProjectDirectory() : string {
     return $path;
 }
 
-stf\runTests();
+stf\runTests(new stf\PointsReporter([9 => 1]));

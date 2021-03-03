@@ -33,7 +33,6 @@ class PageParser {
 
         } catch (ParseException $ex) {
             return $this->createResult($ex);
-
         }
 
         return ValidationResult::success();
@@ -88,6 +87,10 @@ class PageParser {
         }
 
         return array_filter($childTexts);
+    }
+
+    public function getHtml(): string {
+        return $this->html;
     }
 
 }

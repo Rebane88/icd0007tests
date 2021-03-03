@@ -16,6 +16,8 @@ require_once 'internals.php';
 require_once 'constants.php';
 require_once 'browser/page/Form.php';
 include_once 'PointsReporter.php';
+include_once 'FrameworkException.php';
+include_once 'FrameworkParseException.php';
 
 require_once 'matchers/ContainsMatcher.php';
 require_once 'matchers/ContainsStringMatcher.php';
@@ -55,15 +57,24 @@ function is($value) : stf\AbstractMatcher {
 }
 
 function setBaseUrl(string $url) : void {
+    stf\getGlobals()->baseUrl = new stf\Url($url);
     stf\getGlobals()->currentUrl = new stf\Url($url);
 }
 
-function logRequests(bool $flag) : void {
+function setLogRequests(bool $flag) : void {
     stf\getGlobals()->logRequests = $flag;
 }
 
-function logPostParameters(bool $flag) : void {
+function setLogPostParameters(bool $flag) : void {
     stf\getGlobals()->logPostParameters = $flag;
+}
+
+function setPrintStackTrace(bool $flag) : void {
+    stf\getGlobals()->printStackTrace = $flag;
+}
+
+function setPrintPageSourceOnParseError(bool $flag) : void {
+    stf\getGlobals()->printPageSourceOnParseError = $flag;
 }
 
 function getResponseCode() : int {

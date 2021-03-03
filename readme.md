@@ -15,6 +15,13 @@
 
 `C03` Otsitavad sõne ei leita otsitavast tekstist. Lahendus on sama, mis `C02` puhul.
 
+`D01` Test ootab, et programm kuvas lehe, millel on sõnumis mainitud id. Mõned põhjused, miks see võiks nii olla.
+- lehele on id panemata jäänud või on vale.
+- link viitas valesse kohta.
+- programm kuvas vale lehe.
+- programm kuvas vea.
+
+
 `H01` Viga programmi poolt väljastatavas Html-is. Kui pöörduti staatilise lehe poole, siis pole selle lehe Html kood korrektne. Võimalik, et mõni _tag_ on kinni panemata või kuskil on mingi sümbol, mis selles kohas ei peaks olema. Koos veateatega väljastatakse ka info vea asukoha kohta. Kui sellest jääb väheks, siis võib abi olla https://validator.w3.org/ lehel olevast validaatorist. Kui Html-i genereeris Php skript, siis on vea otsimine tülikam. Vea otsimiseks peaksite kõigepealt väljundit nägema. Selleks võiks teha brauseris samad sammud läbi, mida test teeb ja õiges kohas "View page source" valida.
 
 `H02` Lingi _href_ atribuut või vormi _action_ atribuut sisaldab keelatud sümboleid. Veebi aadressis ei tohi olla näiteks tühikuid. Probleemi lahendamiseks peaksite probleemsed sümbolid eemaldama. Üks võimalus nendest sümbolitest lahti saada, on info kodeerimine urlencode() funktsiooniga.

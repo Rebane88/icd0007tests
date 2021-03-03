@@ -29,18 +29,6 @@ function getGlobals() : Globals {
     return $GLOBALS[$key] ??= new Globals();
 }
 
-//function getBrowser() : Browser {
-//    $key = "---STF-BROWSER---";
-//
-//    return $GLOBALS[$key] = $GLOBALS[$key] ?? new Browser(getSettings());
-//}
-//
-//function getSettings() : Settings {
-//    $key = "---STF-SETTINGS---";
-//
-//    return $GLOBALS[$key] = $GLOBALS[$key] ?? new Settings();
-//}
-
 function getElementWithId($id) : ?Element {
     $elements = getGlobals()->page->getElements();
 
@@ -128,7 +116,7 @@ function assertValidHtml(PageParser $pageParser): void {
         $result->getMessage(), $result->getLine(), $result->getColumn());
     $message .= sprintf("%s\n", $result->getSource());
 
-    fail(ERROR_H01, $message);
+    throw new FrameworkParseException(ERROR_H01, $message, $pageParser->getHtml());
 }
 
 function assertValidUrl(string $url) : void {

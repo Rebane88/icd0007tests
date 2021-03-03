@@ -2,8 +2,6 @@
 
 namespace stf;
 
-require_once 'browser/parser/ParseException.php';
-
 use \RuntimeException;
 
 function runTests(?PointsReporter $reporter = null) {

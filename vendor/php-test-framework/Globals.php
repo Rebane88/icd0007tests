@@ -2,6 +2,9 @@
 
 namespace stf;
 
+use stf\browser\Url;
+use stf\browser\page\Page;
+
 class Globals {
 
     public Url $baseUrl;

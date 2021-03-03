@@ -1,22 +1,14 @@
 <?php
 
-namespace stf;
-
-require_once __DIR__ . '/../parser/HtmlLexer.php';
-require_once __DIR__ . '/../parser/HtmlParser.php';
-require_once __DIR__ . '/../parser/ParseException.php';
-require_once __DIR__ . '/../parser/node/AbstractNode.php';
-require_once __DIR__ . '/../parser/TreeBuilderActions.php';
-
-require_once 'ValidationResult.php';
+namespace stf\browser\page;
 
 use tplLib\HtmlLexer;
 use tplLib\HtmlParser;
 use tplLib\ParseException;
-use tplLib\AbstractNode;
-use tplLib\TextNode;
+use tplLib\node\AbstractNode;
+use tplLib\node\TextNode;
 use tplLib\TreeBuilderActions;
-use tplLib\WsNode;
+use tplLib\node\WsNode;
 
 class PageParser {
 

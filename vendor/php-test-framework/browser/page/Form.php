@@ -1,10 +1,6 @@
 <?php
 
-namespace stf;
-
-require_once 'RadioGroup.php';
-require_once 'Checkbox.php';
-require_once 'TextField.php';
+namespace stf\browser\page;
 
 class Form {
 
@@ -58,7 +54,7 @@ class Form {
         return $this->getFieldByNameCommon($fieldName, AbstractInput::class);
     }
 
-    public function getCheckboxByName($fieldName) : Checkbox {
+    public function getCheckboxByName($fieldName) : ?Checkbox {
         return $this->getFieldByNameCommon($fieldName, Checkbox::class);
     }
 

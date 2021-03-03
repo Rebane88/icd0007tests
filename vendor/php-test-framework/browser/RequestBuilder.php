@@ -1,8 +1,9 @@
 <?php
 
-namespace stf;
+namespace stf\browser;
 
-require_once 'HttpRequest.php';
+use stf\browser\page\Form;
+use stf\FrameworkException;
 
 class RequestBuilder {
 

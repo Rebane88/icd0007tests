@@ -1,6 +1,7 @@
 <?php
 
 require_once 'vendor/php-test-framework/public-api.php';
+require_once 'common.php';
 
 const PROJECT_DIRECTORY = '';
 const BASE_URL = 'http://localhost:8080';
@@ -106,37 +107,5 @@ function calculatesFahrenheitToCelsius() {
 setBaseUrl(BASE_URL);
 
 setIncludePath();
-
-function assertContains(array $allPosts, Post $post) {
-    foreach ($allPosts as $each) {
-        if ($each->title === $post->title && $each->text === $post->text) {
-            return;
-        }
-    }
-
-    throw new stf\FrameworkException(ERROR_C01, "Did not find saved post");
-}
-
-function setIncludePath() {
-    set_include_path(get_include_path() . PATH_SEPARATOR . getProjectDirectory());
-}
-
-function getProjectDirectory() : string {
-    global $argc, $argv;
-
-    $path = $argc === 2 ? $path = $argv[1] : PROJECT_DIRECTORY;
-
-    if (!$path) {
-        die("Please specify your projects directory in constant PROJECT_DIRECTORY");
-    }
-
-    $path = realpath($path);
-
-    if (!file_exists($path)) {
-        die("Value in PROJECT_DIRECTORY is not correct directory");
-    }
-
-    return $path;
-}
 
 stf\runTests(new stf\PointsReporter([9 => 1]));

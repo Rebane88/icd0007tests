@@ -8,12 +8,15 @@
 `N01` Probleem võrguühendusega. Üks võimalus on see, et server ei käi oodatud aadressil.
 
 `N02` Server vastas veaga. See juhtub siis, kui küsitud faili ei leita või Php skript lõpetab veaga.
+Vea tuvastamisel võib abik olla infost serveri konsoolis. Selle info leiate sellest aknast, kust serveri käima panite.
 
 `C01` Üldine viga, mille puhul peaks veateade ise piisav olema.
 
 `C02` Võrreldavad väärtused ei ole võrdsed. Lahendamiseks peaks testist välja lugema, millist väärtust test ootab ja miks ta seda ootab. Kui see on selge, siis jääb vaid üle selgeks teha, miks teie programm teisiti käitub.
 
 `C03` Otsitavad sõne ei leita otsitavast tekstist. Lahendus on sama, mis `C02` puhul.
+
+`C04` Leiti sõne, mida ei peaks otsitavas tekstis olema. Lahendus on sama, mis `C02` puhul.
 
 `D01` Test ootab, et programm kuvas lehe, millel on sõnumis mainitud id. Mõned põhjused, miks see võiks nii olla.
 - lehele on id panemata jäänud või on vale.
@@ -36,6 +39,15 @@
 Vea tuvastamisel võib abiks olla meetod printPageSource(), mille peaks kirjutama vahetult viga tekitava lause ette.
 
 `W04` Test ootab, et praegusel lehel on link mille sisuks on tekst testis määratud väärtusega.
-Vea tuvastamisel võib abiks olla meetod printPageSource(), mille peaks kirjutama vahetult viga tekitava lause ette.
+Vea tuvastamine võiks käia sarnaselt `W03`-ga.
+
+`W05` Test ootab, et praegusel lehel on sisestuskast (input või textarea) testis määratud nimega.
+Vea tuvastamine võiks käia sarnaselt `W03`-ga.
+
+`W06` Test ootab, et praegusel lehel on nupp (input või button) testis määratud nimega.
+Mõlema elemendi puhul on oluline, et type atribuut oleks väärtusega 'submit'.
+Vea tuvastamine võiks käia sarnaselt `W03`-ga.
+
+`W07` Viga juhub siis, kui test otsib lehelt mingit vormi elementi (sisestusväli, checkbox, nupp jne) aga lehel ei ole isegi form tag-i. Kõik sisestuselemendid peavad vormi sees paiknema. Vea parandamiseks tuleks sisestuselemendid form tag-iga ümbritseda.
 
 `G01` Ootamatu viga. Test ei ole sellise olukorraga arvestanud. Siin on võimalus, et teie programm on korrektne ja viga on testis.

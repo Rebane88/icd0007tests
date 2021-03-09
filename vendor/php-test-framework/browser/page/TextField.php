@@ -12,7 +12,7 @@ class TextField extends AbstractInput {
     }
 
     public function __toString() : string {
-        return sprintf("Input: %s %s",
+        return sprintf("Input %s=%s",
             $this->getName(), $this->value);
     }
 

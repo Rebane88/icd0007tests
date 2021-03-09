@@ -45,13 +45,13 @@ function navigateTo(string $destination) : void {
     executeRequest($request);
 }
 
-function submitFormByButtonPress(string $buttonName) {
+function submitFormByButtonPress(string $buttonName, ?string $buttonValue) {
     $g = getGlobals();
 
     $form = $g->page->getForm();
 
     $request = (new RequestBuilder($form, $g->currentUrl))
-        ->requestFromButtonPress($buttonName);
+        ->requestFromButtonPress($buttonName, $buttonValue);
 
     executeRequest($request);
 }

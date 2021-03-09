@@ -8,7 +8,7 @@ const BASE_URL = 'http://localhost:8080';
 
 function canSaveNewPosts() {
 
-    require_once 'ex4/ex1.php';
+    require_once 'ex4/post-data-functions.php';
 
     $title = getRandomString(5);
     $text = getRandomString(10);
@@ -22,7 +22,7 @@ function canSaveNewPosts() {
 
 function canDeletePosts() {
 
-    require_once 'ex4/ex1.php';
+    require_once 'ex4/post-data-functions.php';
 
     $title = getRandomString(10);
 
@@ -37,7 +37,7 @@ function canDeletePosts() {
 
 function canUpdatePosts() {
 
-    require_once 'ex4/ex1.php';
+    require_once 'ex4/post-data-functions.php';
 
     $titleOld = getRandomString(10);
     $titleNew = getRandomString(10);
@@ -58,7 +58,7 @@ function canUpdatePosts() {
 }
 
 function confirmationWorksWithSimpleText() {
-    navigateTo(BASE_URL . '/ex4/confirm/sender.html');
+    navigateTo(BASE_URL . '/ex4/confirm/');
 
     setTextFieldValue('text', 'hello');
 
@@ -70,7 +70,7 @@ function confirmationWorksWithSimpleText() {
 }
 
 function confirmationWorksWithDifferentSymbols() {
-    navigateTo(BASE_URL . '/ex4/confirm/sender.html');
+    navigateTo(BASE_URL . '/ex4/confirm/');
 
     $text = "hello'\"\n";
 
@@ -83,7 +83,17 @@ function confirmationWorksWithDifferentSymbols() {
     assertPageContainsText('Confirmed: ' . $text);
 }
 
-function calculatesSimpleExpressions() {
+function checksCorrectRadio() {
+    navigateTo(BASE_URL . '/ex4/radios.php');
+
+    assertThat(getFieldValue('grade'), is('3'));
+
+    navigateTo(BASE_URL . '/ex4/radios.php?grade=4');
+
+    assertThat(getFieldValue('grade'), is('4'));
+}
+
+function calculatesArithmeticExpressions() {
     navigateTo(BASE_URL . '/ex4/calc/');
 
     setTextFieldValue('number', '4');
@@ -119,4 +129,4 @@ setPrintPageSourceOnParseError(false);
 
 setIncludePath();
 
-stf\runTests(new stf\PointsReporter([6 => 1]));
+stf\runTests(new stf\PointsReporter([7 => 1]));

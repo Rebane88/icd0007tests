@@ -18,6 +18,8 @@ Vea tuvastamisel võib abik olla infost serveri konsoolis. Selle info leiate sel
 
 `C04` Leiti sõne, mida ei peaks otsitavas tekstis olema. Lahendus on sama, mis `C02` puhul.
 
+`C05` Otsitavad sõne peaks leiduma vaid üks kord. Leiti rohkem või vähem. Lahendus on sama, mis `C02` puhul.
+
 `D01` Test ootab, et programm kuvas lehe, millel on sõnumis mainitud id. Mõned põhjused, miks see võiks nii olla.
 - lehele on id panemata jäänud või on vale.
 - link viitas valesse kohta.

@@ -109,17 +109,20 @@ function canUpdateBooksWithMultipleAuthors() {
     assertThat(getPageText(), doesNotContainString($authorName1));
 }
 
-function doesNotAllowSqlInjection() {
+function doesNotAllowSqlInjectionWhenAddingBook() {
 
     gotoLandingPage();
 
     clickBookFormLink();
 
-    $bookTitle = getSampleBook()->title;
+    $dangerousSymbols = " \" ' ";
+    $bookTitle = getSampleBook()->title; // 1e549 f26a5
+    $dangerousBookTitle = $bookTitle . $dangerousSymbols; // 1e549 f26a5 " '
 
-    setTextFieldValue('title', $bookTitle);
+    // should accept this value as a book title
+    setTextFieldValue('title', $dangerousBookTitle);
 
-    $dangerousSymbols = " ; \" ' ";
+    // should ignore these values and not break
     forceFieldValue('grade', $dangerousSymbols);
     forceFieldValue('isRead', $dangerousSymbols);
     forceFieldValue('author1', $dangerousSymbols);
@@ -127,7 +130,33 @@ function doesNotAllowSqlInjection() {
 
     clickBookFormSubmitButton();
 
-    assertThat(getPageText(), containsString($bookTitle));
+    assertThat(getPageText(), containsString($dangerousBookTitle));
+}
+
+function doesNotAllowSqlInjectionWhenAddingAuthor() {
+
+    gotoLandingPage();
+
+    clickAuthorFormLink();
+
+    $dangerousSymbols = " \" ' ";
+    $firstName = getSampleAuthor()->firstName; // f4d 544a
+    $lastName = getSampleAuthor()->lastName; // c3841 251
+
+    $dangerousFirstName = $firstName . $dangerousSymbols; // f4d 544a " '
+    $dangerousLastName = $lastName . $dangerousSymbols; // c3841 251 " '
+
+    // should accept these values as names
+    setTextFieldValue('firstName', $dangerousFirstName);
+    setTextFieldValue('lastName', $dangerousLastName);
+
+    // should ignore this value and not break
+    forceFieldValue('grade', $dangerousSymbols);
+
+    clickAuthorFormSubmitButton();
+
+    assertThat(getPageText(), containsString($dangerousFirstName));
+    assertThat(getPageText(), containsString($dangerousLastName));
 }
 
 #Helpers
@@ -154,4 +183,4 @@ setLogPostParameters(false);
 setPrintStackTrace(false);
 setPrintPageSourceOnParseError(false);
 
-stf\runTests(new stf\PointsReporter([3 => 3, 5 => 5]));
+stf\runTests(new stf\PointsReporter([4 => 3, 6 => 5]));

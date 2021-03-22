@@ -3,6 +3,7 @@
 namespace stf\browser\page;
 
 use \RuntimeException;
+use function stf\decode_html_entities;
 
 class PageBuilder {
 
@@ -15,7 +16,7 @@ class PageBuilder {
     }
 
     function getPage() : Page {
-        $text = html_entity_decode($this->nodeTree->getFullText());
+        $text = decode_html_entities($this->nodeTree->getFullText());
 
         $page = new Page($this->source, $text,
             $this->getLinks(), $this->getForm());

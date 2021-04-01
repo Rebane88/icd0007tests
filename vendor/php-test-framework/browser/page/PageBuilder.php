@@ -1,8 +1,6 @@
 <?php
 
 namespace stf\browser\page;
-
-use \RuntimeException;
 use function stf\decode_html_entities;
 
 class PageBuilder {
@@ -18,28 +16,14 @@ class PageBuilder {
     function getPage() : Page {
         $text = decode_html_entities($this->nodeTree->getFullText());
 
+        $formBuilder = new FormBuilder($this->nodeTree);
+
         $page = new Page($this->source, $text,
-            $this->getLinks(), $this->getForm());
+            $this->getLinks(), $formBuilder->getFormSet());
 
         $page->setElements($this->getAllElements());
 
         return $page;
-    }
-
-    private function getForm() : ?Form {
-        $formBuilder = new FormBuilder($this->nodeTree);
-
-        $formCount = $formBuilder->getFormCount();
-
-        if ($formCount === 0) {
-            return null;
-        }
-
-        if ($formCount > 1) {
-            throw new RuntimeException("This framework supports only one form per page");
-        }
-
-        return $formBuilder->getForm();
     }
 
     private function getAllElements() : array {

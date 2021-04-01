@@ -123,7 +123,7 @@ setBaseUrl(BASE_URL);
 setLogRequests(false);
 setLogPostParameters(false);
 setPrintStackTrace(false);
-setPrintPageSourceOnParseError(false);
+setPrintPageSourceOnError(false);
 
 #Helpers
 

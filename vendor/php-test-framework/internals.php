@@ -5,18 +5,19 @@ namespace stf;
 use \Exception;
 use stf\browser\HttpClient;
 use stf\browser\HttpRequest;
+use stf\browser\HttpResponse;
 use stf\browser\RequestBuilder;
 use stf\browser\page\Element;
-use stf\browser\page\Form;
+use stf\browser\page\FormSet;
 use stf\browser\page\PageBuilder;
 use stf\browser\page\PageParser;
 use stf\browser\page\NodeTree;
 
-function getForm() : Form {
-    $form = getGlobals()->page->getForm();
+function getFormSet() : FormSet {
+    $form = getGlobals()->page->getFormSet();
 
     if ($form === null) {
-        fail(ERROR_W07, "Current page does not contain a form");
+        fail(ERROR_W07, "Current page does not contain any form elements");
     }
 
     return $form;
@@ -43,22 +44,53 @@ function getElementWithId($id) : ?Element {
 function navigateTo(string $destination) : void {
     $request = new HttpRequest(getGlobals()->currentUrl, $destination, 'GET');
 
-    executeRequest($request);
+    executeRequestWithRedirects($request);
 }
 
 function submitFormByButtonPress(string $buttonName, ?string $buttonValue) {
-    $g = getGlobals();
+    $globals = getGlobals();
 
-    $form = $g->page->getForm();
+    $formSet = $globals->page->getFormSet();
 
-    $request = (new RequestBuilder($form, $g->currentUrl))
+    $request = (new RequestBuilder($formSet, $globals->currentUrl))
         ->requestFromButtonPress($buttonName, $buttonValue);
 
-    executeRequest($request);
+    executeRequestWithRedirects($request);
 }
 
-function executeRequest(HttpRequest $request) {
-    $g = getGlobals();
+function executeRequestWithRedirects(HttpRequest $request) {
+
+    $response = executeRequest($request);
+
+    $count = 3;
+    while ($response->isRedirect() && $count-- > 0) {
+
+        $request = new HttpRequest($request->getFullUrl(),
+            $response->getLocation(), 'GET');
+
+        $response = executeRequest($request);
+    }
+
+    updatePage($response);
+}
+
+function updatePage(HttpResponse $response) : void {
+    $pageParser = new PageParser($response->getContents());
+
+    assertValidResponse($response->getResponseCode());
+    assertValidHtml($pageParser);
+
+    $nodeTree = new NodeTree($pageParser->getNodeTree());
+
+    $page = (new PageBuilder($nodeTree, $response->getContents()))->getPage();
+
+    $globals = getGlobals();
+    $globals->responseCode = $response->getResponseCode();
+    $globals->page = $page;
+}
+
+function executeRequest(HttpRequest $request) : HttpResponse {
+    $globals = getGlobals();
 
     $url = $request->getFullUrl()->asString();
 
@@ -71,31 +103,20 @@ function executeRequest(HttpRequest $request) {
     } catch (Exception $e) {
         throw new FrameworkException(ERROR_G01, $e->getMessage());
     } finally {
-        if ($g->logRequests) {
-            printf("%s (%s)\n", $url, $response->code ?? 'no response code');
+        if ($globals->logRequests) {
+            printf("%s (%s)\n", $url,
+                $response->getResponseCode() ?? 'no response code');
         }
     }
 
-
-    $g->currentUrl = $request->getFullUrl();
-
-
-    if ($g->logPostParameters && $request->isPostMethod()) {
+    if ($globals->logPostParameters && $request->isPostMethod()) {
         printf("   POST parameters: %s" . PHP_EOL,
             mapAsString($request->getParameters()));
     }
 
-    $pageParser = new PageParser($response->contents);
+    $globals->currentUrl = $request->getFullUrl();
 
-    assertValidResponse($response->code);
-    assertValidHtml($pageParser);
-
-    $nodeTree = new NodeTree($pageParser->getNodeTree());
-
-    $page = (new PageBuilder($nodeTree, $response->contents))->getPage();
-
-    $g->responseCode = $response->code;
-    $g->page = $page;
+    return $response;
 }
 
 function assertValidResponse(int $code): void {
@@ -116,7 +137,7 @@ function assertValidHtml(PageParser $pageParser): void {
         $result->getMessage(), $result->getLine(), $result->getColumn());
     $message .= sprintf("%s\n", $result->getSource());
 
-    throw new FrameworkParseException(ERROR_H01, $message, $pageParser->getHtml());
+    throw new FrameworkException(ERROR_H01, $message);
 }
 
 function assertValidUrl(string $url) : void {

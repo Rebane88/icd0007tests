@@ -13,6 +13,8 @@ function runTests(?PointsReporter $reporter = null) {
         }
 
         try {
+            getGlobals()->reset();
+
             call_user_func($testName);
 
             $successful++;

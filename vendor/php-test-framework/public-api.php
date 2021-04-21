@@ -52,6 +52,10 @@ function assertThat($actual, stf\matcher\AbstractMatcher $matcher, $message = nu
     throw new stf\FrameworkException($error->getCode(), $error->getMessage());
 }
 
+function disableAutomaticRedirects() : void {
+    stf\getGlobals()->maxRedirectCount = 0;
+}
+
 function setBaseUrl(string $url) : void {
     stf\getGlobals()->baseUrl = new stf\browser\Url($url);
     stf\getGlobals()->currentUrl = new stf\browser\Url($url);
@@ -91,6 +95,10 @@ function printPageText() : void {
 
 function getPageText() : string {
     return stf\getGlobals()->page->getText();
+}
+
+function getPageSource() : string {
+    return stf\getGlobals()->page->getSource();
 }
 
 function assertPageContainsLinkWithId($linkId) : void {
@@ -206,6 +214,21 @@ function assertPageDoesNotContainElementWithId($id) : void {
         sprintf("Current page should not contain element with id '%s'.", $id));
 }
 
+function assertFrontControllerLink(string $id) : void {
+    assertPageContainsLinkWithId($id);
+
+    $link = stf\getGlobals()->page->getLinkById($id)->getHref();
+
+    $pattern = '/^(index\.php)?\??[-=&\w]*$/';
+
+    if (!preg_match($pattern, $link)) {
+        $message = 'Front Controller pattern expects all links '
+            . 'to be in ?key1=value1&key2=... format. But this link was: ' . $link;
+
+        fail(ERROR_W20, $message);
+    }
+}
+
 function assertPageContainsText($textToBeFound) : void {
     $pageText = stf\getGlobals()->page->getText();
 
@@ -215,6 +238,18 @@ function assertPageContainsText($textToBeFound) : void {
 
     fail(ERROR_H04, sprintf("Did not find text '%s' on the current page.",
         $textToBeFound));
+}
+
+function assertNoOutput() : void {
+    $source = stf\getGlobals()->page->getSource();
+
+    if (preg_match('/^\s*$/', $source)) {
+        return;
+    }
+
+    fail(ERROR_W21, sprintf(
+        "Should not print any output along with redirect header " .
+        "but the output was: %s", $source));
 }
 
 function assertCurrentUrl($expected) : void {
@@ -234,7 +269,7 @@ function clickLinkWithText($text) : void {
     stf\navigateTo($link->getHref());
 }
 
-function getHrefFromLinkWithText($text) : string {
+function getHrefFromLinkWithText(string $text) : string {
     assertPageContainsLinkWithText($text);
 
     return stf\getGlobals()->page->getLinkByText($text)->getHref();
@@ -338,4 +373,8 @@ function containsStringOnce(string $value) : stf\matcher\AbstractMatcher {
 
 function containsInAnyOrder(array $value) : stf\matcher\AbstractMatcher {
     return new stf\matcher\ContainsInAnyOrderMatcher($value);
+}
+
+function isAnyOf(...$values) : stf\matcher\AbstractMatcher {
+    return new stf\matcher\ContainsAnyMatcher($values);
 }

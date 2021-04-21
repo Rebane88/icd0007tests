@@ -8,6 +8,7 @@ const ERROR_C03 = 'C03'; // string does not contain substring
 const ERROR_C04 = 'C04'; // contains substring but should not
 const ERROR_C05 = 'C05'; // does not contain substring once
 const ERROR_C06 = 'C06'; // does not contain discounting order
+const ERROR_C07 = 'C07'; // does not match any option
 
 const ERROR_D01 = 'D01'; // wrong page id
 
@@ -36,4 +37,5 @@ const ERROR_W15 = 'W15'; // no checkbox with name
 const ERROR_W16 = 'W16'; // no select with name
 const ERROR_W18 = 'W18'; // field should not exist
 const ERROR_W19 = 'W19'; // button should not exist
-
+const ERROR_W20 = 'W20'; // not front controller link
+const ERROR_W21 = 'W21'; // should not print any output

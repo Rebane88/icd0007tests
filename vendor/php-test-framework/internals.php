@@ -62,7 +62,7 @@ function executeRequestWithRedirects(HttpRequest $request) {
 
     $response = executeRequest($request);
 
-    $count = 3;
+    $count = getGlobals()->maxRedirectCount;
     while ($response->isRedirect() && $count-- > 0) {
 
         $request = new HttpRequest($request->getFullUrl(),
@@ -141,7 +141,7 @@ function assertValidHtml(PageParser $pageParser): void {
 }
 
 function assertValidUrl(string $url) : void {
-    $invalidCharsRegex = "/[^0-9A-Za-z:\/?#\[\]@!$&\'()*+,;=\-._~%]/";
+    $invalidCharsRegex = "/[^0-9A-Za-z:\/?#\[\]@!$&'()*+,;=\-._~%]/";
 
     if (!preg_match($invalidCharsRegex, $url, $matches)) {
         return;

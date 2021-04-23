@@ -122,7 +122,7 @@ class TagNode extends AbstractNode {
 
     public function getAttributeValue($name) : ?string {
         foreach ($this->attributes as $key => $value) {
-            if ($key === $name) {
+            if ($key === $name && $value !== null) {
                 return $this->stripQuotes($value);
             }
         }

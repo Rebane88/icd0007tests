@@ -3,7 +3,6 @@
 namespace stf;
 
 use \Exception;
-use stf\browser\HttpClient;
 use stf\browser\HttpRequest;
 use stf\browser\HttpResponse;
 use stf\browser\RequestBuilder;
@@ -97,7 +96,7 @@ function executeRequest(HttpRequest $request) : HttpResponse {
     assertValidUrl($url);
 
     try {
-        $response = (new HttpClient())->execute($request);
+        $response = $globals->httpClient->execute($request);
     } catch (FrameworkException $e) {
         throw $e;
     } catch (Exception $e) {

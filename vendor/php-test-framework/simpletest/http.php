@@ -217,7 +217,7 @@ class SimpleHttpRequest
      *    These include proxy information, URL, cookies, headers,
      *    request method and choice of encoding.
      *    @param SimpleRoute $route              Request route.
-     *    @param SimpleFormEncoding $encoding    Content to send with
+     *    @param SimpleEntityEncoding $encoding    Content to send with
      *                                           request.
      *    @access public
      */

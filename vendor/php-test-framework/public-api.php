@@ -23,6 +23,8 @@ use stf\matcher\ContainsMatcher;
 use stf\matcher\AbstractMatcher;
 use stf\matcher\ContainsStringMatcher;
 use stf\matcher\ContainsNotStringMatcher;
+use function stf\getGlobals;
+use function stf\getFormSet;
 
 function assertThrows($function): void {
     try {
@@ -53,40 +55,40 @@ function assertThat($actual, stf\matcher\AbstractMatcher $matcher, $message = nu
 }
 
 function disableAutomaticRedirects() : void {
-    stf\getGlobals()->maxRedirectCount = 0;
+    getGlobals()->maxRedirectCount = 0;
 }
 
 function setBaseUrl(string $url) : void {
-    stf\getGlobals()->baseUrl = new stf\browser\Url($url);
-    stf\getGlobals()->currentUrl = new stf\browser\Url($url);
+    getGlobals()->baseUrl = new stf\browser\Url($url);
+    getGlobals()->currentUrl = new stf\browser\Url($url);
 }
 
 function setLogRequests(bool $flag) : void {
-    stf\getGlobals()->logRequests = $flag;
+    getGlobals()->logRequests = $flag;
 }
 
 function setLogPostParameters(bool $flag) : void {
-    stf\getGlobals()->logPostParameters = $flag;
+    getGlobals()->logPostParameters = $flag;
 }
 
 function setPrintStackTrace(bool $flag) : void {
-    stf\getGlobals()->printStackTrace = $flag;
+    getGlobals()->printStackTrace = $flag;
 }
 
 function setPrintPageSourceOnError(bool $flag) : void {
-    stf\getGlobals()->printPageSourceOnError = $flag;
+    getGlobals()->printPageSourceOnError = $flag;
 }
 
 function getResponseCode() : int {
-    return stf\getGlobals()->responseCode;
+    return getGlobals()->responseCode;
 }
 
 function getCurrentUrl() : string {
-    return stf\getGlobals()->currentUrl->asString();
+    return getGlobals()->currentUrl->asString();
 }
 
 function printPageSource() : void {
-    print stf\getGlobals()->page->getSource() . PHP_EOL;
+    print getGlobals()->page->getSource() . PHP_EOL;
 }
 
 function printPageText() : void {
@@ -94,15 +96,15 @@ function printPageText() : void {
 }
 
 function getPageText() : string {
-    return stf\getGlobals()->page->getText();
+    return getGlobals()->page->getText();
 }
 
 function getPageSource() : string {
-    return stf\getGlobals()->page->getSource();
+    return getGlobals()->page->getSource();
 }
 
 function assertPageContainsLinkWithId($linkId) : void {
-    $link = stf\getGlobals()->page->getLinkById($linkId);
+    $link = getGlobals()->page->getLinkById($linkId);
 
     if ($link === null) {
         fail(ERROR_W03,
@@ -111,7 +113,7 @@ function assertPageContainsLinkWithId($linkId) : void {
 }
 
 function assertPageContainsTextFieldWithName($name) : void {
-    if (stf\getFormSet()->getTextFieldByName($name) !== null) {
+    if (getFormSet()->getTextFieldByName($name) !== null) {
         return;
     }
 
@@ -120,7 +122,7 @@ function assertPageContainsTextFieldWithName($name) : void {
 }
 
 function assertPageContainsRadioWithName($name) : void {
-    if (stf\getFormSet()->getRadioByName($name) !== null) {
+    if (getFormSet()->getRadioByName($name) !== null) {
         return;
     }
 
@@ -129,7 +131,7 @@ function assertPageContainsRadioWithName($name) : void {
 }
 
 function assertPageContainsSelectWithName($name) : void {
-    if (stf\getFormSet()->getSelectByName($name) !== null) {
+    if (getFormSet()->getSelectByName($name) !== null) {
         return;
     }
 
@@ -138,7 +140,7 @@ function assertPageContainsSelectWithName($name) : void {
 }
 
 function assertPageContainsFieldWithName($name) : void {
-    if (stf\getFormSet()->getFieldByName($name) !== null) {
+    if (getFormSet()->getFieldByName($name) !== null) {
         return;
     }
 
@@ -147,7 +149,7 @@ function assertPageContainsFieldWithName($name) : void {
 }
 
 function assertPageDoesNotContainFieldWithName($name) : void {
-    if (stf\getFormSet()->getFieldByName($name) === null) {
+    if (getFormSet()->getFieldByName($name) === null) {
         return;
     }
 
@@ -156,7 +158,7 @@ function assertPageDoesNotContainFieldWithName($name) : void {
 }
 
 function assertPageDoesNotContainButtonWithName($name) : void {
-    if (stf\getFormSet()->getButtonByName($name) === null) {
+    if (getFormSet()->getButtonByName($name) === null) {
         return;
     }
 
@@ -165,7 +167,7 @@ function assertPageDoesNotContainButtonWithName($name) : void {
 }
 
 function assertPageContainsCheckboxWithName($name) : void {
-    if (stf\getFormSet()->getCheckboxByName($name) !== null) {
+    if (getFormSet()->getCheckboxByName($name) !== null) {
         return;
     }
 
@@ -174,7 +176,7 @@ function assertPageContainsCheckboxWithName($name) : void {
 }
 
 function assertPageContainsButtonWithName($name) : void {
-    if (stf\getFormSet()->getButtonByName($name) !== null) {
+    if (getFormSet()->getButtonByName($name) !== null) {
         return;
     }
 
@@ -184,7 +186,7 @@ function assertPageContainsButtonWithName($name) : void {
 }
 
 function assertPageContainsLinkWithText($text) : void {
-    $link = stf\getGlobals()->page->getLinkByText($text);
+    $link = getGlobals()->page->getLinkByText($text);
 
     if ($link === null) {
         fail(ERROR_W03,
@@ -217,7 +219,7 @@ function assertPageDoesNotContainElementWithId($id) : void {
 function assertFrontControllerLink(string $id) : void {
     assertPageContainsLinkWithId($id);
 
-    $link = stf\getGlobals()->page->getLinkById($id)->getHref();
+    $link = getGlobals()->page->getLinkById($id)->getHref();
 
     $pattern = '/^(index\.php)?\??[-=&\w]*$/';
 
@@ -230,7 +232,7 @@ function assertFrontControllerLink(string $id) : void {
 }
 
 function assertPageContainsText($textToBeFound) : void {
-    $pageText = stf\getGlobals()->page->getText();
+    $pageText = getGlobals()->page->getText();
 
     if (strpos($pageText, $textToBeFound) !== false) {
         return;
@@ -241,7 +243,7 @@ function assertPageContainsText($textToBeFound) : void {
 }
 
 function assertNoOutput() : void {
-    $source = stf\getGlobals()->page->getSource();
+    $source = getGlobals()->page->getSource();
 
     if (preg_match('/^\s*$/', $source)) {
         return;
@@ -253,7 +255,7 @@ function assertNoOutput() : void {
 }
 
 function assertCurrentUrl($expected) : void {
-    $actual = stf\getGlobals()->currentUrl->asString();
+    $actual = getGlobals()->currentUrl->asString();
 
     if ($actual !== $expected) {
         fail(ERROR_H03, sprintf("Expected url to be '%s' but was '%s'",
@@ -264,7 +266,7 @@ function assertCurrentUrl($expected) : void {
 function clickLinkWithText($text) : void {
     assertPageContainsLinkWithText($text);
 
-    $link = stf\getGlobals()->page->getLinkByText($text);
+    $link = getGlobals()->page->getLinkByText($text);
 
     stf\navigateTo($link->getHref());
 }
@@ -272,13 +274,19 @@ function clickLinkWithText($text) : void {
 function getHrefFromLinkWithText(string $text) : string {
     assertPageContainsLinkWithText($text);
 
-    return stf\getGlobals()->page->getLinkByText($text)->getHref();
+    return getGlobals()->page->getLinkByText($text)->getHref();
+}
+
+function getTextFromLinkWithId(string $id) : string {
+    assertPageContainsLinkWithId($id);
+
+    return getGlobals()->page->getLinkById($id)->getText();
 }
 
 function clickLinkWithId($linkId) : void {
     assertPageContainsLinkWithId($linkId);
 
-    $link = stf\getGlobals()->page->getLinkById($linkId);
+    $link = getGlobals()->page->getLinkById($linkId);
 
     navigateTo($link->getHref());
 }
@@ -343,12 +351,22 @@ function getFieldValue(string $fieldName) {
         : $field->getValue();
 }
 
+function getButtonLabel(string $buttonName) : string {
+    assertPageContainsButtonWithName($buttonName);
+
+    return getFormSet()->getButtonByName($buttonName)->getLabel();
+}
+
 function getSelectedOptionText(string $fieldName) : string {
     assertPageContainsSelectWithName($fieldName);
 
     $select = stf\getFormSet()->getSelectByName($fieldName);
 
     return $select->getSelectedOptionText();
+}
+
+function deleteSessionCookie() : void {
+    getGlobals()->httpClient->deleteCookie(session_name());
 }
 
 function is($value) : stf\matcher\AbstractMatcher {

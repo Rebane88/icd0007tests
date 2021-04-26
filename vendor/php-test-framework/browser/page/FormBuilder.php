@@ -129,7 +129,11 @@ class FormBuilder {
         $value = $element->getAttributeValue('value') ?? '';
         $formAction = $element->getAttributeValue('formaction') ?? '';
 
-        return new Button($name, $value, $formAction);
+        $label = $element->getTagName() === 'input'
+            ? $value
+            : implode('', $this->nodeTree->getTextLines($element));
+
+        return new Button($name, $value, $label, $formAction);
     }
 }
 

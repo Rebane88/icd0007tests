@@ -304,11 +304,13 @@ function clickButton(string $buttonName, ?string $buttonValue = null) {
 function setTextFieldValue(string $fieldName, string $value) {
     assertPageContainsTextFieldWithName($fieldName);
 
-    stf\getFormSet()->getTextFieldByName($fieldName)->setValue($value);
+    getFormSet()->getTextFieldByName($fieldName)->setValue($value);
 }
 
 function forceFieldValue(string $fieldName, string $value) {
-    $form = stf\getFormSet()->findFormContainingField($fieldName);
+    assertPageContainsFieldWithName($fieldName);
+
+    $form = getFormSet()->findFormContainingField($fieldName);
 
     $form->deleteFieldByName($fieldName);
 
@@ -318,19 +320,19 @@ function forceFieldValue(string $fieldName, string $value) {
 function selectOptionWithText(string $fieldName, string $text) {
     assertPageContainsSelectWithName($fieldName);
 
-    stf\getFormSet()->getSelectByName($fieldName)->selectOptionWithText($text);
+    getFormSet()->getSelectByName($fieldName)->selectOptionWithText($text);
 }
 
 function setCheckboxValue(string $fieldName, bool $value) {
     assertPageContainsCheckboxWithName($fieldName);
 
-    stf\getFormSet()->getCheckboxByName($fieldName)->check($value);
+    getFormSet()->getCheckboxByName($fieldName)->check($value);
 }
 
 function setRadioFieldValue(string $fieldName, string $value) {
     assertPageContainsRadioWithName($fieldName);
 
-    $field = stf\getFormSet()->getRadioByName($fieldName);
+    $field = getFormSet()->getRadioByName($fieldName);
 
     if ($field->hasOption($value)) {
         $field->selectOption($value);
@@ -344,7 +346,7 @@ function setRadioFieldValue(string $fieldName, string $value) {
 function getFieldValue(string $fieldName) {
     assertPageContainsFieldWithName($fieldName);
 
-    $field = stf\getFormSet()->getFieldByName($fieldName);
+    $field = getFormSet()->getFieldByName($fieldName);
 
     return $field instanceof stf\browser\page\Checkbox
         ? $field->isChecked()
@@ -360,7 +362,7 @@ function getButtonLabel(string $buttonName) : string {
 function getSelectedOptionText(string $fieldName) : string {
     assertPageContainsSelectWithName($fieldName);
 
-    $select = stf\getFormSet()->getSelectByName($fieldName);
+    $select = getFormSet()->getSelectByName($fieldName);
 
     return $select->getSelectedOptionText();
 }

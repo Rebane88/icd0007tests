@@ -126,7 +126,6 @@ function doesNotAllowSqlInjectionWhenAddingBook() {
     forceFieldValue('grade', $dangerousSymbols);
     forceFieldValue('isRead', $dangerousSymbols);
     forceFieldValue('author1', $dangerousSymbols);
-    forceFieldValue('author2', $dangerousSymbols);
 
     clickBookFormSubmitButton();
 

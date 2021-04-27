@@ -103,7 +103,7 @@ function executeRequest(HttpRequest $request) : HttpResponse {
         throw new FrameworkException(ERROR_G01, $e->getMessage());
     } finally {
         if ($globals->logRequests) {
-            printf("%s (%s)\n", $url,
+            printf("%s %s (%s)\n", $request->isPostMethod() ? "POST" : 'GET', $url,
                 $response->getResponseCode() ?? 'no response code');
         }
     }

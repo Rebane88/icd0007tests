@@ -37,17 +37,17 @@ class HttpClient {
 
         $response = $simpleHttpRequest->fetch(1); // 1 second
 
+        if ($response->isError()) {
+            throw new FrameworkException($response->getErrorCode(),
+                $response->getError());
+        }
+
         $response->getHeaders()->writeCookiesToJar(
             $this->cookieJar, new SimpleUrl($url));
 
         $headers = new HttpHeaders(
             $response->getHeaders()->getResponseCode(),
-            $response->getHeaders()->getLocation() ?: null) ;
-
-        if ($response->isError()) {
-            throw new FrameworkException($response->getErrorCode(),
-                $response->getError());
-        }
+            $response->getHeaders()->getLocation() ?: null);
 
         return new HttpResponse($headers, $response->getContent());
     }

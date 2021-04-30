@@ -7,7 +7,6 @@ use tplLib\node\TagNode;
 class FormBuilder {
 
     private NodeTree $nodeTree;
-    private array $radios = [];
 
     public function __construct(NodeTree $nodeTree) {
         $this->nodeTree = $nodeTree;
@@ -34,13 +33,14 @@ class FormBuilder {
         $form->setAction($formNode->getAttributeValue('action') ?? '');
         $form->setMethod($formNode->getAttributeValue('method') ?? '');
 
+        $radios = [];
         foreach ($formElements as $element) {
             if ($this->isButton($element)) {
                 $form->addButton($this->createButton($element));
             } else if ($this->isRadio($element)) {
 
                 $name = $element->getAttributeValue('name') ?? '';
-                $radio = $this->radios[$name] ??= new RadioGroup($name);
+                $radio = $radios[$name] ??= new RadioGroup($name);
 
                 $value = $element->getAttributeValue('value') ?? '';
                 $radio->addOption($value);
@@ -74,7 +74,7 @@ class FormBuilder {
             }
         }
 
-        foreach ($this->radios as $radio) {
+        foreach ($radios as $radio) {
             $form->addField($radio);
         }
 
@@ -83,7 +83,7 @@ class FormBuilder {
 
     private function isButton($element) : bool {
         return ($element->getTagName() === 'button' || $element->getTagName() === 'input')
-                && $element->getAttributeValue('type') === 'submit';
+            && $element->getAttributeValue('type') === 'submit';
     }
 
     private function isTextArea($element) : bool {
@@ -92,12 +92,12 @@ class FormBuilder {
 
     private function isRadio($element) : bool {
         return ($element->getTagName() === 'input')
-                && $element->getAttributeValue('type') === 'radio';
+            && $element->getAttributeValue('type') === 'radio';
     }
 
     private function isCheckbox($element) : bool {
         return ($element->getTagName() === 'input')
-                && $element->getAttributeValue('type') === 'checkbox';
+            && $element->getAttributeValue('type') === 'checkbox';
     }
 
     private function isSelect($element) : bool {
@@ -136,5 +136,3 @@ class FormBuilder {
         return new Button($name, $value, $label, $formAction);
     }
 }
-
-

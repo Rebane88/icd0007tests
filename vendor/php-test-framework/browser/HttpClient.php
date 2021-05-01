@@ -20,16 +20,17 @@ class HttpClient {
 
     function execute(HttpRequest $request) : HttpResponse {
 
-        $url = $request->getFullUrl()->asString();
-
         $encoding = $request->isPostMethod()
             ? new SimplePostEncoding()
             : new SimpleGetEncoding();
 
-        foreach ($request->getParameters() as $key => $value) {
-            $encoding->add($key, $value);
+        if ($request->isPostMethod()) {
+            foreach ($request->getParameters() as $key => $value) {
+                $encoding->add($key, $value);
+            }
         }
 
+        $url = $request->getFullUrl()->asString();
         $simpleHttpRequest = new SimpleHttpRequest(
             new SimpleRoute(new SimpleUrl($url)), $encoding);
 

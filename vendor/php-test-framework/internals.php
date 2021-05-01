@@ -136,7 +136,7 @@ function assertValidHtml(PageParser $pageParser): void {
         return;
     }
 
-    $message = sprintf("Application responded with incorrect HTML\n");
+    $message = "Application responded with incorrect HTML\n";
     $message .= sprintf("%s at line %s, column %s\n\n",
         $result->getMessage(), $result->getLine(), $result->getColumn());
     $message .= sprintf("%s\n", $result->getSource());

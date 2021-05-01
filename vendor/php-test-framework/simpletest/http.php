@@ -553,6 +553,7 @@ class SimpleHttpResponse extends SimpleStickyError
     {
         if (! $raw) {
             $this->setError('Nothing fetched');
+            $this->setErrorCode(ERROR_N03);
             $this->headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->url->getScheme()) {
             $this->headers = new SimpleHttpHeaders('');

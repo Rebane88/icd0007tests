@@ -320,6 +320,15 @@ function forceFieldValue(string $fieldName, string $value) {
 function selectOptionWithText(string $fieldName, string $text) {
     assertPageContainsSelectWithName($fieldName);
 
+    $select = stf\getFormSet()->getSelectByName($fieldName);
+
+    if ($select->hasOptionWithLabel($text)) {
+        $select->selectOptionWithText($text);
+    } else {
+        fail(ERROR_W12, sprintf("select with name '%s' does not have option '%s'",
+            $fieldName, $text));
+    }
+
     getFormSet()->getSelectByName($fieldName)->selectOptionWithText($text);
 }
 

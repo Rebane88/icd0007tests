@@ -14,7 +14,7 @@ const ERROR_D01 = 'D01'; // wrong page id
 
 const ERROR_N01 = 'N01'; // Error reading socket
 const ERROR_N02 = 'N02'; // bad response code
-const ERROR_N03 = 'N03'; // Nothing fetched
+const ERROR_N03 = 'N03'; // Timeout / nothing fetched
 
 const ERROR_H01 = 'H01'; // Parse exception
 const ERROR_H02 = 'H02'; // bad characters in url

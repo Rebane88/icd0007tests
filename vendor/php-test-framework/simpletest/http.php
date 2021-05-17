@@ -552,7 +552,7 @@ class SimpleHttpResponse extends SimpleStickyError
     protected function parse($raw)
     {
         if (! $raw) {
-            $this->setError('Timeout 1 second');
+            $this->setError('Timeout 2 seconds');
             $this->setErrorCode(ERROR_N03);
             $this->headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->url->getScheme()) {

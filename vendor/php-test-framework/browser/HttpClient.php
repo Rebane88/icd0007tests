@@ -36,7 +36,7 @@ class HttpClient {
 
         $simpleHttpRequest->readCookiesFromJar($this->cookieJar, new SimpleUrl($url));
 
-        $response = $simpleHttpRequest->fetch(1); // 1 second
+        $response = $simpleHttpRequest->fetch(2); // 2 seconds
 
         if ($response->isError()) {
             throw new FrameworkException($response->getErrorCode(),

@@ -2,10 +2,11 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-if ($argc < 2) {
-    die('Pass directory to scan as an argument.' . PHP_EOL);
+if ($argc < 3) {
+    die('Pass project directory and Csv fail as arguments.' . PHP_EOL);
 } else {
     $path = realpath($argv[1]);
+    $namesCsv = realpath($argv[2]);
 }
 
 if ($path === false) {
@@ -24,16 +25,24 @@ $json = json_decode($string, true);
 $errors = [];
 
 if (!$json['firstName']) {
-    $errors[] = 'firstName is missing';
+    $errors[] = 'First name is missing';
 }
 if (!$json['lastName']) {
-    $errors[] = 'lastName is missing';
+    $errors[] = 'Last name is missing';
 }
 if (!$json['passwordHash']) {
-    $errors[] = 'passwordHash is missing';
+    $errors[] = 'Password hash is missing';
 }
 if ($json['iHaveReadTheRulesOfTheCourse'] !== true) {
     $errors[] = 'iHaveReadTheRulesOfTheCourse must be true';
+}
+
+$fullName = $json['firstName'] . ' ' . $json['lastName'];
+
+if (!nameExistsInDeclaredNames($fullName, $namesCsv)) {
+    $errors['name'] = "There is no declaration with name '$fullName' in Õis (as of 05.09.2021). 
+                 If you declared the course later and the name is correct you will get 
+                 the points on 19.09.2021";
 }
 
 if (!$errors) {
@@ -43,6 +52,20 @@ if (!$errors) {
 } else {
     print join(PHP_EOL, $errors);
 
-    die(sprintf(RESULT_PATTERN, 0, MAX_POINTS));
+    $score = count($errors) === 1 && $errors['name'] ? 3 : 0;
+
+    die(sprintf(RESULT_PATTERN, $score, MAX_POINTS));
 }
 
+function nameExistsInDeclaredNames(string $name, string $csvFile) : bool {
+    $file = new SplFileObject($csvFile);
+    $file->setFlags(SplFileObject::READ_CSV);
+    $file->setCsvControl(';');
+    foreach ($file as $row) {
+        if ($name === $row[2] . ' ' . $row[3]) {
+            return true;
+        }
+    }
+
+    return false;
+}

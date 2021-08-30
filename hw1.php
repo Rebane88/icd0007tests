@@ -40,7 +40,7 @@ if ($json['iHaveReadTheRulesOfTheCourse'] !== true) {
 $fullName = $json['firstName'] . ' ' . $json['lastName'];
 
 if (!nameExistsInDeclaredNames($fullName, $namesCsv)) {
-    $errors['name'] = "There is no declaration with name '$fullName' in Õis (as of 05.09.2021). 
+    $errors['name'] = "There is no declaration with name '$fullName' in Õis (as of 31.08.2021). 
                  If you declared the course later and the name is correct you will get 
                  the points on 19.09.2021";
 }

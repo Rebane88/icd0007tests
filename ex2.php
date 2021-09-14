@@ -7,7 +7,7 @@ const BASE_URL = 'http://localhost:8080/ex2/nav/';
 setBaseUrl(BASE_URL);
 
 function indexToA() {
-    navigateTo(BASE_URL . '');
+    navigateTo(BASE_URL);
 
     clickLinkWithText("a.html");
 

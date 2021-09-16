@@ -62,7 +62,7 @@ function nameExistsInDeclaredNames(string $name, string $csvFile) : bool {
     $file->setFlags(SplFileObject::READ_CSV);
     $file->setCsvControl(';');
     foreach ($file as $row) {
-        if ($name === $row[2] . ' ' . $row[3]) {
+        if (isset($row[2]) && $name === $row[2] . ' ' . $row[3]) {
             return true;
         }
     }

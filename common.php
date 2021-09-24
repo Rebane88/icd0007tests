@@ -19,14 +19,26 @@ function assertDoesNotContainPostWithTitle(array $allPosts, string $title) {
     }
 }
 
-function setIncludePath() {
-    set_include_path(get_include_path() . PATH_SEPARATOR . getProjectDirectory());
+function extendIncludePath(array $argv, string $userDefinedDir) {
+    $path = count($argv) === 2 ? $argv[1] : $userDefinedDir;
+
+    if (!$path) {
+        die("Please specify your project's directory in constant PROJECT_DIRECTORY");
+    }
+
+    $path = realpath($path);
+
+    if (!file_exists($path)) {
+        die("Value in PROJECT_DIRECTORY is not correct directory");
+    }
+
+    set_include_path(get_include_path() . PATH_SEPARATOR . $path);
 }
 
 function getProjectDirectory() : string {
     global $argc, $argv;
 
-    $path = $argc === 2 ? $path = $argv[1] : PROJECT_DIRECTORY;
+    $path = $argc === 2 ? $argv[1] : PROJECT_DIRECTORY;
 
     if (!$path) {
         die("Please specify your projects directory in constant PROJECT_DIRECTORY");

@@ -14,8 +14,9 @@ class Globals {
 
     public Url $baseUrl;
     public Url $currentUrl;
-    public Page $page;
+    public string $responseContents;
     public int $responseCode;
+    public Page $page;
 
     public bool $logRequests = false;
     public bool $logPostParameters = false;

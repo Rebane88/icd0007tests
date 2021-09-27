@@ -44,9 +44,7 @@ function printPageSourceIfNeeded() {
         return;
     }
 
-    $text = isset(getGlobals()->page)
-        ? getGlobals()->page->getSource()
-        : 'Nothing fetched yet';
+    $text = getGlobals()->responseContents ?? 'Nothing fetched yet';
 
     print("##################  Page source start #################### \n");
     print $text . PHP_EOL;

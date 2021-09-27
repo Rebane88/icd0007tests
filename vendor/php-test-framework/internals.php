@@ -70,21 +70,25 @@ function executeRequestWithRedirects(HttpRequest $request) {
         $response = executeRequest($request);
     }
 
-    updatePage($response);
+    updateGlobals($response);
 }
 
-function updatePage(HttpResponse $response) : void {
-    $pageParser = new PageParser($response->getContents());
+function updateGlobals(HttpResponse $response) : void {
+    $globals = getGlobals();
 
     assertValidResponse($response->getResponseCode());
+
+    $globals->responseCode = $response->getResponseCode();
+    $globals->responseContents = $response->getContents();
+
+    $pageParser = new PageParser($response->getContents());
+
     assertValidHtml($pageParser);
 
     $nodeTree = new NodeTree($pageParser->getNodeTree());
 
     $page = (new PageBuilder($nodeTree, $response->getContents()))->getPage();
 
-    $globals = getGlobals();
-    $globals->responseCode = $response->getResponseCode();
     $globals->page = $page;
 }
 

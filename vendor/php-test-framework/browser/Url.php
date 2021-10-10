@@ -30,22 +30,20 @@ class Url {
             : $result;
     }
 
-    private function isAbsolute(?string $url) {
+    private function isAbsolute(?string $url) : bool {
         return !empty($this->getHost($url));
     }
 
     public function navigateTo(?string $destination) : Url {
-        if ($this->isAbsolute($destination)) {
+        if (empty($destination)) {
+            return $this->normalize();
+        } else if ($this->isAbsolute($destination)) {
             return new Url($destination);
         }
 
-        $thisPath = $this->path;
+        $path = $this->path->removeFilePart();
 
-        if (!empty($destination)) {
-            $thisPath = $thisPath->removeFilePart();
-        }
-
-        $newPath = $thisPath->extend(new Path($destination));
+        $newPath = $path->extend(new Path($destination));
 
         $newUrl = new Url($this->host . $newPath->asAbsolute()->asString());
 
@@ -58,7 +56,7 @@ class Url {
 
         $newUrl->path = $this->path->normalize();
 
-        if ($newUrl->path->isRoot()) {
+        if ($newUrl->path->isRoot() && empty($this->getQueryString())) {
             $newUrl->path = new Path('');
         }
 
@@ -98,7 +96,4 @@ class Url {
 
         $this->queryString .= "$key=$value";
     }
-
 }
-
-

@@ -1,7 +1,6 @@
 <?php
 
 require_once 'vendor/php-test-framework/public-api.php';
-require_once 'common.php';
 
 const PROJECT_DIRECTORY = '';
 const BASE_URL = 'http://localhost:8080';

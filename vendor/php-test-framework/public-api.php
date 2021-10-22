@@ -407,3 +407,19 @@ function containsInAnyOrder(array $value) : stf\matcher\AbstractMatcher {
 function isAnyOf(...$values) : stf\matcher\AbstractMatcher {
     return new stf\matcher\ContainsAnyMatcher($values);
 }
+
+function extendIncludePath(array $argv, string $userDefinedDir) {
+    $path = count($argv) === 2 ? $argv[1] : $userDefinedDir;
+
+    if (!$path) {
+        die("Please specify your project's directory in constant PROJECT_DIRECTORY");
+    }
+
+    $path = realpath($path);
+
+    if (!file_exists($path)) {
+        die("Value in PROJECT_DIRECTORY is not correct directory");
+    }
+
+    set_include_path(get_include_path() . PATH_SEPARATOR . $path);
+}

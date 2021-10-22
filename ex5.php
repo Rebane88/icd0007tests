@@ -1,9 +1,8 @@
 <?php
 
 require_once 'vendor/php-test-framework/public-api.php';
-require_once 'common.php';
 
-const PROJECT_DIRECTORY = '';
+const PROJECT_DIRECTORY = '/home/mkalmo/git/php/icd0007';
 
 function distributesNumbersToSets() {
 

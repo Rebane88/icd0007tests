@@ -189,7 +189,7 @@ function assertPageContainsLinkWithText($text) : void {
     $link = getGlobals()->page->getLinkByText($text);
 
     if ($link === null) {
-        fail(ERROR_W03,
+        fail(ERROR_W04,
             sprintf("Current page does not contain link with text '%s'.", $text));
     }
 }

@@ -6,11 +6,13 @@ const PROJECT_DIRECTORY = '';
 const BASE_URL = 'http://localhost:8080';
 
 function orderLineDaoReturnsOrderLineObjects() {
+    global $argv;
 
     require_once 'ex7/OrderLineDao.php';
     require_once 'ex7/OrderLine.php';
+    $dataFilePath = getProjectPath($argv, PROJECT_DIRECTORY) . '/ex7/data/order.txt';
 
-    $dao = new OrderLineDao(realpath(PROJECT_DIRECTORY) . '/ex7/data/order.txt');
+    $dao = new OrderLineDao($dataFilePath);
 
     $orderLines = $dao->getOrderLines();
 

@@ -59,6 +59,8 @@ function hostname() {
     assertThat(url('http://lh')->navigateTo('/../../.')->asString(), is('http://lh'));
 
     assertThat(url('http://lh')->navigateTo('/../a')->asString(), is('http://lh/a'));
+
+    assertThat(url('http://lh')->navigateTo('a.html')->asString(), is('http://lh/a.html'));
 }
 
 function hostnameSlash() {

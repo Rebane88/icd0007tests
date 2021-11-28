@@ -60,6 +60,7 @@ class Url {
 
         return $this->host
             . $this->path->asString()
+            . ($this->host && $this->path->isEmpty() && ($this->file || $this->queryString) ? '/' : '')
             . $this->file
             . $this->queryString;
     }

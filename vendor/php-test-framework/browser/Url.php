@@ -58,9 +58,13 @@ class Url {
             return $this->host;
         }
 
+        $slashAfterHost = $this->host
+            && !$this->path->isAbsolute()
+            && ($this->file || $this->queryString) ? '/' : '';
+
         return $this->host
+            . $slashAfterHost
             . $this->path->asString()
-            . ($this->host && $this->path->isEmpty() && ($this->file || $this->queryString) ? '/' : '')
             . $this->file
             . $this->queryString;
     }

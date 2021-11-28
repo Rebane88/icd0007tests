@@ -62,6 +62,7 @@ function fromHostname() {
 
     assertThat(url('http://lh')->navigateTo('a.html')->asString(), is('http://lh/a.html'));
     assertThat(url('http://lh')->navigateTo('a/a.html')->asString(), is('http://lh/a/a.html'));
+    assertThat(url('http://lh')->navigateTo('a/')->asString(), is('http://lh/a/'));
     assertThat(url('http://lh')->navigateTo('?a=1')->asString(), is('http://lh/?a=1'));
 }
 

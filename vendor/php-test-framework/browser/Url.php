@@ -50,20 +50,16 @@ class Url {
     }
 
     public function asString() : string {
-        if ($this->host !== ''
-            && $this->path->isRoot()
-            && $this->file === ''
-            && $this->queryString === '') {
+        if ($this->host
+            && ($this->path->isEmpty() || $this->path->isRoot())
+            && !$this->file
+            && !$this->queryString) {
 
             return $this->host;
         }
 
-        $slashAfterHost = $this->host
-            && !$this->path->isAbsolute()
-            && ($this->file || $this->queryString) ? '/' : '';
-
         return $this->host
-            . $slashAfterHost
+            . ($this->host && !$this->path->isAbsolute() ? '/' : '')
             . $this->path->asString()
             . $this->file
             . $this->queryString;

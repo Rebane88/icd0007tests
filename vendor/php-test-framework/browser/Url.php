@@ -65,21 +65,17 @@ class Url {
             . $this->queryString;
     }
 
-    private function hasHostPart() : bool {
-        return $this->host !== '';
-    }
-
     private function isEmpty() : bool {
-        return $this->host === ''
+        return !$this->host
             && $this->path->isEmpty()
-            && $this->file === ''
-            && $this->queryString === '';
+            && !$this->file
+            && !$this->queryString;
     }
 
     public function navigateTo(string $destination) : Url {
         $dest = new Url($destination);
 
-        if ($dest->hasHostPart()) {
+        if ($dest->host) {
             return new Url($destination);
         } else if ($dest->isEmpty()) {
             return $this;

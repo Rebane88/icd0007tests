@@ -1,7 +1,7 @@
 <?php
 
 const MAX_POINTS = 4;
-const RESULT_PATTERN = "\nResult: %s of %s points\n";
+const RESULT_PATTERN = "\nRESULT: %s of %s points\n";
 
 function getPageId() : ?string {
     return stf\getGlobals()->page->getId();

@@ -62,4 +62,4 @@ function authorFormPageContainsCorrectMenu() {
     assertPageContainsLinkWithId('author-form-link');
 }
 
-stf\runTests(new stf\PointsReporter([6 => 5]));
+stf\runTests(new stf\PointsReporter([6 => 4]));

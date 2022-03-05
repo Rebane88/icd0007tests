@@ -198,4 +198,4 @@ setLogPostParameters(false);
 setPrintStackTrace(false);
 setPrintPageSourceOnError(false);
 
-stf\runTests(new stf\PointsReporter([10 => 5]));
+stf\runTests(new stf\PointsReporter([10 => 4]));

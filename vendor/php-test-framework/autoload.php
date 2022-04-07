@@ -6,7 +6,7 @@ spl_autoload_register(function ($className) {
     if ($parts[0] === 'tplLib') {
         $basePath = __DIR__ . '/parser';
     } else if ($parts[0] === 'Facebook') {
-        $basePath = __DIR__ . '/../php-webdriver/webdriver/lib';
+        $basePath = __DIR__ . '/php-webdriver/webdriver/lib';
         array_shift($parts);
     } else {
         $basePath = __DIR__;

@@ -33,13 +33,18 @@ function assertLinkById($id) {
     getElement(WebDriverBy::id($id));
 }
 
-function getElement($selector) : RemoteWebElement {
+function getElement($selector) : ?RemoteWebElement {
     $message = sprintf("Did not find element %s = '%s'",
         $selector->getMechanism(), $selector->getValue());
 
-    getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
-        WebDriverExpectedCondition::presenceOfElementLocated($selector), $message
-    );
+    try {
+        getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+            WebDriverExpectedCondition::presenceOfElementLocated($selector), $message
+        );
+    } catch (Facebook\WebDriver\Exception\NoSuchElementException $e) {
+
+        return null;
+    }
 
     return getDriver()->findElement($selector);
 }

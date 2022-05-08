@@ -3,8 +3,6 @@
 namespace stf\browser;
 
 interface Browser {
-    function setCurrentUrl(string $url) : void;
-
     function setMaxRedirectCount(int $count) : void;
 
     function getCurrentUrl() : string;

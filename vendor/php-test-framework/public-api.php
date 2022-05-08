@@ -27,7 +27,7 @@ use stf\matcher\ContainsNotStringMatcher;
 use stf\browser\Browser;
 
 function getBrowser() : Browser {
-    return getGlobals()->browser;
+    return getGlobals()->getBrowser();
 }
 
 function assertThrows($function): void {
@@ -64,7 +64,12 @@ function disableAutomaticRedirects() : void {
 
 function setBaseUrl(string $url) : void {
     getGlobals()->baseUrl = new stf\browser\Url($url);
-    getBrowser()->setCurrentUrl($url);
+}
+
+function useWebDriver(bool $shouldUse) : void {
+    getGlobals()->getBrowser()->reset();
+
+    getGlobals()->setUseWebDriver($shouldUse);
 }
 
 function setLogRequests(bool $flag) : void {
@@ -81,6 +86,14 @@ function setPrintStackTrace(bool $flag) : void {
 
 function setPrintPageSourceOnError(bool $flag) : void {
     getGlobals()->printPageSourceOnError = $flag;
+}
+
+function setLeaveBrowserOpen(bool $flag) : void {
+    getGlobals()->leaveBrowserOpen = $flag;
+}
+
+function setShowBrowser(bool $flag) : void {
+    getGlobals()->showBrowser = $flag;
 }
 
 function getResponseCode() : int {
@@ -345,6 +358,11 @@ function deleteSessionCookie() : void {
     throw new Error('not implemented');
     // getGlobals()->httpClient->deleteCookie(session_name());
 }
+
+function closeBrowser() {
+    getBrowser()->reset();
+}
+
 
 function is($value) : stf\matcher\AbstractMatcher {
     return new stf\matcher\IsMatcher($value);

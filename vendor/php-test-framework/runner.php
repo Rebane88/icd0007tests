@@ -13,9 +13,13 @@ function runTests(?PointsReporter $reporter = null) {
         }
 
         try {
-            getGlobals()->browser->reset();
+            getGlobals()->getBrowser()->reset();
 
             call_user_func($testName);
+
+            if (!getGlobals()->leaveBrowserOpen) {
+                getGlobals()->getBrowser()->reset();
+            }
 
             $successful++;
 
@@ -44,7 +48,7 @@ function printPageSourceIfNeeded() {
         return;
     }
 
-    $text = getGlobals()->browser->getResponseContents() ?? 'Nothing fetched yet';
+    $text = getGlobals()->getBrowser()->getResponseContents() ?? 'Nothing fetched yet';
 
     print("##################  Page source start #################### \n");
     print $text . PHP_EOL;

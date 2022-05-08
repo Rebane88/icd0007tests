@@ -33,8 +33,9 @@ class HttpBrowser implements Browser {
     private string $responseContents = '';
     private string $responseCode = '';
 
-    public function __construct(Globals $globals) {
+    public function __construct(Globals $globals, Url $url) {
         $this->globals = $globals;
+        $this->currentUrl = $url;
         $this->reset();
     }
 
@@ -53,10 +54,6 @@ class HttpBrowser implements Browser {
     public function reset() : void {
         $this->httpClient = new HttpClient();
         $this->maxRedirectCount = self::MAX_REDIRECT_COUNT;
-    }
-
-    function setCurrentUrl(string $url) : void {
-        $this->currentUrl = new Url($url);
     }
 
     function getCurrentUrl() : string {

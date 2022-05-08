@@ -1,0 +1,219 @@
+<?php
+
+namespace stf\browser;
+
+const SELENIUM_SERVER_URL = 'http://localhost:4444/';
+const MAX_WAIT_TIME = 2;
+const POLL_FREQUENCY = 200;
+
+use Error;
+use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Facebook\WebDriver\Remote\RemoteWebElement;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
+use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Exception\NoSuchElementException;
+
+use stf\Globals;
+
+class WebDriverBrowser implements Browser {
+
+    private Globals $globals;
+    private ?RemoteWebDriver $driver = null;
+
+    public function __construct(Globals $globals) {
+        $this->globals = $globals;
+    }
+
+    function setMaxRedirectCount(int $count): void {
+        throw new Error('not implemented');
+    }
+
+    function getCurrentUrl(): string {
+        return $this->getDriver()->getCurrentURL();
+    }
+
+    function getResponseContents(): string {
+        return $this->getDriver()->getPageSource();
+    }
+
+    function getResponseCode(): int {
+        throw new Error('not implemented');
+    }
+
+    function reset(): void {
+        if ($this->driver) {
+            $this->driver->quit();
+        }
+
+        $this->driver = null;
+    }
+
+    function navigateTo(string $url) {
+        $this->getDriver()->get($url);
+    }
+
+    function getPageId(): ?string {
+        throw new Error('not implemented');
+    }
+
+    function getLinkHrefById(string $id): string {
+        throw new Error('not implemented');
+    }
+
+    function getLinkHrefByText(string $text): string {
+        throw new Error('not implemented');
+    }
+
+    function hasLinkWithId(string $id): bool {
+        return $this->getElement(WebDriverBy::id($id)) != null;
+    }
+
+    function hasLinkWithText(string $linkText): bool {
+        return $this->getElement(WebDriverBy::linkText($linkText)) != null;
+    }
+
+    function hasElementWithId(string $id): bool {
+        throw new Error('not implemented');
+    }
+
+    function clickLinkWithId(string $linkId): void {
+        $this->clickAndWaitUrlChange(WebDriverBy::id($linkId));
+    }
+
+    function clickLinkWithText(string $linkText): void {
+        $this->clickAndWaitUrlChange(WebDriverBy::linkText($linkText));
+    }
+
+    function hasFieldByName(string $fieldName, string $type): bool {
+        return $this->getElement(WebDriverBy::name($fieldName)) != null;
+    }
+
+    function setTextFieldValue(string $fieldName, string $value): void {
+        $this->setValueBySelector(WebDriverBy::name($fieldName), $value);
+    }
+
+    function hasRadioOption(string $fieldName, string $optionValue): bool {
+        throw new Error('not implemented');
+    }
+
+    function hasSelectOptionWithLabel(string $fieldName, string $label): bool {
+        throw new Error('not implemented');
+    }
+
+    function selectOptionWithLabel(string $fieldName, string $label): void {
+        throw new Error('not implemented');
+    }
+
+    function getSelectedOptionText(string $fieldName): string {
+        throw new Error('not implemented');
+    }
+
+    function setRadioValue(string $fieldName, string $value): void {
+        throw new Error('not implemented');
+    }
+
+    function setCheckboxValue(string $fieldName, string $value): void {
+        throw new Error('not implemented');
+    }
+
+    function forceFieldValue(string $fieldName, string $value): void {
+        throw new Error('not implemented');
+    }
+
+    function getFieldValue(string $fieldName) {
+        throw new Error('not implemented');
+    }
+
+    function submitFormByButtonPress(string $buttonName, ?string $buttonValue) {
+        $this->clickAndWaitUrlChange(WebDriverBy::name($buttonName));
+    }
+
+    function getPageText(): string {
+        return $this->getDriver()->getPageSource();
+    }
+
+    function getPageSource(): string {
+        return $this->getDriver()->getPageSource();
+    }
+
+    private function setValueBySelector($selector, $value) {
+
+        $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+            function () use ($selector, $value) {
+                $input = $this->getDriver()->findElement($selector);
+
+                $input->clear()->sendKeys($value);
+
+                $readValue = $input->getAttribute('value');
+
+                return $readValue === $value;
+            },
+            sprintf("Could not set value to element %s = '%s'",
+                $selector->getMechanism(), $selector->getValue())
+        );
+    }
+
+    private function clickAndWaitUrlChange($selector) {
+        $element = $this->getElement($selector);
+
+        // sometimes the element is found but if clicked too soon the click fails.
+        usleep(200000);
+
+        $previousUrl = $this->getCurrentURL();
+
+        $element->click();
+
+        $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+            function () use ($previousUrl) {
+                $tmpUrl = $this->getCurrentURL();
+
+                return $previousUrl !== $tmpUrl;
+            },
+            sprintf("Url did not change from %s", $previousUrl)
+        );
+    }
+
+    private function getElement($selector) : ?RemoteWebElement {
+        try {
+
+            $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+                WebDriverExpectedCondition::presenceOfElementLocated($selector)
+            );
+
+        } catch (NoSuchElementException $e) {
+
+            return null;
+        }
+
+        return $this->getDriver()->findElement($selector);
+    }
+
+    private function getDriver() : RemoteWebDriver {
+        if ($this->driver) {
+            return $this->driver;
+        }
+
+        $this->driver = $this->createDriver();
+
+        return $this->driver;
+    }
+
+    private function createDriver() : RemoteWebDriver {
+        $options = new ChromeOptions();
+
+        $arguments = ['no-sandbox', 'disable-gpu'];
+
+        if (!$this->globals->showBrowser) {
+            $arguments[] = 'headless';
+        }
+
+        $options->addArguments($arguments);
+
+        $capabilities = DesiredCapabilities::chrome();
+        $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
+
+        return RemoteWebDriver::create(SELENIUM_SERVER_URL, $capabilities);
+    }
+}

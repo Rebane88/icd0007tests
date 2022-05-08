@@ -2,7 +2,7 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-const BASE_URL = 'http://localhost:8080/hw7/';
+const BASE_URL = 'http://localhost:8080/';
 
 function baseUrlResponds() {
     navigateTo(BASE_URL);

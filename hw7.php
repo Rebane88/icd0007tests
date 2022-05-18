@@ -29,7 +29,7 @@ function canSaveBooks() {
 
     clickButton('submitButton');
 
-    assertThat(getPageText(), containsStringOnce($book->title));
+    waitPageText(fn() => containsStringOnce($book->title));
 
     // check that data is not generated on server side
 
@@ -61,7 +61,7 @@ function canUpdateBooks() {
 
     clickButton('submitButton');
 
-    assertThat(getPageText(), containsStringOnce($newTitle));
+    waitPageText(fn() => containsStringOnce($newTitle));
 
     assertThat(getPageText(), doesNotContainString($title));
 }

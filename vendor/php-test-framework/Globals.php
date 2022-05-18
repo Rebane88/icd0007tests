@@ -9,6 +9,10 @@ use stf\browser\WebDriverBrowser;
 
 class Globals {
 
+    const MAX_WAIT_TIME = 2;
+    const POLL_FREQUENCY = 200;
+    const SELENIUM_SERVER_URL = 'http://localhost:4444/';
+
     public Url $baseUrl;
 
     public bool $logRequests = false;

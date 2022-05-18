@@ -2,10 +2,6 @@
 
 namespace stf\browser;
 
-const SELENIUM_SERVER_URL = 'http://localhost:4444/';
-const MAX_WAIT_TIME = 2;
-const POLL_FREQUENCY = 200;
-
 use Error;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
@@ -140,7 +136,7 @@ class WebDriverBrowser implements Browser {
 
     private function setValueBySelector($selector, $value) {
 
-        $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+        $this->getDriver()->wait(Globals::MAX_WAIT_TIME, Globals::POLL_FREQUENCY)->until(
             function () use ($selector, $value) {
                 $input = $this->getDriver()->findElement($selector);
 
@@ -165,7 +161,7 @@ class WebDriverBrowser implements Browser {
 
         $element->click();
 
-        $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+        $this->getDriver()->wait(Globals::MAX_WAIT_TIME, Globals::POLL_FREQUENCY)->until(
             function () use ($previousUrl) {
                 $tmpUrl = $this->getCurrentURL();
 
@@ -178,7 +174,7 @@ class WebDriverBrowser implements Browser {
     private function getElement($selector) : ?RemoteWebElement {
         try {
 
-            $this->getDriver()->wait(MAX_WAIT_TIME, POLL_FREQUENCY)->until(
+            $this->getDriver()->wait(Globals::MAX_WAIT_TIME, Globals::POLL_FREQUENCY)->until(
                 WebDriverExpectedCondition::presenceOfElementLocated($selector)
             );
 
@@ -214,6 +210,6 @@ class WebDriverBrowser implements Browser {
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        return RemoteWebDriver::create(SELENIUM_SERVER_URL, $capabilities);
+        return RemoteWebDriver::create(Globals::SELENIUM_SERVER_URL, $capabilities);
     }
 }

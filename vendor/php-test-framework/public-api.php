@@ -44,6 +44,22 @@ function fail($code, $message): void {
     throw new stf\FrameworkException($code, $message);
 }
 
+function waitPageText(Closure $closure): void {
+    $time = 0;
+    while ($time < Globals::MAX_WAIT_TIME * 1000) {
+        if ($closure()->matches(getPageText())) {
+            return;
+        }
+
+        usleep(Globals::POLL_FREQUENCY * 1000);
+
+        $time += Globals::POLL_FREQUENCY;
+    }
+
+    throw new stf\FrameworkException(ERROR_C05,
+        "did not find text in " . Globals::MAX_WAIT_TIME . ' seconds');
+}
+
 function assertThat($actual, stf\matcher\AbstractMatcher $matcher, $message = null): void {
     if ($matcher->matches($actual)) {
         return;

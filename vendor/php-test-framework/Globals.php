@@ -37,7 +37,7 @@ class Globals {
 
         $this->browser = $this->useWebDriver
             ? new WebDriverBrowser($this)
-            : new HttpBrowser($this, $this->baseUrl);
+            : new HttpBrowser($this, $this->baseUrl ?? new Url(''));
 
         return $this->browser;
     }

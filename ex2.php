@@ -87,4 +87,4 @@ function cssIsCorrect() {
     }
 }
 
-stf\runTests(new stf\PointsReporter([6 => 1]));
+stf\runTests(new stf\PointsReporter([7 => 1]));

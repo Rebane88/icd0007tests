@@ -82,7 +82,7 @@ function cssIsCorrect() {
 
     $source = implode("\n", $output);
 
-    if (strpos($source, '5 of 5 correct') === false) {
+    if (strpos($source, '5 of 5 points') === false) {
         fail(ERROR_C01, "Css is not correct");
     }
 }

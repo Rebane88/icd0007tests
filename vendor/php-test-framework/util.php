@@ -23,9 +23,12 @@ function asString($value) : string {
         return 'NULL';
     } else if (gettype($value) === 'string') {
         return sprintf("'%s'", $value);
+    } else if (gettype($value) === 'array') {
+        return sprintf("'%s'", print_r($value, true));
     } else if ($value === '') {
         return '<EMPTY STRING>';
     }
 
     return $value;
 }
+

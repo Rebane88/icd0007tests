@@ -11,6 +11,8 @@ function checksWhetherListContainsSpecifiedElement() {
     $list = [1, 2, 3, 2, 6];
 
     assertThat(isInList($list, 7), is(false));
+
+    assertThat(isInList($list, 3), is(true));
 }
 
 function filtersOutOddNumbers() {

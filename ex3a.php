@@ -57,7 +57,7 @@ function calculatesCelsiusToFahrenheit() {
 
     clickButton('calculateButton');
 
-    assertPageContainsText('is 68 decrees');
+    assertPageContainsText('is 68 degrees');
 }
 
 function calculatesFahrenheitToCelsius() {
@@ -69,7 +69,7 @@ function calculatesFahrenheitToCelsius() {
 
     clickButton('calculateButton');
 
-    assertPageContainsText('is 20 decrees');
+    assertPageContainsText('is 20 degrees');
 }
 
 #Helpers

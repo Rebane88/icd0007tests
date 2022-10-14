@@ -60,7 +60,11 @@ class HttpBrowser implements Browser {
         return $this->currentUrl->asString();
     }
 
-    public function navigateTo(string $url) {
+    function getCurrentUrlDir() : string {
+        return $this->currentUrl->navigateTo('.')->asString();
+    }
+
+    public function navigateTo(string $url): void {
         $request = new HttpRequest($this->currentUrl, $url, 'GET');
 
         $this->executeRequestWithRedirects($request);
@@ -198,6 +202,10 @@ class HttpBrowser implements Browser {
         $this->responseCode = $response->getResponseCode();
         $this->responseContents = $response->getContents();
 
+        if (strpos($response->getContentType(), 'html') === false) {
+            return;
+        }
+
         $pageParser = new PageParser($response->getContents());
 
         $this->assertValidHtml($pageParser);
@@ -220,6 +228,11 @@ class HttpBrowser implements Browser {
 
     function hasElementWithId(string $id) : bool {
         return $this->getElementWithId($id) !== null;
+    }
+
+    function getElementAttributeValue(string $id,
+                                      string $attributeName): string {
+        return $this->getElementWithId($id)->getAttributeValue($attributeName);
     }
 
     public function getLinkHrefById(string $id) : string {

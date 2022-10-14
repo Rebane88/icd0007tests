@@ -120,6 +120,10 @@ function getCurrentUrl() : string {
     return getBrowser()->getCurrentUrl();
 }
 
+function getCurrentUrlDir() : string {
+    return getBrowser()->getCurrentUrlDir();
+}
+
 function printPageSource() : void {
     print getPageSource() . PHP_EOL;
 }
@@ -302,6 +306,12 @@ function getHrefFromLinkWithText(string $text) : string {
     return getBrowser()->getLinkHrefByText($text);
 }
 
+function getAttributeFromElementWithId(string $id, string $attributeName) : string {
+    assertPageContainsElementWithId($id);
+
+    return getBrowser()->getElementAttributeValue($id, $attributeName);
+}
+
 function clickLinkWithId($linkId) : void {
     assertPageContainsLinkWithId($linkId);
 
@@ -310,6 +320,14 @@ function clickLinkWithId($linkId) : void {
 
 function navigateTo(string $url) {
     getBrowser()->navigateTo($url);
+}
+
+function resourceExists(string $url) {
+    getBrowser()->navigateTo($url);
+
+    $code = getBrowser()->getResponseCode();
+
+    assertThat($code, is(200), "Resource does not exist.");
 }
 
 function clickButton(string $buttonName, ?string $buttonValue = null) {

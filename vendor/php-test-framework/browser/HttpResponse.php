@@ -26,6 +26,10 @@ class HttpResponse {
         return $this->headers->responseCode;
     }
 
+    public function getContentType() : string {
+        return $this->headers->contentType;
+    }
+
     public function getContents() : string {
         return $this->contents;
     }

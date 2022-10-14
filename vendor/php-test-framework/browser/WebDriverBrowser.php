@@ -30,6 +30,10 @@ class WebDriverBrowser implements Browser {
         return $this->getDriver()->getCurrentURL();
     }
 
+    function getCurrentUrlDir(): string {
+        throw new Error('not implemented');
+    }
+
     function getResponseContents(): string {
         return $this->getDriver()->getPageSource();
     }
@@ -46,7 +50,7 @@ class WebDriverBrowser implements Browser {
         $this->driver = null;
     }
 
-    function navigateTo(string $url) {
+    function navigateTo(string $url): void {
         $this->getDriver()->get($url);
     }
 
@@ -71,6 +75,11 @@ class WebDriverBrowser implements Browser {
     }
 
     function hasElementWithId(string $id): bool {
+        throw new Error('not implemented');
+    }
+
+    function getElementAttributeValue(string $id,
+                                      string $attributeName): string {
         throw new Error('not implemented');
     }
 

@@ -48,7 +48,8 @@ class HttpClient {
 
         $headers = new HttpHeaders(
             $response->getHeaders()->getResponseCode(),
-            $response->getHeaders()->getLocation() ?: null);
+            $response->getHeaders()->getLocation() ?: null,
+            $response->getHeaders()->getMimeType() ?: null);
 
         return new HttpResponse($headers, $response->getContent());
     }

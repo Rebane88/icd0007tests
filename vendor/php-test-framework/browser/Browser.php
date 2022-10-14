@@ -7,13 +7,15 @@ interface Browser {
 
     function getCurrentUrl() : string;
 
+    function getCurrentUrlDir() : string;
+
     function getResponseContents() : string;
 
     function getResponseCode() : int;
 
     function reset() : void;
 
-    function navigateTo(string $url);
+    function navigateTo(string $url): void;
 
     function getPageId() : ?string;
 
@@ -26,6 +28,8 @@ interface Browser {
     function hasLinkWithText(string $linkText) : bool;
 
     function hasElementWithId(string $id) : bool;
+
+    function getElementAttributeValue(string $id, string $attributeName) : string;
 
     function clickLinkWithId(string $linkId) : void;
 

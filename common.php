@@ -4,7 +4,7 @@ require_once 'vendor/php-test-framework/public-api.php';
 
 function repositoryDoesNotContainNonProjectFiles() {
     global $argc, $argv;
-
+    
     if ($argc < 2) {
         die('Pass directory to scan as an argument' . PHP_EOL);
     } else {
@@ -16,7 +16,7 @@ function repositoryDoesNotContainNonProjectFiles() {
     }
 
     $filter = function ($file) {
-        return preg_match('/^\\.\\/ex\\d$/', $file->getPathName());
+        return ! preg_match('/^\\.\\/ex\\d$/', $file->getPathName());
     };
 
     chdir($path);
@@ -40,6 +40,8 @@ function repositoryDoesNotContainNonProjectFiles() {
     if ($htmlCount > 10) {
         fail(ERROR_C01, "Repository contains too many ($htmlCount) Html files (max 10)");
     }
+
+    print $phpCount . PHP_EOL;
 
     if ($phpCount > 12) {
         fail(ERROR_C01, "Repository contains too many ($phpCount) Php files (max 12)");

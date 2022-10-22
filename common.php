@@ -4,7 +4,7 @@ require_once 'vendor/php-test-framework/public-api.php';
 
 function repositoryDoesNotContainNonProjectFiles() {
     global $argc, $argv;
-    
+
     if ($argc < 2) {
         die('Pass directory to scan as an argument' . PHP_EOL);
     } else {
@@ -29,23 +29,22 @@ function repositoryDoesNotContainNonProjectFiles() {
     $phpCount = 0;
     foreach($it as $each) {
         $extension = strtolower($each[1]);
-        if ($extension === 'html') {
-            $htmlCount++;
-        }
         if ($extension === 'php') {
             $phpCount++;
         }
+        if ($extension === 'html') {
+            $htmlCount++;
+        }
+    }
+
+    if ($phpCount > 12) {
+        fail(ERROR_C01, "Repository contains too many ($phpCount) Php files (max 12)");
     }
 
     if ($htmlCount > 10) {
         fail(ERROR_C01, "Repository contains too many ($htmlCount) Html files (max 10)");
     }
 
-    print $phpCount . PHP_EOL;
-
-    if ($phpCount > 12) {
-        fail(ERROR_C01, "Repository contains too many ($phpCount) Php files (max 12)");
-    }
 }
 
 stf\runTests(new stf\PointsReporter([1 => 1]));

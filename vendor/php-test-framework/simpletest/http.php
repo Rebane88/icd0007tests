@@ -537,8 +537,9 @@ class SimpleHttpResponse extends SimpleStickyError
         $this->content = false;
         $raw = $this->readAll($socket);
         if ($socket->isError()) {
-            $this->setError('Error reading socket [' . $socket->getError() . ']');
-            $this->setErrorCode(ERROR_N01);
+            $this->setError('Error reading data from server [' . $socket->getError() . ']');
+            $errorCode = $socket->getErrorCode() ?: ERROR_N01;
+            $this->setErrorCode($errorCode);
             return;
         }
         $this->parse($raw);
@@ -552,7 +553,7 @@ class SimpleHttpResponse extends SimpleStickyError
     protected function parse($raw)
     {
         if (! $raw) {
-            $this->setError(sprintf('Timeout %s seconds', TIMEOUT));
+            $this->setError(sprintf('Timeout %s seconds', REQUEST_TIMEOUT));
             $this->setErrorCode(ERROR_N03);
             $this->headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->url->getScheme()) {

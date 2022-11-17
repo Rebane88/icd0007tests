@@ -36,7 +36,7 @@ class HttpClient {
 
         $simpleHttpRequest->readCookiesFromJar($this->cookieJar, new SimpleUrl($url));
 
-        $response = $simpleHttpRequest->fetch(TIMEOUT);
+        $response = $simpleHttpRequest->fetch(REQUEST_TIMEOUT);
 
         if ($response->isError()) {
             throw new FrameworkException($response->getErrorCode(),

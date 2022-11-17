@@ -254,7 +254,21 @@ class SimpleSocket extends SimpleStickyError
         if ($this->isError() || ! $this->isOpen()) {
             return false;
         }
+
+        stream_set_timeout($this->handle, REQUEST_TIMEOUT);
+
         $raw = @fread($this->handle, $this->block_size);
+
+        $info = stream_get_meta_data($this->handle);
+
+        if ($info['timed_out']) {
+            $this->setError(sprintf(
+                'Socket read timeout. Timeout is %s seconds', REQUEST_TIMEOUT));
+            $this->setErrorCode(ERROR_N03);
+            $this->close();
+            return false;
+        }
+
         if ($raw === false) {
             $this->setError('Cannot read from socket');
             $this->close();

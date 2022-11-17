@@ -1,6 +1,6 @@
 <?php
 
-const TIMEOUT = 3; // tests should run under 3 seconds
+const REQUEST_TIMEOUT = 3; // each request should finish under 3 seconds
 
 const ERROR_G01 = 'G01'; // unexpected
 

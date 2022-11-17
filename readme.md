@@ -10,7 +10,7 @@
 `N02` Server vastas veaga. See juhtub siis, kui küsitud faili ei leita või Php skript lõpetab veaga.
 Vea tuvastamisel võib abiks olla infost serveri konsoolis. Selle info leiate sellest aknast, kust serveri käima panite.
 
-`N03` Server ei vastanud ühe sekundi jooksul. See juhtub siis, kui rakenduse kood on liiga aeglane või saadeti vigane päring.
+`N03` Server ei vastanud määratud aja jooksul. See juhtub siis, kui rakenduse kood on liiga aeglane või saadeti vigane päring.
 
 `C01` Üldine viga, mille puhul peaks veateade ise piisav olema.
 

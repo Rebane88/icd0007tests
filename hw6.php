@@ -80,4 +80,4 @@ setLogRequests(false);
 setLogPostParameters(false);
 setPrintPageSourceOnError(false);
 
-stf\runTests(new stf\PointsReporter([3 => 4]));
+stf\runTests(new stf\PointsReporter([3 => 6]));

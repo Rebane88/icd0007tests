@@ -61,6 +61,8 @@ Probleemi lahendamisel võib kasuks tulla `Html väljundi vaatamine`.
 
 `G01` Ootamatu viga. Test ei ole sellise olukorraga arvestanud. Siin on võimalus, et teie programm on korrektne ja viga on testis.
 
+`J01` Pärast aadressi vahetust on rakenduse olek kadunud. Tõenäoline põhjus on lehe täielik laadimine. 
+
 `Html väljundi vaatamine`  
 
 Testide failis on all

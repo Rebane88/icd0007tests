@@ -11,6 +11,7 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
+use stf\FrameworkException;
 use stf\Globals;
 
 class WebDriverBrowser implements Browser {
@@ -164,9 +165,11 @@ class WebDriverBrowser implements Browser {
         $element = $this->getElement($selector);
 
         // sometimes the element is found but if clicked too soon the click fails.
-        usleep(200000);
+        usleep(400000);
 
         $previousUrl = $this->getCurrentURL();
+
+        $this->getDriver()->executeScript("document.wtrTestState = 1;");
 
         $element->click();
 
@@ -178,6 +181,12 @@ class WebDriverBrowser implements Browser {
             },
             sprintf("Url did not change from %s", $previousUrl)
         );
+
+        $jsResult = $this->getDriver()->executeScript("return document.wtrTestState;");
+
+        if (!$jsResult) {
+            throw new FrameworkException(ERROR_J01, "Applications state is missing after url change");
+        }
     }
 
     private function getElement($selector) : ?RemoteWebElement {

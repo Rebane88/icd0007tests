@@ -42,3 +42,5 @@ const ERROR_W18 = 'W18'; // field should not exist
 const ERROR_W19 = 'W19'; // button should not exist
 const ERROR_W20 = 'W20'; // not front controller link
 const ERROR_W21 = 'W21'; // should not print any output
+
+const ERROR_J01 = 'J01'; // applications state is missing after url change

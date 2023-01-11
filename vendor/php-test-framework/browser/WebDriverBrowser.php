@@ -112,6 +112,14 @@ class WebDriverBrowser implements Browser {
         throw new Error('not implemented');
     }
 
+    function hasSelectOptionWithValue(string $fieldName, string $value): bool {
+        throw new Error('not implemented');
+    }
+
+    function selectOptionWithValue(string $fieldName, string $value): void {
+        throw new Error('not implemented');
+    }
+
     function getSelectedOptionText(string $fieldName): string {
         throw new Error('not implemented');
     }

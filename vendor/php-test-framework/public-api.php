@@ -359,6 +359,17 @@ function selectOptionWithText(string $fieldName, string $text) : void {
     }
 }
 
+function selectOptionWithValue(string $fieldName, string $value) : void {
+    assertPageContainsSelectWithName($fieldName);
+
+    if (getBrowser()->hasSelectOptionWithValue($fieldName, $value)) {
+        getBrowser()->selectOptionWithValue($fieldName, $value);
+    } else {
+        fail(ERROR_W12, sprintf("select with name '%s' does not have option '%s'",
+            $fieldName, $value));
+    }
+}
+
 function setCheckboxValue(string $fieldName, bool $value) {
     assertPageContainsCheckboxWithName($fieldName);
 

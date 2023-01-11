@@ -24,7 +24,21 @@ function radioGroupTest() {
     assertThat($radio->hasOption('v3'), is(false));
 }
 
-function selectTest() {
+function selectByValue() {
+    $select = new Select('s1');
+
+    $select->addOption("v1", "Value 1", false);
+    $select->addOption("v2", "Value 2", false);
+    $select->addOption("v3", "Value 3", false);
+
+    assertThat($select->getValue(), is('v1'));
+
+    $select->selectOptionWithValue("v2");
+
+    assertThat($select->getValue(), is('v2'));
+}
+
+function selectByLabel() {
 
     $select = new Select('s1');
 

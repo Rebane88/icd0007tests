@@ -34,6 +34,16 @@ class Select extends AbstractInput {
         return false;
     }
 
+    public function hasOptionWithValue(string $value): bool {
+        foreach ($this->options as $each) {
+            if ($each->getValue() === $value) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function isMultiple() : bool {
         return $this->isMultiple;
     }
@@ -51,6 +61,21 @@ class Select extends AbstractInput {
         }
 
         throw new RuntimeException("unknown option text: " . $text);
+    }
+
+    public function selectOptionWithValue(string $value) {
+        foreach ($this->options as $each) {
+            $each->unSelect();
+        }
+
+        foreach ($this->options as $each) {
+            if ($each->getValue() === $value) {
+                $each->select();
+                return;
+            }
+        }
+
+        throw new RuntimeException("unknown option value: " . $value);
     }
 
     public function getSelectedOptionText() : string {

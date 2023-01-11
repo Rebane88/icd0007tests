@@ -251,10 +251,16 @@ class HttpBrowser implements Browser {
         $form->addTextField($fieldName, $value);
     }
 
-    function hasSelectOptionWithLabel(string $fieldName, string $label) : bool {
+    function hasSelectOptionWithLabel(string $fieldName, string $label): bool {
         $select = $this->page->getFormSet()->getSelectByName($fieldName);
 
         return $select->hasOptionWithLabel($label);
+    }
+
+    function hasSelectOptionWithValue(string $fieldName, string $value): bool {
+        $select = $this->page->getFormSet()->getSelectByName($fieldName);
+
+        return $select->hasOptionWithValue($value);
     }
 
     public function getFieldValue(string $fieldName) {
@@ -271,10 +277,16 @@ class HttpBrowser implements Browser {
         return $select->getSelectedOptionText();
     }
 
-    public function selectOptionWithLabel(string $fieldName, string $label) : void {
+    public function selectOptionWithLabel(string $fieldName, string $label): void {
         $this->page->getFormSet()
             ->getSelectByName($fieldName)
             ->selectOptionWithText($label);
+    }
+
+    public function selectOptionWithValue(string $fieldName, string $value): void {
+        $this->page->getFormSet()
+            ->getSelectByName($fieldName)
+            ->selectOptionWithValue($value);
     }
 
     private function getElementWithId($id) : ?Element {

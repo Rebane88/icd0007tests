@@ -17,19 +17,19 @@ class HttpRequest {
         $this->method = $method;
     }
 
-    public function isPostMethod() : bool {
+    public function isPostMethod(): bool {
         return strtoupper($this->method) === 'POST';
     }
 
-    public function addParameter(string $name, string $value) {
+    public function addParameter(string $name, string $value): void {
         $this->parameters[$name] = $value;
     }
 
-    public function getParameters() : array {
+    public function getParameters(): array {
         return $this->parameters;
     }
 
-    public function getFullUrl() : Url {
+    public function getFullUrl(): Url {
         $url = $this->baseUrl->navigateTo($this->subPath);
 
         if ($this->isPostMethod()) {

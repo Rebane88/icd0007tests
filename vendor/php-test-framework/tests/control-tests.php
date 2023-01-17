@@ -13,7 +13,7 @@ function radioGroupTest() {
     $radio->addOption("v1");
     $radio->addOption("v2");
 
-    assertThat($radio->getValue(), is(''));
+    assertThat($radio->getValue(), is(null));
 
     $radio->selectOption("v1");
 
@@ -73,15 +73,21 @@ function multiselectHasNoDefault() {
     assertThat($select->getValue(), is(''));
 }
 
-function checkboxTest() {
-    $checkbox = new Checkbox('c1', 'on');
+function checkboxWithValue() {
+    $checkbox = new Checkbox('c1', '1');
 
     assertThat($checkbox->isChecked(), is(false));
-    assertThat($checkbox->getValue(), is(''));
+    assertThat($checkbox->getValue(), is(null));
 
     $checkbox->check(true);
 
     assertThat($checkbox->isChecked(), is(true));
+    assertThat($checkbox->getValue(), is('1'));
+}
+
+function checkboxWithDefaultValue() {
+    $checkbox = new Checkbox('c1', null, true);
+
     assertThat($checkbox->getValue(), is('on'));
 }
 

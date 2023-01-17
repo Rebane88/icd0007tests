@@ -13,7 +13,7 @@ class PageBuilder {
         $this->source = $source;
     }
 
-    function getPage() : Page {
+    function getPage(): Page {
         $text = decode_html_entities($this->nodeTree->getFullText());
 
         $formBuilder = new FormBuilder($this->nodeTree);
@@ -26,7 +26,7 @@ class PageBuilder {
         return $page;
     }
 
-    private function getAllElements() : array {
+    private function getAllElements(): array {
         $nodes = $this->nodeTree->getAllTagNodes();
 
         return array_map(function ($node) {
@@ -34,7 +34,7 @@ class PageBuilder {
         }, $nodes);
     }
 
-    private function getLinks() : array {
+    private function getLinks(): array {
         $nodes = $this->nodeTree->findNodesByTagNames(['a']);
 
         return array_map(function ($linkNode) {
@@ -44,7 +44,7 @@ class PageBuilder {
         }, $nodes);
     }
 
-    private function getLinkText($linkNode) : string {
+    private function getLinkText($linkNode): string {
         return join("", $this->nodeTree->getTextLines($linkNode, true));
     }
 }

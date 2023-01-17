@@ -6,9 +6,9 @@ use function stf\decode_html_entities;
 
 class TextField extends AbstractInput {
 
-    private string $value;
+    private ?string $value;
 
-    public function __construct(string $name, string $value) {
+    public function __construct(string $name, ?string $value) {
         parent::__construct($name);
         $this->value = $value;
     }
@@ -18,11 +18,11 @@ class TextField extends AbstractInput {
             $this->getName(), $this->value);
     }
 
-    public function getValue() : string {
-        return decode_html_entities($this->value);
+    public function getValue(): ?string {
+        return decode_html_entities($this->value ?? '');
     }
 
-    public function setValue(string $value): void {
+    public function setValue(?string $value): void {
         $this->value = $value;
     }
 }

@@ -9,23 +9,23 @@ class Form {
     private array $fields = [];
     private array $buttons = [];
 
-    public function addField($field) : void {
+    public function addField(AbstractInput $field): void {
         $this->fields[] = $field;
     }
 
-    public function addTextField(string $name, string $value) : void {
+    public function addTextField(string $name, string $value): void {
         $this->fields[] = new TextField($name, $value);
     }
 
-    public function addButton($button) : void {
+    public function addButton($button): void {
         $this->buttons[] = $button;
     }
 
-    public function getFields() : array {
+    public function getFields(): array {
         return $this->fields;
     }
 
-    public function getButtonByName(string $buttonName) : ?Button {
+    public function getButtonByName(string $buttonName): ?Button {
         return $this->getButtonByNameAndValue($buttonName, null);
     }
 
@@ -54,11 +54,11 @@ class Form {
         $this->fields = array_values($fields);
     }
 
-    public function getTextFieldByName($fieldName) : ?TextField {
+    public function getTextFieldByName($fieldName): ?TextField {
         return $this->getFieldByNameAndType($fieldName, TextField::class);
     }
 
-    public function containsInputByName($fieldName) : bool {
+    public function containsInputByName($fieldName): bool {
         $input = [...$this->fields, ...$this->buttons];
 
         foreach ($input as $field) {
@@ -80,27 +80,27 @@ class Form {
         return $field ?? null;
     }
 
-    public function getRadioByName($fieldName) : ?RadioGroup {
+    public function getRadioByName($fieldName): ?RadioGroup {
         return $this->getFieldByNameAndType($fieldName, RadioGroup::class);
     }
 
-    public function getFieldByName($fieldName) : ?AbstractInput {
+    public function getFieldByName($fieldName): ?AbstractInput {
         return $this->getFieldByNameAndType($fieldName, AbstractInput::class);
     }
 
-    public function getCheckboxByName($fieldName) : ?Checkbox {
+    public function getCheckboxByName($fieldName): ?Checkbox {
         return $this->getFieldByNameAndType($fieldName, Checkbox::class);
     }
 
-    public function getSelectByName($fieldName) : ?Select {
+    public function getSelectByName($fieldName): ?Select {
         return $this->getFieldByNameAndType($fieldName, Select::class);
     }
 
-    public function getAction() : ?string {
+    public function getAction(): ?string {
         return $this->action;
     }
 
-    public function setAction($action) : void {
+    public function setAction($action): void {
         $this->action = $action;
     }
 
@@ -112,7 +112,7 @@ class Form {
         $this->method = $method;
     }
 
-    public function __toString() : string {
+    public function __toString(): string {
         $elements = [...$this->fields, ...$this->buttons];
 
         $strings = array_map(function ($each) {

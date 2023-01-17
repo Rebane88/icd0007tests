@@ -28,7 +28,7 @@ function buildsCheckboxes() {
     $c1 = getFormSet($html)->getCheckboxByName('c1');
     $c2 = getFormSet($html)->getCheckboxByName('c2');
 
-    assertThat($c1->getValue(), is(''));
+    assertThat($c1->getValue(), is(null));
     assertThat($c2->getValue(), is('v2'));
 }
 

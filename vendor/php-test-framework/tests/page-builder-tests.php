@@ -17,13 +17,25 @@ function buildPageSimple() {
     assertThat($link->getText(), is(' abc'));
 }
 
-function buildPage() {
+function buildSimpleForm() {
 
     $html = file_get_contents('../test-files/form.html');
 
     $page = getPage($html);
 
     assertThat($page->getId(), is('form-page-id'));
+}
+
+function buildFormWithUncheckedInputs() {
+
+    $html = file_get_contents('../test-files/empty-controls.html');
+
+    $form = getPage($html)->getFormSet();
+
+    assertThat($form->getTextFieldByName('t1')->getValue(), is(''));
+    assertThat($form->getCheckboxByName('c1')->getValue(), is(null));
+    assertThat($form->getRadioByName('r1')->getValue(), is(null));
+    assertThat($form->getSelectByName('s1')->getValue(), is(null));
 }
 
 #Helpers

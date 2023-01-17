@@ -44,11 +44,11 @@ class Select extends AbstractInput {
         return false;
     }
 
-    public function isMultiple() : bool {
+    public function isMultiple(): bool {
         return $this->isMultiple;
     }
 
-    public function selectOptionWithText(string $text) {
+    public function selectOptionWithText(string $text): void {
         foreach ($this->options as $each) {
             $each->unSelect();
         }
@@ -63,7 +63,7 @@ class Select extends AbstractInput {
         throw new RuntimeException("unknown option text: " . $text);
     }
 
-    public function selectOptionWithValue(string $value) {
+    public function selectOptionWithValue(string $value): void {
         foreach ($this->options as $each) {
             $each->unSelect();
         }
@@ -78,7 +78,7 @@ class Select extends AbstractInput {
         throw new RuntimeException("unknown option value: " . $value);
     }
 
-    public function getSelectedOptionText() : string {
+    public function getSelectedOptionText(): string {
         if (count($this->options) < 1) {
             return '';
         }
@@ -92,7 +92,7 @@ class Select extends AbstractInput {
         return $this->options[0]->getText();
     }
 
-    public function __toString() : string {
+    public function __toString(): string {
         $values = array_map(function ($each) {
             return $each->getValue();
         }, $this->options);
@@ -101,9 +101,9 @@ class Select extends AbstractInput {
             $this->getName(), implode(", ", $values), $this->getValue());
     }
 
-    public function getValue() : string {
+    public function getValue(): ?string {
         if (!count($this->options)) {
-            return '';
+            return null;
         }
 
         foreach (array_reverse($this->options) as $each) {

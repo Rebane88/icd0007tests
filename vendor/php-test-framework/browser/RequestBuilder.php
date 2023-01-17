@@ -15,7 +15,7 @@ class RequestBuilder {
     }
 
     public function requestFromButtonPress(
-        string $buttonName, ?string $buttonValue) : HttpRequest {
+        string $buttonName, ?string $buttonValue): HttpRequest {
 
         $form = $this->formSet->findFormContainingField($buttonName);
 
@@ -28,7 +28,9 @@ class RequestBuilder {
         $request->addParameter($button->getName(), $button->getValue());
 
         foreach ($form->getFields() as $field) {
-            $request->addParameter($field->getName(), $field->getValue() ?? '');
+            if ($field->getValue() !== null) {
+                $request->addParameter($field->getName(), $field->getValue());
+            }
         }
 
         return $request;

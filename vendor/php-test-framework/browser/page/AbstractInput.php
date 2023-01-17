@@ -10,11 +10,11 @@ abstract class AbstractInput {
         $this->name = $name;
     }
 
-    public function getName() : string {
+    public function getName(): string {
         return $this->name;
     }
 
-    public abstract function getValue() : string;
+    public abstract function getValue(): ?string;
 
 }
 

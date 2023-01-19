@@ -413,6 +413,10 @@ function is($value) : stf\matcher\AbstractMatcher {
     return new stf\matcher\IsMatcher($value);
 }
 
+function isCloseTo($value) : stf\matcher\AbstractMatcher {
+    return new stf\matcher\IsCloseToMatcher($value);
+}
+
 function contains(array $needleArray) : AbstractMatcher {
     return new ContainsMatcher($needleArray);
 }

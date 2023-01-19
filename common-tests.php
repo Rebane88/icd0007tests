@@ -1,6 +1,7 @@
 <?php
 
 require_once 'vendor/php-test-framework/public-api.php';
+require_once 'common-functions.php';
 
 if ($argc < 2) {
     die('Pass directory to scan as an argument' . PHP_EOL);
@@ -32,28 +33,14 @@ function _repositoryDoesNotContainNonProjectHtmlFiles() {
     }
 }
 
-#Helpers
+function _repositorySizeIsNotTooBig() {
+    global $path;
 
-function getFileCount($path, $extension): int {
+    $size = getRepoSize($path);
 
-    $filter = function ($file) {
-        return ! preg_match('/^(\\.\\/ex\\d)|vendor$/', $file->getPathName());
-    };
-
-    chdir($path);
-
-    $it = new RecursiveDirectoryIterator('.');
-    $it = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator($it, $filter));
-    $it = new RegexIterator($it, '/\.(\w+)$/i', RegexIterator::GET_MATCH);
-
-    $count = 0;
-    foreach($it as $each) {
-        if (strtolower($each[1]) === $extension) {
-            $count++;
-        }
+    if ($size > pow(2, 20)) {
+        fail(ERROR_C01, "Repository size is too big ($size bytes). Maximum is 1MB");
     }
-
-    return $count;
 }
 
 stf\runTests(new stf\PointsReporter([1 => 1]));

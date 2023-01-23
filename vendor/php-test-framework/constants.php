@@ -25,6 +25,7 @@ const ERROR_H04 = 'H04'; // no text on the page text
 const ERROR_H05 = 'H05'; // no text in the page source
 const ERROR_H06 = 'H06'; // multiple fields with the same name
 
+const ERROR_W02 = 'W02'; // link is not relative
 const ERROR_W03 = 'W03'; // no link with id
 const ERROR_W04 = 'W04'; // no link with text
 const ERROR_W05 = 'W05'; // no input with name

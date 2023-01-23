@@ -1,13 +1,10 @@
 <?php
 
-const MAX_POINTS = 4;
-const RESULT_PATTERN = "\nRESULT: %s of %s points\n";
-
-function getPageId() : ?string {
+function getPageId(): ?string {
     return getBrowser()->getPageId();
 }
 
-function gotoLandingPage() {
+function gotoLandingPage(): void {
     $landingPageUrl = getGlobals()->baseUrl->asString();
 
     navigateTo($landingPageUrl);
@@ -15,43 +12,43 @@ function gotoLandingPage() {
     assertCorrectPageId('book-list-page');
 }
 
-function clickBookFormLink() {
+function clickBookFormLink(): void {
     clickLinkWithId('book-form-link');
 
     assertCorrectPageId('book-form-page');
 }
 
-function clickAuthorFormLink() {
+function clickAuthorFormLink(): void {
     clickLinkWithId('author-form-link');
 
     assertCorrectPageId('author-form-page');
 }
 
-function clickBookFormSubmitButton() {
+function clickBookFormSubmitButton(): void {
     clickButton('submitButton');
 
     assertCorrectPageId('book-list-page');
 }
 
-function clickBookFormDeleteButton() {
+function clickBookFormDeleteButton(): void {
     clickButton('deleteButton');
 
     assertCorrectPageId('book-list-page');
 }
 
-function clickAuthorFormSubmitButton() {
+function clickAuthorFormSubmitButton(): void {
     clickButton('submitButton');
 
     assertCorrectPageId('author-list-page');
 }
 
-function clickAuthorFormDeleteButton() {
+function clickAuthorFormDeleteButton(): void {
     clickButton('deleteButton');
 
     assertCorrectPageId('author-list-page');
 }
 
-function assertCorrectPageId($expectedPageId) {
+function assertCorrectPageId($expectedPageId): void {
     if (getPageId() !== $expectedPageId) {
         $message = sprintf("Page id should now be '%s' but was '%s'",
             $expectedPageId, getPageId());
@@ -60,7 +57,7 @@ function assertCorrectPageId($expectedPageId) {
     }
 }
 
-function assertContains(array $allPosts, Post $post) {
+function assertContains(array $allPosts, Post $post): void {
     foreach ($allPosts as $each) {
         if ($each->title === $post->title && $each->text === $post->text) {
             return;
@@ -70,7 +67,7 @@ function assertContains(array $allPosts, Post $post) {
     throw new stf\FrameworkException(ERROR_C01, "Did not find saved post");
 }
 
-function assertDoesNotContainPostWithTitle(array $allPosts, string $title) {
+function assertDoesNotContainPostWithTitle(array $allPosts, string $title): void {
     foreach ($allPosts as $each) {
         if ($each->title === $title) {
             throw new stf\FrameworkException(ERROR_C01,
@@ -91,7 +88,7 @@ class Book {
     public bool $isRead;
 }
 
-function getSampleAuthor() : Author {
+function getSampleAuthor(): Author {
     $author = new Author();
     $author->firstName = getRandomString(3) . ' ' . getRandomString(4);
     $author->lastName = getRandomString(5) . ' ' . getRandomString(3);
@@ -99,11 +96,11 @@ function getSampleAuthor() : Author {
     return $author;
 }
 
-function getRandomString(int $length) : string {
+function getRandomString(int $length): string {
     return substr(md5(mt_rand()), 0, $length);
 }
 
-function getSampleBook() : Book {
+function getSampleBook(): Book {
     $book = new Book();
     $book->title = getRandomString(5) . ' ' . getRandomString(5);
     $book->grade = 5;
@@ -111,7 +108,7 @@ function getSampleBook() : Book {
     return $book;
 }
 
-function insertSampleAuthor() : string {
+function insertSampleAuthor(): string {
 
     gotoLandingPage();
 

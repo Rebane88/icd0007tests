@@ -4,7 +4,7 @@ namespace stf;
 
 use \RuntimeException;
 
-function runTests(?PointsReporter $reporter = null) {
+function runTests(?ResultReporter $reporter = null) {
     $successful = 0;
 
     foreach (getTestNamesToRun() as $testName) {
@@ -39,7 +39,7 @@ function runTests(?PointsReporter $reporter = null) {
     printf("\n%s of %s tests passed.\n", $successful, count(getAllTestNames()));
 
     if ($reporter && !containsSelectedTests(getTestNamesToRun())) {
-        $reporter->execute($successful);
+        print $reporter->execute($successful);
     }
 }
 

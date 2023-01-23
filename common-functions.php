@@ -3,7 +3,11 @@
 function getProjectDirectory(): string {
     global $argv;
 
-    return getProjectPath($argv, PROJECT_DIRECTORY);
+    return removeLastSlash(getProjectPath($argv, PROJECT_DIRECTORY));
+}
+
+function removeLastSlash(string $path): string {
+    return preg_replace('/\/$/', '', $path);
 }
 
 function getRepoSize($path): int {

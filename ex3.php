@@ -2,58 +2,27 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-const PROJECT_DIRECTORY = '';
+const BASE_URL = 'http://localhost:8080/ex2/nav/';
 
-function checksWhetherListContainsSpecifiedElement() {
+setBaseUrl(BASE_URL);
 
-    require_once 'ex3/ex2.php';
+function cssIsCorrect() {
+    $url = "http://localhost:8080/ex2/css/css.html";
+    $cmd = sprintf(
+        'google-chrome --headless --disable-gpu --no-sandbox --dump-dom %s', $url);
 
-    $list = [1, 2, 3, 2, 6];
+    exec($cmd, $output, $exitCode);
 
-    assertThat(isInList($list, 7), is(false));
+    if ($exitCode !== 0) {
+        printf("error on running chrome\n");
+        return;
+    }
 
-    assertThat(isInList($list, 3), is(true));
+    $source = implode("\n", $output);
+
+    if (strpos($source, '5 of 5 points') === false) {
+        fail(ERROR_C01, "Css is not correct");
+    }
 }
 
-function filtersOutOddNumbers() {
-
-    require_once 'ex3/ex3.php';
-
-    $list = [1, 2, 3, 2, 5, 8];
-
-    assertThat(getOddNumbers($list), is([1, 3, 5]));
-}
-
-function canSavePosts() {
-
-    require_once 'ex3/ex6.php';
-
-    $title = getRandomString(5);
-    $text = getRandomString(10);
-
-    $post = new Post($title, $text);
-
-    savePost($post);
-
-    assertContains(getAllPosts(), $post);
-}
-
-function canSavePostsContainingDifferentSymbols() {
-
-    require_once 'ex3/ex6.php';
-
-    $title = getRandomString(5);
-    $text = getRandomString(10) . ".'\n;";
-
-    $post = new Post($title, $text);
-
-    savePost($post);
-
-    assertContains(getAllPosts(), $post);
-}
-
-#Helpers
-
-extendIncludePath($argv, PROJECT_DIRECTORY);
-
-stf\runTests(new stf\PointsReporter([4 => 1]));
+stf\runTests(new stf\PointsReporter([7 => 1]));

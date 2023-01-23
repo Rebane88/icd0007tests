@@ -13,7 +13,7 @@ if ($path === false) {
     die('Argument is not a correct directory' . PHP_EOL);
 }
 
-function _repositoryDoesNotContainNonProjectPhpFiles() {
+function repositoryDoesNotContainNonProjectPhpFiles() {
     global $path;
 
     $count = getFileCount($path, 'php');
@@ -23,7 +23,7 @@ function _repositoryDoesNotContainNonProjectPhpFiles() {
     }
 }
 
-function _repositoryDoesNotContainNonProjectHtmlFiles() {
+function repositoryDoesNotContainNonProjectHtmlFiles() {
     global $path;
 
     $count = getFileCount($path, 'html');
@@ -33,7 +33,7 @@ function _repositoryDoesNotContainNonProjectHtmlFiles() {
     }
 }
 
-function _repositorySizeIsNotTooBig() {
+function repositorySizeIsNotTooBig() {
     global $path;
 
     $size = getRepoSize($path);
@@ -43,4 +43,4 @@ function _repositorySizeIsNotTooBig() {
     }
 }
 
-stf\runTests(new stf\PointsReporter([1 => 1]));
+stf\runTests(new stf\PassFailReporter(3));

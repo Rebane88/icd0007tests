@@ -24,7 +24,7 @@ function asString($value) : string {
     } else if (gettype($value) === 'string') {
         return sprintf("'%s'", $value);
     } else if (gettype($value) === 'array') {
-        return sprintf("'%s'", print_r($value, true));
+        return sprintf("'%s'", varDumpToString($value));
     } else if ($value === '') {
         return '<EMPTY STRING>';
     }
@@ -32,3 +32,8 @@ function asString($value) : string {
     return $value;
 }
 
+function varDumpToString($input) {
+    ob_start();
+    var_dump($input);
+    return ob_get_clean();
+}

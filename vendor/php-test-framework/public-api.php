@@ -9,6 +9,10 @@ if (intval($phpMajorVersion) < 7
         "Found Php version " . PHP_VERSION . '.' . PHP_EOL);
 }
 
+const RESULT_PATTERN_SHORT = "\nRESULT: %s\n";
+const RESULT_PATTERN_POINTS = "\nRESULT: %s points\n";
+const RESULT_PATTERN_WITH_MAX = "\nRESULT: %s of %s points\n";
+
 require_once 'runner.php';
 require_once 'util.php';
 require_once 'domain.php';
@@ -25,6 +29,9 @@ use stf\matcher\AbstractMatcher;
 use stf\matcher\ContainsStringMatcher;
 use stf\matcher\ContainsNotStringMatcher;
 use stf\browser\Browser;
+use stf\PassFailReporter;
+use stf\PointsReporter;
+use stf\ResultReporter;
 
 function getBrowser() : Browser {
     return getGlobals()->getBrowser();
@@ -140,13 +147,23 @@ function getPageSource() : string {
     return getBrowser()->getPageSource();
 }
 
-function assertPageContainsLinkWithId($linkId) : void {
+function assertPageContainsLinkWithId($linkId): void {
     if (getBrowser()->hasLinkWithId($linkId)) {
         return;
     }
 
     fail(ERROR_W03,
         sprintf("Current page does not contain link with id '%s'.", $linkId));
+}
+
+function assertPageContainsRelativeLinkWithId($linkId): void {
+    assertPageContainsLinkWithId($linkId);
+
+    $href = getBrowser()->getLinkHrefById($linkId);
+
+    if (substr($href, 0, 1) === '/') {
+        fail(ERROR_W02, "'$href' is not relative link");
+    }
 }
 
 function assertPageContainsTextFieldWithName($name) : void {
@@ -463,7 +480,7 @@ function getProjectPath(array $argv, string $userDefinedDir) {
     return $path;
 }
 
-function getGlobals() : Globals {
+function getGlobals(): Globals {
     $key = "---STF-GLOBALS---";
 
     if (!isset($GLOBALS[$key])) {
@@ -471,4 +488,16 @@ function getGlobals() : Globals {
     }
 
     return $GLOBALS[$key];
+}
+
+function getPointsReporter(array $scale): ResultReporter {
+    return new PointsReporter($scale, RESULT_PATTERN_POINTS);
+}
+
+function getPassFailReporter(int $threshold): ResultReporter {
+    return new PassFailReporter($threshold, RESULT_PATTERN_SHORT);
+}
+
+function getPointsReporterWithMax(array $scale): ResultReporter {
+    return new PointsReporter($scale, RESULT_PATTERN_WITH_MAX);
 }

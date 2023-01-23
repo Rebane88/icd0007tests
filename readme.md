@@ -44,6 +44,8 @@ Vea tuvastamisel võib abiks olla infost serveri konsoolis. Selle info leiate se
 
 `H06` Teie lehel on mitu sisestuse elementi (_input_) sama sama nimega ja test ei suuda neid eristatda. 
 
+`W02` Link pole relatiivne. Relatiivne link ei alga kaldkriipsuga.
+
 `W03` Test ootab, et praegusel lehel on link millel on _id_ atribuut testis määratud väärtusega.
 Probleemi lahendamisel võib kasuks tulla `Html väljundi vaatamine`.
 

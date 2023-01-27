@@ -43,4 +43,4 @@ function repositorySizeIsNotTooBig() {
     }
 }
 
-stf\runTests(new stf\PassFailReporter(3));
+stf\runTests(getPassFailReporter(3));

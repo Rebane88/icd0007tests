@@ -38,7 +38,9 @@ function convertsStringToIntegerList() {
 
 function savesAndReadsPosts() {
 
-    require_once 'ex1/ex5.php';
+    chdir(getProjectDirectory() . '/ex1');
+
+    require_once 'ex5.php';
 
     $title = getRandomString(5);
     $text = getRandomString(10);
@@ -52,7 +54,9 @@ function savesAndReadsPosts() {
 
 function savesPostsContainingDifferentSymbols() {
 
-    require_once 'ex1/ex5.php';
+    chdir(getProjectDirectory() . '/ex1');
+
+    require_once 'ex5.php';
 
     $title = getRandomString(5);
     $text = getRandomString(10) . ".'\n;";
@@ -104,4 +108,4 @@ function convertsDictionaryToString() {
 
 extendIncludePath($argv, PROJECT_DIRECTORY);
 
-stf\runTests(new stf\PassFailReporter(7));
+stf\runTests(getPassFailReporter(8));

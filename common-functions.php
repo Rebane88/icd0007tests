@@ -13,8 +13,12 @@ function removeLastSlash(string $path): string {
 function getRepoSize($path): int {
     chdir($path);
 
+    $filter = function ($file) {
+        return ! preg_match('/^(\\.\\/\\.git)|vendor$/', $file->getPathName());
+    };
+
     $it = new RecursiveDirectoryIterator('.');
-    $it = new RecursiveIteratorIterator($it);
+    $it = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator($it, $filter));
 
     $size = 0;
     foreach($it as $file) {

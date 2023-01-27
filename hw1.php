@@ -2,7 +2,8 @@
 
 require_once 'vendor/php-test-framework/public-api.php';
 
-const MAX_POINTS = 4;
+const MAX_POINTS = 2;
+const POINTS_WITHOUT_CORRECT_NAME = 1;
 
 if ($argc < 3) {
     die('Pass project directory and Csv fail as arguments.' . PHP_EOL);
@@ -54,9 +55,9 @@ if (!$errors) {
 } else {
     print join(PHP_EOL, $errors);
 
-    $score = count($errors) === 1 && $errors['name'] ? MAX_POINTS / 2 : 0;
+    $score = count($errors) === 1 && $errors['name'] ? POINTS_WITHOUT_CORRECT_NAME : 0;
 
-    die(sprintf(RESULT_PATTERN_SHORT, $score));
+    die(sprintf(RESULT_PATTERN_POINTS, $score));
 }
 
 function nameExistsInDeclaredNames(string $name, string $csvFile): bool {

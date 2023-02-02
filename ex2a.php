@@ -81,4 +81,4 @@ setBaseUrl(BASE_URL);
 
 extendIncludePath($argv, PROJECT_DIRECTORY);
 
-stf\runTests(new stf\PassFailReporter(6));
+stf\runTests(getPassFailReporter(6));

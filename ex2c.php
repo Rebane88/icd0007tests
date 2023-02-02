@@ -63,4 +63,4 @@ function errorsArePrintedToSTDERR() {
     assertThat(strlen($output), is(0));
 }
 
-stf\runTests(new stf\PassFailReporter(5));
+stf\runTests(getPassFailReporter(5));

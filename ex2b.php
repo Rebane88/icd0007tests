@@ -62,4 +62,4 @@ function authorFormPageContainsCorrectMenu() {
 
 setBaseUrl(BASE_URL);
 
-stf\runTests(new stf\PassFailReporter(6));
+stf\runTests(getPassFailReporter(6));

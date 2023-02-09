@@ -5,8 +5,6 @@ require_once 'common-functions.php';
 
 const BASE_URL = 'http://localhost:8080/';
 
-const PROJECT_DIRECTORY = '';
-
 function indexToA() {
     navigateTo(getUrl());
 
@@ -78,7 +76,5 @@ function getUrl(string $relativeUrl = ''): string {
 }
 
 setBaseUrl(BASE_URL);
-
-extendIncludePath($argv, PROJECT_DIRECTORY);
 
 stf\runTests(getPassFailReporter(6));

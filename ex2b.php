@@ -1,25 +1,26 @@
 <?php
 
 require_once 'vendor/php-test-framework/public-api.php';
+require_once 'common-functions.php';
 
 const BASE_URL = 'http://localhost:8080';
 
 function containsIndex() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     if (getResponseCode() !== 200) {
-        fail(ERROR_C01, 'Did not find file ex2/proto/index.html');
+        fail(ERROR_C01, 'Did not find file ' . getUrl('index.html'));
     }
 }
 
 function defaultPageIsBookList() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     assertThat(getPageId(), is('book-list-page'));
 }
 
 function bookListPageContainsCorrectMenu() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     assertPageContainsRelativeLinkWithId('book-list-link');
     assertPageContainsRelativeLinkWithId('book-form-link');
@@ -28,7 +29,7 @@ function bookListPageContainsCorrectMenu() {
 }
 
 function bookFormPageContainsCorrectMenu() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     clickLinkWithId('book-form-link');
 
@@ -39,7 +40,7 @@ function bookFormPageContainsCorrectMenu() {
 }
 
 function authorListPageContainsCorrectMenu() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     clickLinkWithId('author-list-link');
 
@@ -50,7 +51,7 @@ function authorListPageContainsCorrectMenu() {
 }
 
 function authorFormPageContainsCorrectMenu() {
-    navigateTo('/ex2/proto/index.html');
+    navigateTo(getUrl('index.html'));
 
     clickLinkWithId('author-form-link');
 
@@ -58,6 +59,14 @@ function authorFormPageContainsCorrectMenu() {
     assertPageContainsRelativeLinkWithId('book-form-link');
     assertPageContainsRelativeLinkWithId('author-list-link');
     assertPageContainsRelativeLinkWithId('author-form-link');
+}
+
+#Helpers
+
+function getUrl(string $relativeUrl = ''): string {
+    $baseUrl = removeLastSlash(BASE_URL);
+
+    return "$baseUrl/ex2/proto/$relativeUrl";
 }
 
 setBaseUrl(BASE_URL);

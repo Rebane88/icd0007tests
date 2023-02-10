@@ -115,35 +115,35 @@ function setLeaveBrowserOpen(bool $flag) : void {
     getGlobals()->leaveBrowserOpen = $flag;
 }
 
-function setShowBrowser(bool $flag) : void {
+function setShowBrowser(bool $flag): void {
     getGlobals()->showBrowser = $flag;
 }
 
-function getResponseCode() : int {
+function getResponseCode(): int {
     return getBrowser()->getResponse()->getResponseCode();
 }
 
-function getCurrentUrl() : string {
+function getCurrentUrl(): string {
     return getBrowser()->getCurrentUrl();
 }
 
-function getCurrentUrlDir() : string {
+function getCurrentUrlDir(): string {
     return getBrowser()->getCurrentUrlDir();
 }
 
-function printPageSource() : void {
+function printPageSource(): void {
     print getPageSource() . PHP_EOL;
 }
 
-function printPageText() : void {
+function printPageText(): void {
     print getPageText() . PHP_EOL;
 }
 
-function getPageText() : string {
+function getPageText(): string {
     return getBrowser()->getPageText();
 }
 
-function getPageSource() : string {
+function getPageSource(): string {
     return getBrowser()->getPageSource();
 }
 
@@ -166,7 +166,7 @@ function assertPageContainsRelativeLinkWithId($linkId): void {
     }
 }
 
-function assertPageContainsTextFieldWithName($name) : void {
+function assertPageContainsTextFieldWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::TextField)) {
         return;
     }
@@ -175,7 +175,7 @@ function assertPageContainsTextFieldWithName($name) : void {
         sprintf("Current page does not contain text field with name '%s'.", $name));
 }
 
-function assertPageContainsRadioWithName($name) : void {
+function assertPageContainsRadioWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Radio)) {
         return;
     }
@@ -184,7 +184,7 @@ function assertPageContainsRadioWithName($name) : void {
         sprintf("Current page does not contain radio with name '%s'.", $name));
 }
 
-function assertPageContainsSelectWithName($name) : void {
+function assertPageContainsSelectWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Select)) {
         return;
     }
@@ -193,7 +193,7 @@ function assertPageContainsSelectWithName($name) : void {
         sprintf("Current page does not contain select with name '%s'.", $name));
 }
 
-function assertPageContainsFieldWithName($name) : void {
+function assertPageContainsFieldWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Any)) {
         return;
     }
@@ -202,7 +202,7 @@ function assertPageContainsFieldWithName($name) : void {
         sprintf("Current page does not contain field with name '%s'.", $name));
 }
 
-function assertPageDoesNotContainFieldWithName($name) : void {
+function assertPageDoesNotContainFieldWithName($name): void {
     if (!getBrowser()->hasFieldByName($name, FieldType::Any)) {
         return;
     }
@@ -211,7 +211,7 @@ function assertPageDoesNotContainFieldWithName($name) : void {
         sprintf("Current page should not contain field with name '%s'.", $name));
 }
 
-function assertPageDoesNotContainButtonWithName($name) : void {
+function assertPageDoesNotContainButtonWithName($name): void {
     if (!getBrowser()->hasFieldByName($name, FieldType::Button)) {
         return;
     }
@@ -220,7 +220,7 @@ function assertPageDoesNotContainButtonWithName($name) : void {
         sprintf("Current page should not contain button with name '%s'.", $name));
 }
 
-function assertPageContainsCheckboxWithName($name) : void {
+function assertPageContainsCheckboxWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Checkbox)) {
         return;
     }
@@ -229,7 +229,7 @@ function assertPageContainsCheckboxWithName($name) : void {
         sprintf("Current page does not contain checkbox with name '%s'.", $name));
 }
 
-function assertPageContainsButtonWithName($name) : void {
+function assertPageContainsButtonWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Button)) {
         return;
     }
@@ -239,7 +239,7 @@ function assertPageContainsButtonWithName($name) : void {
             $name));
 }
 
-function assertPageContainsLinkWithText($text) : void {
+function assertPageContainsLinkWithText($text): void {
     if (getBrowser()->hasLinkWithText($text)) {
         return;
     }
@@ -248,7 +248,7 @@ function assertPageContainsLinkWithText($text) : void {
         sprintf("Current page does not contain link with text '%s'.", $text));
 }
 
-function assertPageContainsElementWithId($id) : void {
+function assertPageContainsElementWithId($id): void {
     if (getBrowser()->hasElementWithId($id)) {
         return;
     }
@@ -257,7 +257,7 @@ function assertPageContainsElementWithId($id) : void {
         sprintf("Current page does not contain element with id '%s'.", $id));
 }
 
-function assertPageDoesNotContainElementWithId($id) : void {
+function assertPageDoesNotContainElementWithId($id): void {
     if (!getBrowser()->hasElementWithId($id)) {
         return;
     }
@@ -266,7 +266,7 @@ function assertPageDoesNotContainElementWithId($id) : void {
         sprintf("Current page should not contain element with id '%s'.", $id));
 }
 
-function assertFrontControllerLink(string $id) : void {
+function assertFrontControllerLink(string $id): void {
     assertPageContainsLinkWithId($id);
 
     $link = getBrowser()->getLinkHrefById($id);
@@ -281,7 +281,7 @@ function assertFrontControllerLink(string $id) : void {
     }
 }
 
-function assertPageContainsText($textToBeFound) : void {
+function assertPageContainsText($textToBeFound): void {
     if (strpos(getPageText(), $textToBeFound) !== false) {
         return;
     }
@@ -290,7 +290,7 @@ function assertPageContainsText($textToBeFound) : void {
         $textToBeFound));
 }
 
-function assertNoOutput() : void {
+function assertNoOutput(): void {
     $source = getPageSource();
 
     if (preg_match('/^\s*$/', $source)) {
@@ -302,7 +302,7 @@ function assertNoOutput() : void {
         "but the output was: %s", $source));
 }
 
-function assertCurrentUrl($expected) : void {
+function assertCurrentUrl($expected): void {
     $actual = getBrowser()->getCurrentUrl();
 
     if ($actual !== $expected) {
@@ -311,25 +311,25 @@ function assertCurrentUrl($expected) : void {
     }
 }
 
-function clickLinkWithText($text) : void {
+function clickLinkWithText($text): void {
     assertPageContainsLinkWithText($text);
 
     getBrowser()->clickLinkWithText($text);
 }
 
-function getHrefFromLinkWithText(string $text) : string {
+function getHrefFromLinkWithText(string $text): string {
     assertPageContainsLinkWithText($text);
 
     return getBrowser()->getLinkHrefByText($text);
 }
 
-function getAttributeFromElementWithId(string $id, string $attributeName) : string {
+function getAttributeFromElementWithId(string $id, string $attributeName): string {
     assertPageContainsElementWithId($id);
 
     return getBrowser()->getElementAttributeValue($id, $attributeName);
 }
 
-function clickLinkWithId($linkId) : void {
+function clickLinkWithId($linkId): void {
     assertPageContainsLinkWithId($linkId);
 
     getBrowser()->clickLinkWithId($linkId);
@@ -366,7 +366,7 @@ function forceFieldValue(string $fieldName, string $value) {
     getBrowser()->forceFieldValue($fieldName, $value);
 }
 
-function selectOptionWithText(string $fieldName, string $text) : void {
+function selectOptionWithText(string $fieldName, string $text): void {
     assertPageContainsSelectWithName($fieldName);
 
     if (getBrowser()->hasSelectOptionWithLabel($fieldName, $text)) {
@@ -377,7 +377,7 @@ function selectOptionWithText(string $fieldName, string $text) : void {
     }
 }
 
-function selectOptionWithValue(string $fieldName, string $value) : void {
+function selectOptionWithValue(string $fieldName, string $value): void {
     assertPageContainsSelectWithName($fieldName);
 
     if (getBrowser()->hasSelectOptionWithValue($fieldName, $value)) {
@@ -411,15 +411,14 @@ function getFieldValue(string $fieldName) {
     return getBrowser()->getFieldValue($fieldName);
 }
 
-function getSelectedOptionText(string $fieldName) : string {
+function getSelectedOptionText(string $fieldName): string {
     assertPageContainsSelectWithName($fieldName);
 
     return getBrowser()->getSelectedOptionText($fieldName);
 }
 
-function deleteSessionCookie() : void {
+function deleteSessionCookie(): void {
     throw new Error('not implemented');
-    // getGlobals()->httpClient->deleteCookie(session_name());
 }
 
 function closeBrowser() {
@@ -427,35 +426,35 @@ function closeBrowser() {
 }
 
 
-function is($value) : stf\matcher\AbstractMatcher {
+function is($value): stf\matcher\AbstractMatcher {
     return new stf\matcher\IsMatcher($value);
 }
 
-function isCloseTo($value) : stf\matcher\AbstractMatcher {
+function isCloseTo($value): stf\matcher\AbstractMatcher {
     return new stf\matcher\IsCloseToMatcher($value);
 }
 
-function contains(array $needleArray) : AbstractMatcher {
+function contains(array $needleArray): AbstractMatcher {
     return new ContainsMatcher($needleArray);
 }
 
-function containsString(string $needle) : AbstractMatcher {
+function containsString(string $needle): AbstractMatcher {
     return new ContainsStringMatcher($needle);
 }
 
-function doesNotContainString(string $needle) : AbstractMatcher {
+function doesNotContainString(string $needle): AbstractMatcher {
     return new ContainsNotStringMatcher($needle);
 }
 
-function containsStringOnce(string $value) : stf\matcher\AbstractMatcher {
+function containsStringOnce(string $value): stf\matcher\AbstractMatcher {
     return new stf\matcher\ContainsStringOnceMatcher($value);
 }
 
-function containsInAnyOrder(array $value) : stf\matcher\AbstractMatcher {
+function containsInAnyOrder(array $value): stf\matcher\AbstractMatcher {
     return new stf\matcher\ContainsInAnyOrderMatcher($value);
 }
 
-function isAnyOf(...$values) : stf\matcher\AbstractMatcher {
+function isAnyOf(...$values): stf\matcher\AbstractMatcher {
     return new stf\matcher\ContainsAnyMatcher($values);
 }
 

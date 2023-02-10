@@ -2,6 +2,7 @@
 
 namespace stf\browser;
 
+use Error;
 use Exception;
 use stf\browser\page\AbstractInput;
 use stf\browser\page\Checkbox;
@@ -30,8 +31,7 @@ class HttpBrowser implements Browser {
     private HttpClient $httpClient;
     private Globals $globals;
 
-    private string $responseContents = '';
-    private string $responseCode = '';
+    private ?HttpResponse $response = null;
 
     public function __construct(Globals $globals, Url $url) {
         $this->globals = $globals;
@@ -39,12 +39,8 @@ class HttpBrowser implements Browser {
         $this->reset();
     }
 
-    function getResponseContents() : string {
-        return $this->responseContents;
-    }
-
-    function getResponseCode() : int {
-        return intval($this->responseCode);
+    function getResponse(): ?HttpResponse {
+        return $this->response;
     }
 
     function setMaxRedirectCount(int $count) : void  {
@@ -122,7 +118,7 @@ class HttpBrowser implements Browser {
         } else if ($type === FieldType::Button) {
             return $this->page->getFormSet()->getButtonByName($fieldName) !== null;
         } else {
-            throw new \Error('unknown field type: '  . $type);
+            throw new Error('unknown field type: '  . $type);
         }
 
         return $this->page->getFormSet()
@@ -199,8 +195,7 @@ class HttpBrowser implements Browser {
 
         $this->assertValidResponse($response->getResponseCode());
 
-        $this->responseCode = $response->getResponseCode();
-        $this->responseContents = $response->getContents();
+        $this->response = $response;
 
         if (strpos($response->getContentType(), 'html') === false) {
             return;

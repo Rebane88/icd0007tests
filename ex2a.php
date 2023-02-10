@@ -8,7 +8,7 @@ const BASE_URL = 'http://localhost:8080/';
 function indexToA() {
     navigateTo(getUrl());
 
-    clickLinkWithText('a.html');
+    clickRelativeLinkWithText('a.html');
 
     assertCurrentUrl(getUrl('a/a.html'));
 }
@@ -16,7 +16,7 @@ function indexToA() {
 function aToE() {
     navigateTo(getUrl('a/a.html'));
 
-    clickLinkWithText('e.html');
+    clickRelativeLinkWithText('e.html');
 
     assertCurrentUrl(getUrl('a/b/c/d/e/e.html'));
 }
@@ -24,7 +24,7 @@ function aToE() {
 function eToD() {
     navigateTo(getUrl('a/b/c/d/e/e.html'));
 
-    clickLinkWithText('d.html');
+    clickRelativeLinkWithText('d.html');
 
     assertCurrentUrl(getUrl('a/b/c/d/d.html'));
 }
@@ -32,7 +32,7 @@ function eToD() {
 function dToB() {
     navigateTo(getUrl('a/b/c/d/d.html'));
 
-    clickLinkWithText('b.html');
+    clickRelativeLinkWithText('b.html');
 
     assertCurrentUrl(getUrl('a/b/b.html'));
 }
@@ -44,7 +44,7 @@ function emptyLink() {
 
     $href = getHrefFromLinkWithText($linkText);
 
-    clickLinkWithText($linkText);
+    clickRelativeLinkWithText($linkText);
 
     assertCurrentUrl(getUrl('a/b/c/d/e/f/f.html'));
 
@@ -59,12 +59,24 @@ function directoryLink() {
 
     $href = getHrefFromLinkWithText($linkText);
 
-    clickLinkWithText($linkText);
+    clickRelativeLinkWithText($linkText);
 
     assertCurrentUrl(getUrl('a/b/c/d/e/f/'));
 
     assertThat(strlen($href), is(1),
         "'$href' is not the shortest link possible");
+}
+
+function logoImageSrcIsCorrect() {
+
+    navigateTo(getUrl('a/b/c/d/e/f/f.html'));
+
+    $src = getAttributeFromElementWithId('logo', 'src');
+
+    assertThat(isRelativeLink($src), is(true),
+        "'$src' is not a relative link");
+
+    assertImageExists(getCurrentUrlDir() . $src);
 }
 
 #Helpers
@@ -75,6 +87,20 @@ function getUrl(string $relativeUrl = ''): string {
     return "$baseUrl/ex2/nav/$relativeUrl";
 }
 
+function isRelativeLink($href): bool {
+    return !preg_match("/:/", $href) && !preg_match("/^\//", $href);
+}
+
+function clickRelativeLinkWithText($linkText): void {
+    $href = getHrefFromLinkWithText($linkText);
+
+    if (!isRelativeLink($href)) {
+        throw new RuntimeException("$href is not a relative link");
+    }
+
+    clickLinkWithText($linkText);
+}
+
 setBaseUrl(BASE_URL);
 
-stf\runTests(getPassFailReporter(6));
+stf\runTests(getPassFailReporter(7));

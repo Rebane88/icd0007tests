@@ -2,7 +2,7 @@
 
 namespace stf;
 
-use \RuntimeException;
+use RuntimeException;
 
 function runTests(?ResultReporter $reporter = null) {
     $successful = 0;
@@ -48,7 +48,9 @@ function printPageSourceIfNeeded() {
         return;
     }
 
-    $text = getGlobals()->getBrowser()->getResponseContents() ?? 'Nothing fetched yet';
+    $response = getGlobals()->getBrowser()->getResponse();
+
+    $text = $response ? $response->getContents() : 'Nothing fetched yet';
 
     print("##################  Page source start #################### \n");
     print $text . PHP_EOL;

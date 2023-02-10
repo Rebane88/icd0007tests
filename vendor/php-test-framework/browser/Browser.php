@@ -9,9 +9,7 @@ interface Browser {
 
     function getCurrentUrlDir(): string;
 
-    function getResponseContents(): string;
-
-    function getResponseCode(): int;
+    function getResponse(): ?HttpResponse;
 
     function reset() : void;
 

@@ -120,7 +120,7 @@ function setShowBrowser(bool $flag) : void {
 }
 
 function getResponseCode() : int {
-    return getBrowser()->getResponseCode();
+    return getBrowser()->getResponse()->getResponseCode();
 }
 
 function getCurrentUrl() : string {
@@ -339,12 +339,13 @@ function navigateTo(string $url) {
     getBrowser()->navigateTo($url);
 }
 
-function resourceExists(string $url) {
+function assertImageExists(string $url): void {
     getBrowser()->navigateTo($url);
 
-    $code = getBrowser()->getResponseCode();
+    $type = getBrowser()->getResponse()->getContentType();
 
-    assertThat($code, is(200), "Resource does not exist.");
+    assertThat($type, containsString('image'),
+        "$url does not point to image");
 }
 
 function clickButton(string $buttonName, ?string $buttonValue = null) {

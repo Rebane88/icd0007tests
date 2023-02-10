@@ -35,12 +35,10 @@ class WebDriverBrowser implements Browser {
         throw new Error('not implemented');
     }
 
-    function getResponseContents(): string {
-        return $this->getDriver()->getPageSource();
-    }
+    function getResponse(): ?HttpResponse {
+        $headers = new HttpHeaders(0, null, null);
 
-    function getResponseCode(): int {
-        throw new Error('not implemented');
+        return new HttpResponse($headers, $this->getDriver()->getPageSource());
     }
 
     function reset(): void {

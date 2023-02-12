@@ -48,7 +48,7 @@ function calculatesFahrenheitToCelsius() {
 function getUrl(): string {
     $baseUrl = removeLastSlash(BASE_URL);
 
-    return "$baseUrl/ex3/calc_done/";
+    return "$baseUrl/ex3/calc/";
 }
 
 setBaseUrl(BASE_URL);

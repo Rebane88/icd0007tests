@@ -52,3 +52,14 @@ function getFileCount($path, $extension): int {
     return $count;
 }
 
+function readJsonFileFrom(string $path) {
+    $infoFile = "$path/info.json";
+
+    if (!file_exists($infoFile)) {
+        die("can't find info.json from $path" . PHP_EOL);
+    }
+
+    $string = file_get_contents($infoFile);
+
+    return json_decode($string, true);
+}

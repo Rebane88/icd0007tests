@@ -14,7 +14,7 @@ function getRepoSize($path): int {
     chdir($path);
 
     $filter = function ($file) {
-        return ! preg_match('/^(\\.\\/\\.git)|vendor$/', $file->getPathName());
+        return ! preg_match('/^(\\.\\/\\.git)|vendor|\\.png|\\.jpg/', $file->getPathName());
     };
 
     $it = new RecursiveDirectoryIterator('.');

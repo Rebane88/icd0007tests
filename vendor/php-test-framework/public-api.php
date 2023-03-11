@@ -417,6 +417,13 @@ function getSelectedOptionText(string $fieldName): string {
     return getBrowser()->getSelectedOptionText($fieldName);
 }
 
+function getSelectOptionValues(string $fieldName): array {
+    assertPageContainsSelectWithName($fieldName);
+
+    return getBrowser()->getFormSet()
+        ->getSelectByName($fieldName)->getOptionValues();
+}
+
 function deleteSessionCookie(): void {
     throw new Error('not implemented');
 }

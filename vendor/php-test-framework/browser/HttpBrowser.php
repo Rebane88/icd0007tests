@@ -130,11 +130,11 @@ class HttpBrowser implements Browser {
     }
 
 
-    private function getFormSet() : FormSet {
+    public function getFormSet(): FormSet {
         $formSet = $this->page->getFormSet();
 
         if ($formSet->getFormCount() === 0) {
-            fail(ERROR_W07, "Current page does not contain any form elements");
+            fail(ERROR_W07, "Current page does not contain a form");
         }
 
         return $formSet;

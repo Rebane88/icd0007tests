@@ -116,4 +116,10 @@ class Select extends AbstractInput {
             ? ''
             : $this->options[0]->getValue();
     }
+
+    public function getOptionValues(): array {
+        return array_map(function ($each) {
+            return $each->getValue();
+        }, $this->options);
+    }
 }

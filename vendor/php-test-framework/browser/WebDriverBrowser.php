@@ -11,6 +11,7 @@ use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
+use stf\browser\page\FormSet;
 use stf\FrameworkException;
 use stf\Globals;
 
@@ -235,5 +236,9 @@ class WebDriverBrowser implements Browser {
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
         return RemoteWebDriver::create(Globals::SELENIUM_SERVER_URL, $capabilities);
+    }
+
+    function getFormSet(): FormSet {
+        throw new Error('not implemented');
     }
 }

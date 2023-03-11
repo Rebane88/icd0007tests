@@ -2,6 +2,8 @@
 
 namespace stf\browser;
 
+use stf\browser\page\FormSet;
+
 interface Browser {
     function setMaxRedirectCount(int $count): void;
 
@@ -62,5 +64,7 @@ interface Browser {
     function getPageText(): string;
 
     function getPageSource(): string;
+
+    function getFormSet(): FormSet;
 
 }

@@ -1,0 +1,111 @@
+<?php
+
+require_once 'vendor/php-test-framework/public-api.php';
+
+const BASE_URL = 'http://localhost:8080';
+
+function canSaveBooksWithSingleAuthor() {
+
+    $authorName = insertSampleAuthor();
+
+    gotoLandingPage();
+
+    clickBookFormLink();
+
+    $book = getSampleBook();
+
+    setTextFieldValue('title', $book->title);
+    setRadioFieldValue('grade', '5');
+    selectOptionWithText('author1', $authorName);
+
+    clickBookFormSubmitButton();
+
+    assertThat(getPageText(), containsStringOnce($book->title));
+    assertThat(getPageText(), containsStringOnce($authorName));
+}
+
+function canUpdateBooksWithSingleAuthor() {
+
+    $originalAuthorName = insertSampleAuthor();
+    $newAuthorName = insertSampleAuthor();
+
+    gotoLandingPage();
+
+    clickBookFormLink();
+
+    $bookTitle = getSampleBook()->title;
+
+    setTextFieldValue('title', $bookTitle);
+    selectOptionWithText('author1', $originalAuthorName);
+
+    clickBookFormSubmitButton();
+
+    clickLinkWithText($bookTitle);
+
+    assertThat(getFieldValue('title'), is($bookTitle));
+    assertThat(getSelectedOptionText('author1'), is($originalAuthorName));
+
+    selectOptionWithText('author1', $newAuthorName);
+
+    clickBookFormSubmitButton();
+
+    assertThat(getPageText(), containsStringOnce($newAuthorName));
+    assertThat(getPageText(), doesNotContainString($originalAuthorName));
+}
+
+function doesNotAllowSqlInjectionWhenAddingBook() {
+
+    gotoLandingPage();
+
+    clickBookFormLink();
+
+    $dangerousSymbols = " \" ' ";
+    $bookTitle = getSampleBook()->title; // 1e549 f26a5
+    $dangerousBookTitle = $bookTitle . $dangerousSymbols; // 1e549 f26a5 " '
+
+    // should accept this value as a book title
+    setTextFieldValue('title', $dangerousBookTitle);
+
+    // should ignore these values and not break
+    forceFieldValue('grade', $dangerousSymbols);
+    forceFieldValue('isRead', $dangerousSymbols);
+    forceFieldValue('author1', $dangerousSymbols);
+
+    clickBookFormSubmitButton();
+
+    assertThat(getPageText(), containsString($dangerousBookTitle));
+}
+
+function doesNotAllowSqlInjectionWhenAddingAuthor() {
+
+    gotoLandingPage();
+
+    clickAuthorFormLink();
+
+    $dangerousSymbols = " \" ' ";
+    $firstName = getSampleAuthor()->firstName; // f4d 544a
+    $lastName = getSampleAuthor()->lastName; // c3841 251
+
+    $dangerousFirstName = $firstName . $dangerousSymbols; // f4d 544a " '
+    $dangerousLastName = $lastName . $dangerousSymbols; // c3841 251 " '
+
+    // should accept these values as names
+    setTextFieldValue('firstName', $dangerousFirstName);
+    setTextFieldValue('lastName', $dangerousLastName);
+
+    // should ignore this value and not break
+    forceFieldValue('grade', $dangerousSymbols);
+
+    clickAuthorFormSubmitButton();
+
+    assertThat(getPageText(), containsString($dangerousFirstName));
+    assertThat(getPageText(), containsString($dangerousLastName));
+}
+
+setBaseUrl(BASE_URL);
+setLogRequests(false);
+setLogPostParameters(false);
+setPrintStackTrace(false);
+setPrintPageSourceOnError(false);
+
+stf\runTests(getPassFailReporter(4));

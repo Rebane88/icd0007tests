@@ -14,7 +14,7 @@ class PassFailReporter implements ResultReporter {
 
     public function execute(int $passedMethodCount): string {
         $result = $passedMethodCount >= $this->neededForPass
-            ? 'PASSED' : 'FAILED';
+            ? RESULT_PASSED : RESULT_FAILED;
 
         return sprintf($this->format, $result);
     }

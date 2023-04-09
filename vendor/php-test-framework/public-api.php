@@ -12,6 +12,8 @@ if (intval($phpMajorVersion) < 7
 const RESULT_PATTERN_SHORT = "\nRESULT: %s\n";
 const RESULT_PATTERN_POINTS = "\nRESULT: %s points\n";
 const RESULT_PATTERN_WITH_MAX = "\nRESULT: %s of %s points\n";
+const RESULT_PASSED = 'PASSED';
+const RESULT_FAILED = 'FAILED';
 
 require_once 'runner.php';
 require_once 'util.php';

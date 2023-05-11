@@ -90,6 +90,6 @@ setBaseUrl(BASE_URL);
 useWebDriver(true);
 setPrintPageSourceOnError(false);
 setLeaveBrowserOpen(false);
-setShowBrowser(true);
+setShowBrowser(false);
 
 stf\runTests(getPassFailReporter(5));

@@ -21,14 +21,15 @@ $json = readJsonFileFrom($path);
 $fullName = $json['firstName'] . ' ' . $json['lastName'];
 
 if (nameExistsInDeclaredNames($fullName, $namesCsv)) {
-    printf(RESULT_PATTERN_SHORT, MAX_POINTS);
+    printf(RESULT_PATTERN_SHORT, RESULT_PASSED);
 } else {
     print "There is no declaration with the name '$fullName' in Õis (as of 04.09.2023). 
                  If you declared the course later and the name is correct you will get 
                  the points on 18.09.2023";
 
-    die(sprintf(RESULT_PATTERN_POINTS, 0));
+    printf(RESULT_PATTERN_SHORT, RESULT_FAILED);
 
+    exit(1);
 }
 
 function nameExistsInDeclaredNames(string $name, string $csvFile): bool {

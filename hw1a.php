@@ -3,8 +3,6 @@
 require_once 'common-functions.php';
 require_once 'vendor/php-test-framework/public-api.php';
 
-const MAX_POINTS = 1;
-
 if ($argc < 2) {
     die('Pass project directory as an argument' . PHP_EOL);
 } else {
@@ -35,7 +33,10 @@ if ($json['iHaveReadTheRulesOfTheCourse'] !== true) {
 if (count($errors)) {
     print join(PHP_EOL, $errors);
 
-    die(sprintf(RESULT_PATTERN_POINTS, 0));
+    printf(RESULT_PATTERN_SHORT, RESULT_FAILED);
+
+    exit(1);
+
 } else {
-    printf(RESULT_PATTERN_POINTS, MAX_POINTS);
+    printf(RESULT_PATTERN_SHORT, RESULT_PASSED);
 }

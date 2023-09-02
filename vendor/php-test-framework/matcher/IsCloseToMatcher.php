@@ -20,7 +20,7 @@ class IsCloseToMatcher extends AbstractMatcher {
         $actual, ?string $message = null): MatcherError {
 
         $message = sprintf("Expected %s to be close to %s",
-            asString($this->expected), asString($actual));
+            asString($actual), asString($this->expected));
 
         return new MatcherError(ERROR_C02, $message);
     }

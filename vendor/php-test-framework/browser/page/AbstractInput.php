@@ -14,6 +14,10 @@ abstract class AbstractInput {
         return $this->name;
     }
 
+    public function isFile(): bool {
+        return false;
+    }
+
     public abstract function getValue(): ?string;
 
 }

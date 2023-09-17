@@ -73,6 +73,10 @@ class FormSet {
         return $this->getFieldByNameAndType($fieldName, Checkbox::class);
     }
 
+    public function getFileFieldByName($fieldName) : ?FileField {
+        return $this->getFieldByNameAndType($fieldName, FileField::class);
+    }
+
     public function getSelectByName($fieldName) : ?Select {
         return $this->getFieldByNameAndType($fieldName, Select::class);
     }

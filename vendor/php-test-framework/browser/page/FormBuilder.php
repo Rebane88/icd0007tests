@@ -28,10 +28,11 @@ class FormBuilder {
         $formElements = $this->nodeTree->findChildNodesByTagNames(
             $formNode, ['input', 'button', 'textarea', 'select']);
 
-        $form = new Form();
+        $action = $formNode->getAttributeValue('action') ?? '';
+        $method = $formNode->getAttributeValue('method') ?? '';
+        $enctype = $formNode->getAttributeValue('enctype') ?? '';
 
-        $form->setAction($formNode->getAttributeValue('action') ?? '');
-        $form->setMethod($formNode->getAttributeValue('method') ?? '');
+        $form = new Form($action, $method, $enctype);
 
         $radios = [];
         foreach ($formElements as $element) {
@@ -58,6 +59,12 @@ class FormBuilder {
                     $element->hasAttribute('checked'));
 
                 $form->addField($checkbox);
+
+            } else if ($this->isFile($element) && $name !== null) {
+
+                $fileField = new FileField($name, '', '');
+
+                $form->addField($fileField);
 
             } else if ($this->isTextArea($element) && $name !== null) {
 
@@ -103,6 +110,11 @@ class FormBuilder {
 
     private function isSelect($element): bool {
         return $element->getTagName() === 'select';
+    }
+
+    private function isFile($element): bool {
+        return ($element->getTagName() === 'input')
+            && $element->getAttributeValue('type') === 'file';
     }
 
     private function createSelect($element): Select {

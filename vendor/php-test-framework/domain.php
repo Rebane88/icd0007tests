@@ -9,13 +9,13 @@ function gotoLandingPage(): void {
 
     navigateTo($landingPageUrl);
 
-    assertCorrectPageId('book-list-page');
+    assertCorrectPageId('dashboard-page');
 }
 
-function clickBookFormLink(): void {
-    clickLinkWithId('book-form-link');
+function clickEmployeeFormLink(): void {
+    clickLinkWithId('employee-form-link');
 
-    assertCorrectPageId('book-form-page');
+    assertCorrectPageId('employee-form-page');
 }
 
 function clickAuthorFormLink(): void {
@@ -24,10 +24,10 @@ function clickAuthorFormLink(): void {
     assertCorrectPageId('author-form-page');
 }
 
-function clickBookFormSubmitButton(): void {
+function clickEmployeeFormSubmitButton(): void {
     clickButton('submitButton');
 
-    assertCorrectPageId('book-list-page');
+    assertCorrectPageId('employee-list-page');
 }
 
 function clickBookFormDeleteButton(): void {

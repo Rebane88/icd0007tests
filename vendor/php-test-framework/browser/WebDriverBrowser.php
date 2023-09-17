@@ -131,6 +131,10 @@ class WebDriverBrowser implements Browser {
         throw new Error('not implemented');
     }
 
+    public function setFileFieldValues(string $fieldName, string $path, string $contents) : void {
+        throw new Error('not implemented');
+    }
+
     function forceFieldValue(string $fieldName, string $value): void {
         throw new Error('not implemented');
     }

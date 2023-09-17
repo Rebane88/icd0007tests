@@ -8,6 +8,7 @@ class FieldType {
     const Select = 'Select';
     const Radio = 'Radio';
     const Checkbox = 'Checkbox';
+    const File = 'File';
     const Button = 'Button';
     const Any = 'Any';
 

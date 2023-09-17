@@ -53,6 +53,8 @@ interface Browser {
 
     function setRadioValue(string $fieldName, string $value): void;
 
+    function setFileFieldValues(string $fieldName, string $path, string $contents): void;
+
     function setCheckboxValue(string $fieldName, string $value): void;
 
     function forceFieldValue(string $fieldName, string $value): void;

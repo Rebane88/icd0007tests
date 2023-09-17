@@ -23,13 +23,18 @@ class RequestBuilder {
 
         $action = $button->getFormAction() ?: $form->getAction();
 
-        $request = new HttpRequest($this->currentUrl, $action, $form->getMethod());
+        $request = new HttpRequest($this->currentUrl, $action,
+            $form->getMethod(), $form->getEnctype());
 
         $request->addParameter($button->getName(), $button->getValue());
 
         foreach ($form->getFields() as $field) {
             if ($field->getValue() !== null) {
                 $request->addParameter($field->getName(), $field->getValue());
+            }
+            if ($field->isFile()) {
+                $request->addFileParameter($field->getName(),
+                    $field->getPath(), $field->getContents());
             }
         }
 

@@ -32,6 +32,19 @@ function buildsCheckboxes() {
     assertThat($c2->getValue(), is('v2'));
 }
 
+function buildsFileInput() {
+    $html = '<form enctype="multipart/form-data">
+        <input name="f1" type="file" /></form>';
+
+    $form = getFormSet($html)->findFormContainingField("f1");
+
+    assertThat($form->getEnctype(), is('multipart/form-data'));
+
+    $f1 = getFormSet($html)->getFileFieldByName('f1');
+
+    assertThat($f1->getValue(), is(''));
+}
+
 function buildsSelect() {
     $html = "<form>
              <select name='s1'>

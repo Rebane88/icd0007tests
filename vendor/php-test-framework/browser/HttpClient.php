@@ -3,6 +3,7 @@
 namespace stf\browser;
 
 use \SimpleGetEncoding;
+use \SimpleMultipartEncoding;
 use \SimplePostEncoding;
 use \SimpleUrl;
 use \SimpleCookieJar;
@@ -19,20 +20,9 @@ class HttpClient {
     }
 
     function execute(HttpRequest $request) : HttpResponse {
-
-        $encoding = $request->isPostMethod()
-            ? new SimplePostEncoding()
-            : new SimpleGetEncoding();
-
-        if ($request->isPostMethod()) {
-            foreach ($request->getParameters() as $key => $value) {
-                $encoding->add($key, $value);
-            }
-        }
-
         $url = $request->getFullUrl()->asString();
-        $simpleHttpRequest = new SimpleHttpRequest(
-            new SimpleRoute(new SimpleUrl($url)), $encoding);
+
+        $simpleHttpRequest = $this->createRequest($request, $url);
 
         $simpleHttpRequest->readCookiesFromJar($this->cookieJar, new SimpleUrl($url));
 
@@ -57,6 +47,30 @@ class HttpClient {
     public function deleteCookie(string $cookieName) {
         $this->cookieJar->deleteCookie($cookieName);
     }
+
+    private function createRequest(HttpRequest $request, string $url): SimpleHttpRequest {
+        if (!$request->isPostMethod()) {
+            return new SimpleHttpRequest(
+                new SimpleRoute(new SimpleUrl($url)), new SimpleGetEncoding());
+        }
+
+        $encoding = $request->isMultipartForm()
+            ? new SimpleMultipartEncoding()
+            : new SimplePostEncoding();
+
+        foreach ($request->getParameters() as $key => $value) {
+            $encoding->add($key, $value);
+        }
+
+        foreach ($request->getFileParameters() as $key => $value) {
+            $encoding->attach($key, $value[1], $value[0]);
+        }
+
+        return new SimpleHttpRequest(
+            new SimpleRoute(new SimpleUrl($url)), $encoding);
+
+    }
+
 }
 
 

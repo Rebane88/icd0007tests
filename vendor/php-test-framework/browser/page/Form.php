@@ -6,8 +6,15 @@ class Form {
 
     private string $action = '';
     private string $method = '';
+    private string $enctype = '';
     private array $fields = [];
     private array $buttons = [];
+
+    public function __construct(string $action, string $method, string $enctype) {
+        $this->action = $action;
+        $this->method = $method;
+        $this->enctype = $enctype;
+    }
 
     public function addField(AbstractInput $field): void {
         $this->fields[] = $field;
@@ -96,20 +103,16 @@ class Form {
         return $this->getFieldByNameAndType($fieldName, Select::class);
     }
 
-    public function getAction(): ?string {
+    public function getAction(): string {
         return $this->action;
     }
 
-    public function setAction($action): void {
-        $this->action = $action;
+    public function getEnctype(): string {
+        return $this->enctype;
     }
 
     public function getMethod(): string {
         return $this->method;
-    }
-
-    public function setMethod(string $method): void {
-        $this->method = $method;
     }
 
     public function __toString(): string {

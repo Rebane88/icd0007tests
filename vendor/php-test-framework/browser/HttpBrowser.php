@@ -6,6 +6,7 @@ use Error;
 use Exception;
 use stf\browser\page\AbstractInput;
 use stf\browser\page\Checkbox;
+use stf\browser\page\FileField;
 use stf\browser\page\Element;
 use stf\browser\page\FieldType;
 use stf\browser\page\FormSet;
@@ -61,7 +62,7 @@ class HttpBrowser implements Browser {
     }
 
     public function navigateTo(string $url): void {
-        $request = new HttpRequest($this->currentUrl, $url, 'GET');
+        $request = new HttpRequest($this->currentUrl, $url, 'GET', '');
 
         $this->executeRequestWithRedirects($request);
     }
@@ -104,6 +105,12 @@ class HttpBrowser implements Browser {
         $this->page->getFormSet()->getRadioByName($fieldName)->selectOption($value);
     }
 
+    public function setFileFieldValues(string $fieldName, string $path, string $contents) : void {
+        $f = $this->page->getFormSet()->getFileFieldByName($fieldName);
+        $f->setPath($path);
+        $f->setContents($contents);
+    }
+
     public function hasFieldByName(string $fieldName, string $type) : bool {
         if ($type === FieldType::TextField) {
             $class = TextField::class;
@@ -113,6 +120,8 @@ class HttpBrowser implements Browser {
             $class = Checkbox::class;
         } else if ($type === FieldType::Select) {
             $class = Select::class;
+        } else if ($type === FieldType::File) {
+            $class = FileField::class;
         } else if ($type === FieldType::Any) {
             $class = AbstractInput::class;
         } else if ($type === FieldType::Button) {
@@ -148,7 +157,7 @@ class HttpBrowser implements Browser {
         while ($response->isRedirect() && $count-- > 0) {
 
             $request = new HttpRequest($request->getFullUrl(),
-                $response->getLocation(), 'GET');
+                $response->getLocation(), 'GET', '');
 
             $response = $this->executeRequest($request);
         }

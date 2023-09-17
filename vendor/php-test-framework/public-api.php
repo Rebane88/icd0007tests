@@ -177,6 +177,15 @@ function assertPageContainsTextFieldWithName($name): void {
         sprintf("Current page does not contain text field with name '%s'.", $name));
 }
 
+function assertPageContainsFileFieldWithName($name): void {
+    if (getBrowser()->hasFieldByName($name, FieldType::File)) {
+        return;
+    }
+
+    fail(ERROR_W17,
+        sprintf("Current page does not contain file field with name '%s'.", $name));
+}
+
 function assertPageContainsRadioWithName($name): void {
     if (getBrowser()->hasFieldByName($name, FieldType::Radio)) {
         return;
@@ -360,6 +369,12 @@ function setTextFieldValue(string $fieldName, string $value) {
     assertPageContainsTextFieldWithName($fieldName);
 
     getBrowser()->setTextFieldValue($fieldName, $value);
+}
+
+function setFileFieldValues(string $fieldName, string $path, string $contents) {
+    assertPageContainsFileFieldWithName($fieldName);
+
+    getBrowser()->setFileFieldValues($fieldName, $path, $contents);
 }
 
 function forceFieldValue(string $fieldName, string $value) {

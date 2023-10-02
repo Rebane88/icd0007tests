@@ -30,7 +30,8 @@ class PageBuilder {
         $nodes = $this->nodeTree->getAllTagNodes();
 
         return array_map(function ($node) {
-            return new Element($node);
+            $innerText = (new NodeTree($node))->getFullText();
+            return new Element($node, $innerText);
         }, $nodes);
     }
 

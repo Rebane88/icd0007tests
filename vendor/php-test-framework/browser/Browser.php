@@ -2,6 +2,7 @@
 
 namespace stf\browser;
 
+use stf\browser\page\Element;
 use stf\browser\page\FormSet;
 
 interface Browser {
@@ -28,6 +29,10 @@ interface Browser {
     function hasLinkWithText(string $linkText): bool;
 
     function hasElementWithId(string $id): bool;
+
+    function getElementByInnerText(string $innerText): ?Element;
+
+    function getElements(): array;
 
     function getElementAttributeValue(string $id, string $attributeName): string;
 

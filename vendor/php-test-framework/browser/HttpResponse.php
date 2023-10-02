@@ -12,25 +12,25 @@ class HttpResponse {
         $this->contents = $contents;
     }
 
-    public function isRedirect() : bool {
+    public function isRedirect(): bool {
         $code = $this->headers->responseCode ?? 0;
 
         return $code >= 300 && $code < 400;
     }
 
-    public function getLocation() : string {
+    public function getLocation(): string {
         return $this->headers->location;
     }
 
-    public function getResponseCode() : int {
+    public function getResponseCode(): int {
         return $this->headers->responseCode;
     }
 
-    public function getContentType() : string {
+    public function getContentType(): string {
         return $this->headers->contentType;
     }
 
-    public function getContents() : string {
+    public function getContents(): string {
         return $this->contents;
     }
 

@@ -359,6 +359,12 @@ function assertImageExists(string $url): void {
         "$url does not point to image");
 }
 
+function getImage(string $url): string {
+    getBrowser()->navigateTo($url);
+
+    return getBrowser()->getResponse()->getContents();
+}
+
 function clickButton(string $buttonName, ?string $buttonValue = null) {
     assertPageContainsButtonWithName($buttonName);
 
@@ -452,6 +458,10 @@ function closeBrowser() {
 
 function is($value): stf\matcher\AbstractMatcher {
     return new stf\matcher\IsMatcher($value);
+}
+
+function isNot($value): stf\matcher\AbstractMatcher {
+    return new stf\matcher\IsNotMatcher($value);
 }
 
 function isCloseTo($value): stf\matcher\AbstractMatcher {

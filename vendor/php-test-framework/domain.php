@@ -4,6 +4,32 @@ function getPageId(): ?string {
     return getBrowser()->getPageId();
 }
 
+function getEmployeeIdByName(string $employeeName): ?string {
+    $element = getBrowser()->getElementByInnerText($employeeName);
+
+    if ($element === null) {
+        $message = sprintf("Page did not contain element with text '%s'",
+            $employeeName);
+
+        throw new stf\FrameworkException(ERROR_D01, $message);
+    }
+
+    return $element->getAttributeValue('data-employee-id');
+}
+
+function getProfilePictureUrl(string $employeeId): ?string {
+    $elements = getBrowser()->getElements();
+
+    foreach ($elements as $element) {
+        if ($element->getTagName() === 'img'
+            && $element->getAttributeValue('data-employee-id') === $employeeId) {
+            return $element->getAttributeValue('src');
+        }
+    }
+
+    return null;
+}
+
 function gotoLandingPage(): void {
     $landingPageUrl = getGlobals()->baseUrl->asString();
 
@@ -18,10 +44,16 @@ function clickEmployeeFormLink(): void {
     assertCorrectPageId('employee-form-page');
 }
 
-function clickAuthorFormLink(): void {
-    clickLinkWithId('author-form-link');
+function clickEmployeeListLink(): void {
+    clickLinkWithId('employee-list-link');
 
-    assertCorrectPageId('author-form-page');
+    assertCorrectPageId('employee-list-page');
+}
+
+function clickTaskFormLink(): void {
+    clickLinkWithId('task-form-link');
+
+    assertCorrectPageId('task-form-page');
 }
 
 function clickEmployeeFormSubmitButton(): void {
@@ -36,10 +68,10 @@ function clickBookFormDeleteButton(): void {
     assertCorrectPageId('book-list-page');
 }
 
-function clickAuthorFormSubmitButton(): void {
+function clickTaskFormSubmitButton(): void {
     clickButton('submitButton');
 
-    assertCorrectPageId('author-list-page');
+    assertCorrectPageId('task-list-page');
 }
 
 function clickAuthorFormDeleteButton(): void {
@@ -88,38 +120,38 @@ class Book {
     public bool $isRead;
 }
 
-function getSampleAuthor(): Author {
-    $author = new Author();
-    $author->firstName = getRandomString(3) . ' ' . getRandomString(4);
-    $author->lastName = getRandomString(5) . ' ' . getRandomString(3);
-    $author->grade = 4;
-    return $author;
+function getSampleTask(): Task {
+    return new Task(null, getRandomString(10), '4');
 }
 
 function getRandomString(int $length): string {
     return substr(md5(mt_rand()), 0, $length);
 }
 
-function getSampleBook(): Book {
-    $book = new Book();
-    $book->title = getRandomString(5) . ' ' . getRandomString(5);
-    $book->grade = 5;
-    $book->isRead = true;
-    return $book;
+function getSampleEmployee(): Employee {
+    return new Employee(
+        null,
+        getRandomString(5),
+        getRandomString(6),
+        'position.manager',
+        true,
+        'img/test.jpg',
+        getRandomString(6) . "\x01\x02\x03"
+    );
 }
 
 function insertSampleAuthor(): string {
 
     gotoLandingPage();
 
-    clickAuthorFormLink();
+    clickTaskFormLink();
 
-    $author = getSampleAuthor();
+    $author = getSampleTask();
 
     setTextFieldValue('firstName', $author->firstName);
     setTextFieldValue('lastName', $author->lastName);
 
-    clickAuthorFormSubmitButton();
+    clickTaskFormSubmitButton();
 
     return $author->firstName . ' ' . $author->lastName;
 }

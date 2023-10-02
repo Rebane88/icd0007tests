@@ -305,6 +305,14 @@ class HttpBrowser implements Browser {
         return null;
     }
 
+    function getElementByInnerText(string $innerText): ?Element {
+        return $this->page->getElementByInnerText($innerText);
+    }
+
+    function getElements(): array {
+        return $this->page->getElements();
+    }
+
     function getPageText() : string {
         return $this->page->getText();
     }

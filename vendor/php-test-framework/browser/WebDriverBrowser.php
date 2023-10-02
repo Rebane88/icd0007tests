@@ -12,6 +12,7 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Exception\NoSuchElementException;
 
 use stf\browser\page\FormSet;
+use stf\browser\page\Element;
 use stf\FrameworkException;
 use stf\Globals;
 
@@ -80,6 +81,14 @@ class WebDriverBrowser implements Browser {
 
     function getElementAttributeValue(string $id,
                                       string $attributeName): string {
+        throw new Error('not implemented');
+    }
+
+    function getElementByInnerText(string $innerText): ?Element {
+        throw new Error('not implemented');
+    }
+
+    function getElements(): array {
         throw new Error('not implemented');
     }
 

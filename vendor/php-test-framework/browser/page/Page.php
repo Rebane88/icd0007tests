@@ -57,6 +57,12 @@ class Page {
         }))[0] ?? null;
     }
 
+    public function getElementByInnerText(string $text) : ?Element {
+        return array_values(array_filter($this->elements, function ($element) use ($text) {
+            return trim($element->getInnerText()) === $text;
+        }))[0] ?? null;
+    }
+
     public function getSource(): string {
         return $this->source;
     }

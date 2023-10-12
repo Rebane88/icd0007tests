@@ -119,4 +119,4 @@ setLogRequests(false);
 setLogPostParameters(false);
 setPrintPageSourceOnError(false);
 
-stf\runTests(getPassFailReporter(1));
+stf\runTests(getPassFailReporter(5));

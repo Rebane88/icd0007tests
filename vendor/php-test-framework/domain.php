@@ -17,6 +17,19 @@ function getEmployeeIdByName(string $employeeName): ?string {
     return $element->getAttributeValue('data-employee-id');
 }
 
+function getTaskIdByDescription(string $description): ?string {
+    $element = getBrowser()->getElementByInnerText($description);
+
+    if ($element === null) {
+        $message = sprintf("Page did not contain element with text '%s'",
+            $description);
+
+        throw new stf\FrameworkException(ERROR_D01, $message);
+    }
+
+    return $element->getAttributeValue('data-task-id');
+}
+
 function getProfilePictureUrl(string $employeeId): ?string {
     $elements = getBrowser()->getElements();
 
@@ -62,10 +75,10 @@ function clickEmployeeFormSubmitButton(): void {
     assertCorrectPageId('employee-list-page');
 }
 
-function clickBookFormDeleteButton(): void {
+function clickEmployeeFormDeleteButton(): void {
     clickButton('deleteButton');
 
-    assertCorrectPageId('book-list-page');
+    assertCorrectPageId('employee-list-page');
 }
 
 function clickTaskFormSubmitButton(): void {
@@ -74,10 +87,10 @@ function clickTaskFormSubmitButton(): void {
     assertCorrectPageId('task-list-page');
 }
 
-function clickAuthorFormDeleteButton(): void {
+function clickTaskFormDeleteButton(): void {
     clickButton('deleteButton');
 
-    assertCorrectPageId('author-list-page');
+    assertCorrectPageId('task-list-page');
 }
 
 function assertCorrectPageId($expectedPageId): void {

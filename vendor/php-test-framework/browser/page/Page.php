@@ -65,7 +65,7 @@ class Page {
         // last: find the inner element
         // outer elements have the same innerText
 
-        return $elements[array_key_last($elements)];
+        return count($elements) ? $elements[array_key_last($elements)] : null;
     }
 
     public function getSource(): string {

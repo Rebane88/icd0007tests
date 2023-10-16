@@ -43,12 +43,44 @@ function getProfilePictureUrl(string $employeeId): ?string {
     return null;
 }
 
-function gotoLandingPage(): void {
+function getEmployeeTaskCount(string $employeeId): ?string {
+    $elements = getBrowser()->getElements();
+
+    $elementId = 'employee-task-count-' . $employeeId;
+
+    foreach ($elements as $element) {
+        if ($element->getAttributeValue('id') === $elementId) {
+            return $element->getInnerText();
+        }
+    }
+
+    return null;
+}
+
+function getTaskState(string $taskId): ?string {
+    $elements = getBrowser()->getElements();
+
+    $elementId = 'task-state-' . $taskId;
+
+    foreach ($elements as $element) {
+        if ($element->getAttributeValue('id') === $elementId) {
+            return strtolower(trim($element->getInnerText()));
+        }
+    }
+
+    return null;
+}
+
+function gotoDashboardPage(): void {
     $landingPageUrl = getGlobals()->baseUrl->asString();
 
     navigateTo($landingPageUrl);
 
     assertCorrectPageId('dashboard-page');
+}
+
+function gotoLandingPage(): void {
+    gotoDashboardPage();
 }
 
 function clickEmployeeFormLink(): void {
@@ -147,24 +179,26 @@ function getSampleEmployee(): Employee {
         getRandomString(5),
         getRandomString(6),
         'position.manager',
-        true,
         'img/test.jpg',
         getRandomString(6) . "\x01\x02\x03"
     );
 }
 
-function insertSampleAuthor(): string {
+function insertSampleEmployee(): Employee {
 
     gotoLandingPage();
 
-    clickTaskFormLink();
+    clickEmployeeFormLink();
 
-    $author = getSampleTask();
+    $employee = getSampleEmployee();
 
-    setTextFieldValue('firstName', $author->firstName);
-    setTextFieldValue('lastName', $author->lastName);
+    setTextFieldValue('firstName', $employee->firstName);
+    setTextFieldValue('lastName', $employee->lastName);
 
-    clickTaskFormSubmitButton();
+    clickEmployeeFormSubmitButton();
 
-    return $author->firstName . ' ' . $author->lastName;
+    $employee->id = getEmployeeIdByName(
+        $employee->firstName . ' ' . $employee->lastName);
+
+    return $employee;
 }

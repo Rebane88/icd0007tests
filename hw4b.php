@@ -6,7 +6,7 @@ require_once 'vendor/php-test-framework/Task.php';
 
 const BASE_URL = 'http://localhost:8080';
 
-function selectingEmployeeForTaskPutsItInPendingState() {
+function assigningEmployeeForTaskPutsItInPendingState() {
 
     $employee = insertSampleEmployee();
 

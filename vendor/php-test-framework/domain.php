@@ -179,9 +179,26 @@ function getSampleEmployee(): Employee {
         getRandomString(5),
         getRandomString(6),
         'position.manager',
-        'img/test.jpg',
-        getRandomString(6) . "\x01\x02\x03"
+        sprintf('img/%s.bmp', getRandomString(5)),
+        getRandomImage()
     );
+}
+
+function getRandomImage() {
+    $path = __DIR__ . '/image-template.bmp';
+    $fh = fopen($path, 'rb');
+    $fileContents = fread($fh, filesize($path));
+    fclose($fh);
+
+    $byteArray = array_values(unpack('C*', $fileContents));
+
+    $lastIndex = array_key_last($byteArray);
+
+    $byteArray[$lastIndex - 1] = rand(0, 250);
+    $byteArray[$lastIndex - 2] = rand(0, 250);
+    $byteArray[$lastIndex - 3] = rand(0, 250);
+
+    return pack('C*', ...$byteArray);
 }
 
 function insertSampleEmployee(): Employee {

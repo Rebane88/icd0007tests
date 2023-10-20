@@ -35,7 +35,9 @@ function getRepoSize($path): int {
 function getFileCount($path, $extension): int {
 
     $filter = function ($file) {
-        return ! preg_match('/^(\\.\\/ex\\d)|vendor$/', $file->getPathName());
+        $p = preg_replace('/^(\\.\\/)/' ,'', $file->getPathName());
+
+        return ! preg_match('/^(ex\\d)$|^(vendor)$/', $p);
     };
 
     chdir($path);

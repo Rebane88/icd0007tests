@@ -41,6 +41,8 @@ function repositorySizeIsNotTooBig() {
     if ($size > pow(2, 20)) {
         fail(ERROR_C01, "Repository size is too big ($size bytes). Maximum is 1MB");
     }
+
+    var_dump($size);
 }
 
 stf\runTests(getPassFailReporter(3));

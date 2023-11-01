@@ -1,9 +1,21 @@
 <?php
 
+use php_test_framework\RepositoryFile;
+
+require_once 'vendor/php-test-framework/RepositoryFile.php';
+
 function getProjectDirectory(): string {
     global $argv;
 
     return removeLastSlash(getProjectPath($argv, PROJECT_DIRECTORY));
+}
+
+function containsHtmlTags($contents): string {
+    return preg_match('/<\w+(>|\s+)/', $contents);
+}
+
+function containsPhpTags($contents): string {
+    return preg_match('/<\?(=|php)/', $contents);
 }
 
 function removeLastSlash(string $path): string {
@@ -11,21 +23,10 @@ function removeLastSlash(string $path): string {
 }
 
 function getRepoSize($path): int {
-    chdir($path);
-
-    $filter = function ($file) {
-        return ! preg_match(
-            '/^(\\.\\/\\.git)|vendor|\\.png|\\.jpg|\\.ttf/',
-            $file->getPathName());
-    };
-
-    $it = new RecursiveDirectoryIterator('.');
-    $it = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator($it, $filter));
-
     $size = 0;
-    foreach($it as $file) {
-        if (is_file($file)) {
-            $size += filesize($file);
+    foreach(getProjectFiles($path) as $file) {
+        if (!$file->isGraphicsFile()) {
+            $size += filesize($file->getAbsolutePath());
         }
     }
 
@@ -33,27 +34,30 @@ function getRepoSize($path): int {
 }
 
 function getFileCount($path, $extension): int {
-
-    $filter = function ($file) {
-        $p = preg_replace('/^(\\.\\/)/' ,'', $file->getPathName());
-
-        return ! preg_match('/^(ex\\d)$|^(vendor)$/', $p);
-    };
-
-    chdir($path);
-
-    $it = new RecursiveDirectoryIterator('.');
-    $it = new RecursiveIteratorIterator(new RecursiveCallbackFilterIterator($it, $filter));
-    $it = new RegexIterator($it, '/\.(\w+)$/i', RegexIterator::GET_MATCH);
-
     $count = 0;
-    foreach($it as $each) {
-        if (strtolower($each[1]) === $extension) {
+    foreach(getProjectFiles($path) as $file) {
+        if ($file->getExtension() === $extension) {
             $count++;
         }
     }
 
     return $count;
+}
+
+function getProjectFiles($path): array {
+    $it = new RecursiveDirectoryIterator($path);
+    $it = new RecursiveIteratorIterator($it);
+
+    $files = [];
+    foreach($it as $each) {
+        $file = new RepositoryFile($each->getPathName(), $path);
+
+        if (is_file($file->getAbsolutePath()) && $file->isProjectFile()) {
+            $files[] = $file;
+        }
+    }
+
+    return $files;
 }
 
 function readJsonFileFrom(string $path) {

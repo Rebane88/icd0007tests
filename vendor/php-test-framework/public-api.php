@@ -447,8 +447,8 @@ function getSelectOptionValues(string $fieldName): array {
         ->getSelectByName($fieldName)->getOptionValues();
 }
 
-function deleteSessionCookie(): void {
-    throw new Error('not implemented');
+function deleteCookies(): void {
+    getBrowser()->reset();
 }
 
 function closeBrowser() {

@@ -2,6 +2,8 @@
 
 namespace stf;
 
+use Error;
+use Exception;
 use RuntimeException;
 
 function runTests(?ResultReporter $reporter = null) {
@@ -31,7 +33,7 @@ function runTests(?ResultReporter $reporter = null) {
 
             printPageSourceIfNeeded();
 
-        } catch (RuntimeException $e) {
+        } catch (Error | Exception $e) {
             printf("\n### Test %s() failed \n\n %s\n\n", $testName, $e);
         }
     }

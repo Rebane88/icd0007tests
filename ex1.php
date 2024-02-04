@@ -5,8 +5,7 @@ require_once 'vendor/php-test-framework/public-api.php';
 
 const PROJECT_DIRECTORY = '';
 
-function checksWhetherListContainsSpecifiedElement() {
-
+test('Checks whether list contains specified element', function () {
     require_once 'ex1/ex2.php';
 
     $list = [1, 2, 3, 2, 6];
@@ -16,28 +15,25 @@ function checksWhetherListContainsSpecifiedElement() {
     assertThat(isInList($list, 3), is(true));
 
     assertThat(isInList($list, '3'), is(false));
-}
+});
 
-function convertsListToString() {
-
+test('Converts list to string', function () {
     require_once 'ex1/ex3.php';
 
     $list = [3, 2, 6];
 
     assertThat(listToString($list), is('[3, 2, 6]'));
-}
+});
 
-function convertsStringToIntegerList() {
-
+test('Converts string to integer list', function () {
     require_once 'ex1/ex4.php';
 
     $input = '[3, 2, 6]';
 
     assertThat(stringToIntegerList($input), is([3, 2, 6]));
-}
+});
 
-function getsAverageWeightsByType() {
-
+test('Gets average weights by type', function () {
     require_once 'ex1/ex5.php';
 
     $input = [
@@ -52,10 +48,9 @@ function getsAverageWeightsByType() {
 
     assertThat($result['apple'], is(0.22));
     assertThat($result['orange'], is(0.16));
-}
+});
 
-function findsDaysUnderTargetTemperature() {
-
+test('Gets days under target temperature', function () {
     chdir(getProjectDirectory() . '/ex1');
 
     require_once 'ex7.php';
@@ -67,9 +62,9 @@ function findsDaysUnderTargetTemperature() {
     assertThat(getDaysUnderTemp(2021, -5), isCloseTo(41.04));
     assertThat(getDaysUnderTemp(2022, -5), isCloseTo(20.5));
     assertThat(getDaysUnderTemp(2023, -5), isCloseTo(26.25));
-}
+});
 
-function findsDaysUnderTargetTemperatureDictionary() {
+test('Gets days under target temperature dictionary', function () {
 
     chdir(getProjectDirectory() . '/ex1');
 
@@ -81,16 +76,16 @@ function findsDaysUnderTargetTemperatureDictionary() {
     assertThat($dict[2022], isCloseTo(1.96));
     assertThat($dict[2023], isCloseTo(4.63));
 
-}
+});
 
-function convertsDictionaryToString() {
+test('Converts dictionary to string', function () {
 
     require_once 'ex1/ex8.php';
 
     $string = dictToString(['a' => 1, 'b' => 2]);
 
     assertThat($string, is('[a => 1, b => 2]'));
-}
+});
 
 extendIncludePath($argv, PROJECT_DIRECTORY);
 

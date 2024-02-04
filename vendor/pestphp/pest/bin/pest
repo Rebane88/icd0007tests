@@ -1,0 +1,23 @@
+#!/usr/bin/env php
+<?php
+
+$opts = getopt('t:f:', ['teamcity:', 'filter:']);
+$testPath = $opts['teamcity'] ?? null;
+$filter = $opts['filter'] ?? null;
+
+if ($filter) {
+    $testName = getSelectedTestName($filter);
+    $testPath = sprintf("%s --testToRun '%s'", $testPath, $testName);
+}
+
+$cmd = sprintf("php %s", $testPath);
+
+exec($cmd, $output, $exitCode);
+
+print join(PHP_EOL, $output);
+
+function getSelectedTestName(string $filter): string {
+    $str = str_replace('\\s', ' ', $filter);
+    $str = preg_replace('/.*::/', '', $str);
+    return preg_replace('/\(.*/', '', $str);
+}

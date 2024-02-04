@@ -10,7 +10,7 @@ if ($filter) {
     $testPath = sprintf("%s --testToRun '%s'", $testPath, $testName);
 }
 
-$cmd = sprintf("php %s", $testPath);
+$cmd = sprintf("php %s --fromPest 1", $testPath);
 
 exec($cmd, $output, $exitCode);
 

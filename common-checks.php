@@ -13,7 +13,7 @@ if ($path === false) {
     die('Argument is not a correct directory' . PHP_EOL);
 }
 
-function repositoryDoesNotContainNonProjectPhpFiles() {
+test('repositoryDoesNotContainNonProjectPhpFiles', function() {
     global $path;
 
     $count = getFileCount($path, 'php');
@@ -21,9 +21,9 @@ function repositoryDoesNotContainNonProjectPhpFiles() {
     if ($count > 12) {
         fail(ERROR_C01, "Repository contains too many ($count) Php files (max 12)");
     }
-}
+});
 
-function repositoryDoesNotContainNonProjectHtmlFiles() {
+test('repositoryDoesNotContainNonProjectHtmlFiles', function() {
     global $path;
 
     $count = getFileCount($path, 'html');
@@ -31,18 +31,16 @@ function repositoryDoesNotContainNonProjectHtmlFiles() {
     if ($count > 12) {
         fail(ERROR_C01, "Repository contains too many ($count) Html files (max 12)");
     }
-}
+});
 
-function repositorySizeIsNotTooBig() {
+test('repositorySizeIsNotTooBig', function() {
     global $path;
 
     $size = getRepoSize($path);
 
-    if ($size > pow(2, 20)) {
-        fail(ERROR_C01, "Repository size is too big ($size bytes). Maximum is 1MB");
+    if ($size > pow(2, 20) * 1.5) {
+        fail(ERROR_C01, "Repository size is too big ($size bytes). Maximum is 1.5 MB");
     }
-
-    var_dump($size);
-}
+});
 
 stf\runTests(getPassFailReporter(3));

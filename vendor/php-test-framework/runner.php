@@ -11,8 +11,9 @@ namespace stf {
 
     function runTests(?ResultReporter $reporter = null): void {
         global $filteredNames;
+        global $opts;
 
-        $opts = getopt('t:', ['testToRun:']);
+        $opts = getopt('t:p:', ['testToRun:', 'fromPest:']);
         if (isset($opts['testToRun'])) {
             $filteredNames[] = $opts['testToRun'];
         }
@@ -52,19 +53,27 @@ namespace stf {
         }
     }
 
-    function reportFailure($testName, $ex) {
+    function reportFailure($testName, $ex): void {
+        global $opts;
+
         $details = $ex->getMessage();
 
-        print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-        print("##teamcity[testFailed name='$testName' message='' details='$details']" . PHP_EOL);
+        printf("\n### Test %s() failed \n\n %s\n\n", $testName, $details);
+
+        if (isset($opts['fromPest'])) {
+            print("##teamcity[testStarted name='$testName']" . PHP_EOL);
+            print("##teamcity[testFailed name='$testName' message='' details='$details']" . PHP_EOL);
+        }
     }
 
-
     function reportSuccess($testName): void {
+        global $opts;
         printf("%s OK\n", $testName);
 
-        print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-        print("##teamcity[testFinished name='$testName' duration='0']" . PHP_EOL);
+        if (isset($opts['fromPest'])) {
+            print("##teamcity[testStarted name='$testName']" . PHP_EOL);
+            print("##teamcity[testFinished name='$testName' duration='0']" . PHP_EOL);
+        }
     }
 
     function printPageSourceIfNeeded() {

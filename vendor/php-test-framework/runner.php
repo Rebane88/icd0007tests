@@ -6,16 +6,17 @@ namespace stf {
     use Exception;
     use RuntimeException;
 
-    $collectedTestNames = [];
-    $filteredNames = [];
+    class Storage { // constrain variables to stf namespace
+        public static array $collectedTestNames = [];
+        public static array $filteredNames = [];
+    }
 
     function runTests(?ResultReporter $reporter = null): void {
-        global $filteredNames;
         global $opts;
 
         $opts = getopt('t:p:', ['testToRun:', 'fromPest:']);
         if (isset($opts['testToRun'])) {
-            $filteredNames[] = $opts['testToRun'];
+            Storage::$filteredNames[] = $opts['testToRun'];
         }
 
         $successful = 0;
@@ -68,7 +69,7 @@ namespace stf {
 
     function reportSuccess($testName): void {
         global $opts;
-        printf("%s OK\n", $testName);
+        printf("%s: OK\n", $testName);
 
         if (isset($opts['fromPest'])) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
@@ -76,7 +77,7 @@ namespace stf {
         }
     }
 
-    function printPageSourceIfNeeded() {
+    function printPageSourceIfNeeded(): void {
         if (!getGlobals()->printPageSourceOnError) {
             return;
         }
@@ -90,7 +91,7 @@ namespace stf {
         print("##################  Page source end ###################### \n");
     }
 
-    function handleFrameworkException(FrameworkException $ex, string $testName) {
+    function handleFrameworkException(FrameworkException $ex, string $testName): void {
         [$callerFile, $callerLine] = getCallerLineAndFile($ex, $testName);
         printf("\n### Test %s failed on line %s in file %s(%s)\n\n",
             $testName, $callerLine, $callerFile, $callerLine);
@@ -117,43 +118,36 @@ namespace stf {
         throw new RuntimeException('Unexpected error');
     }
 
-    function getAllTestNames() : array {
-        global $collectedTestNames;
-
+    function getAllTestNames(): array {
         return array_map(function($entry) {
                 return $entry[0];
-            }, $collectedTestNames);
+            }, Storage::$collectedTestNames);
     }
 
     function getTestsToRun(): array {
-        global $collectedTestNames;
-
         $namesToRun = getTestNamesToRun();
 
-        return array_filter($collectedTestNames, function($entry) use ($namesToRun) {
+        return array_filter(Storage::$collectedTestNames, function($entry) use ($namesToRun) {
             return in_array($entry[0], $namesToRun);
         });
 
     }
 
     function getTestNamesToRun(): array {
-        global $filteredNames;
-
         $testNames = getAllTestNames();
 
         if (containsSelectedTests($testNames)) {
-            $testNames = array_filter($testNames, function($name) use ($filteredNames) {
-                return startsWith($name, '_') || in_array($name, $filteredNames);
+            $testNames = array_filter($testNames, function($name) {
+                return startsWith($name, '_')
+                    || in_array($name, Storage::$filteredNames);
             });
         }
 
         return $testNames;
     }
 
-    function containsSelectedTests($testNames) : bool {
-        global $filteredNames;
-
-        if (count($filteredNames) > 0) {
+    function containsSelectedTests($testNames): bool {
+        if (count(Storage::$filteredNames) > 0) {
             return true;
         }
 
@@ -165,44 +159,11 @@ namespace stf {
         return false;
     }
 
-    function startsWith($subject, $match) : bool {
+    function startsWith($subject, $match): bool {
         return stripos($subject, $match) === 0;
     }
 
-    function getTestFunctionNames(string $src): array {
-
-        $tokens = token_get_all($src);
-
-        $result = [];
-        while (count($tokens)) {
-            $token = array_shift($tokens);
-
-            if (is_array($token)
-                && token_name($token[0]) === 'T_COMMENT'
-                && strpos($token[1], '#Helpers') !== false) {
-
-                return $result;
-            }
-
-            if (is_array($token) && token_name($token[0]) === 'T_FUNCTION') {
-                $token = array_shift($tokens);
-                if (is_array($token) && token_name($token[0]) === 'T_WHITESPACE') {
-                    $token = array_shift($tokens);
-                }
-                if ($token === '(') { // anonymous function
-                    continue;
-                } else if (is_array($token) && token_name($token[0]) === 'T_STRING') {
-                    $result[] = $token[1];
-                } else {
-                    throw new RuntimeException('Unexpected error');
-                }
-            }
-        }
-
-        return $result;
-    }
-
-    function runAllTestsInDirectory($directory, $suiteFile) {
+    function runAllTestsInDirectory($directory, $suiteFile): void {
         $files = scandir($directory);
 
         $testCount = 0;
@@ -237,7 +198,7 @@ namespace stf {
         printf("\n%s of %s tests passed.\n", $passedCount, $testCount);
     }
 
-    function didAllTestsPass(string $output) : bool {
+    function didAllTestsPass(string $output): bool {
         preg_match("/(\d+) of (\d+) tests passed./", $output, $matches);
 
         return count($matches) && $matches[1] == $matches[2];
@@ -246,10 +207,10 @@ namespace stf {
 
 namespace {
 
-    function test($name, $fn): void {
-        global $collectedTestNames;
+    use stf\Storage;
 
-        $collectedTestNames[] = [$name, $fn];
+    function test($name, $fn): void {
+        Storage::$collectedTestNames[] = [$name, $fn];
     }
 
 }

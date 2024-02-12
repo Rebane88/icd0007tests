@@ -3,7 +3,7 @@
 require_once 'common-functions.php';
 require_once 'vendor/php-test-framework/public-api.php';
 
-const PROJECT_DIRECTORY = '';
+const PROJECT_DIRECTORY = '.';
 
 test('Checks whether list contains specified element', function () {
     require_once 'ex1/ex2.php';

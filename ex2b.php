@@ -73,4 +73,4 @@ function getUrl(string $relativeUrl = ''): string {
 
 setBaseUrl(BASE_URL);
 
-stf\runTests(getPassFailReporter(6));
+stf\runTests(getPassFailReporter(7));

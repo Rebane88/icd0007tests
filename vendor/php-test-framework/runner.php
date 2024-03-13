@@ -36,14 +36,16 @@ namespace stf {
 
                 reportSuccess($testName);
 
-            } catch (FrameworkException $ex) {
+            } catch (FrameworkException $e) {
 
-                handleFrameworkException($ex, $testName);
+                handleFrameworkException($e, $testName);
 
                 printPageSourceIfNeeded();
 
             } catch (Error | Exception $e) {
-                reportFailure($testName, $e);
+                printf("\n### Test %s() failed \n\n %s\n\n", $testName, $e->getMessage());
+
+                printPestFailure($testName, $e);
             }
         }
 
@@ -54,12 +56,10 @@ namespace stf {
         }
     }
 
-    function reportFailure($testName, $ex): void {
+    function printPestFailure($testName, $ex): void {
         global $opts;
 
         $details = $ex->getMessage();
-
-        printf("\n### Test %s() failed \n\n %s\n\n", $testName, $details);
 
         if (isset($opts['fromPest'])) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
@@ -100,7 +100,7 @@ namespace stf {
             printf("Stack trace: %s\n\n", $ex->getTraceAsString());
         }
 
-        reportFailure($testName, $ex);
+        printPestFailure($testName, $ex);
     }
 
     function getCallerLineAndFile(FrameworkException $ex, string $testName) : array {

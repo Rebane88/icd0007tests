@@ -208,13 +208,16 @@ class SimpleSocket extends SimpleStickyError
     public function __construct($host, $port, $timeout, $block_size = 255)
     {
         parent::__construct();
-        if (! ($this->handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
+
+        if (! ($this->handle = $this->openSocket($host, $port, $error_number, $error, 0))) {
             $this->setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             return;
         }
+
+        stream_set_timeout($this->handle, $timeout);
+
         $this->is_open = true;
         $this->block_size = $block_size;
-        stream_set_timeout($this->handle, $timeout, 0);
     }
 
     /**
@@ -255,13 +258,11 @@ class SimpleSocket extends SimpleStickyError
             return false;
         }
 
-        stream_set_timeout($this->handle, REQUEST_TIMEOUT);
-
-        $raw = @fread($this->handle, $this->block_size);
+        $raw = fread($this->handle, $this->block_size);
 
         $info = stream_get_meta_data($this->handle);
 
-        if ($info['timed_out']) {
+        if ($raw === false && $info['timed_out']) {
             $this->setError(sprintf(
                 'Socket read timeout. Timeout is %s seconds', REQUEST_TIMEOUT));
             $this->setErrorCode(ERROR_N03);

@@ -64,7 +64,7 @@ namespace stf {
 
         if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-            $details = str_replace("'", '', $details);
+            $details = str_replace(["'", '[', ']'], '', $details);
             print("##teamcity[testFailed name='$testName' message='$details']" . PHP_EOL);
         }
     }

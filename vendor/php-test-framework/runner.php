@@ -63,7 +63,8 @@ namespace stf {
 
         if (isset($opts['fromPest'])) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-            print("##teamcity[testFailed name='$testName' message='' details='$details']" . PHP_EOL);
+            $details = str_replace("'", '', $details);
+            print("##teamcity[testFailed name='$testName' message='$details']" . PHP_EOL);
         }
     }
 

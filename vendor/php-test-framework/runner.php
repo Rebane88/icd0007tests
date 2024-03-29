@@ -9,12 +9,15 @@ namespace stf {
     class Storage { // constrain variables to stf namespace
         public static array $collectedTestNames = [];
         public static array $filteredNames = [];
+        public static bool $fromPest = false;
     }
 
     function runTests(?ResultReporter $reporter = null): void {
-        global $opts;
 
         $opts = getopt('t:p:', ['testToRun:', 'fromPest:']);
+
+        Storage::$fromPest = isset($opts['fromPest']);
+
         if (isset($opts['testToRun'])) {
             Storage::$filteredNames[] = $opts['testToRun'];
         }
@@ -57,11 +60,9 @@ namespace stf {
     }
 
     function printPestFailure($testName, $ex): void {
-        global $opts;
-
         $details = $ex->getMessage();
 
-        if (isset($opts['fromPest'])) {
+        if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
             $details = str_replace("'", '', $details);
             print("##teamcity[testFailed name='$testName' message='$details']" . PHP_EOL);
@@ -69,10 +70,9 @@ namespace stf {
     }
 
     function reportSuccess($testName): void {
-        global $opts;
         printf("%s: OK\n", $testName);
 
-        if (isset($opts['fromPest'])) {
+        if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
             print("##teamcity[testFinished name='$testName' duration='0']" . PHP_EOL);
         }

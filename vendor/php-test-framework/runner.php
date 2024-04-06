@@ -14,11 +14,11 @@ namespace stf {
 
     function runTests(?ResultReporter $reporter = null): void {
 
-        $opts = getopt('t:p:', ['testToRun:', 'fromPest:']);
+        $opts = getopt('t:', ['testToRun:']);
 
-        Storage::$fromPest = isset($opts['fromPest']);
+        Storage::$fromPest = isset($opts['testToRun']);
 
-        if (isset($opts['testToRun'])) {
+        if (isset($opts['testToRun']) && $opts['testToRun']) {
             Storage::$filteredNames[] = $opts['testToRun'];
         }
 
@@ -64,7 +64,7 @@ namespace stf {
 
         if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-            $details = str_replace(["'", '[', ']'], '', $details);
+            $details = str_replace(["'", '[', ']', "\n"], ' ', $details);
             print("##teamcity[testFailed name='$testName' message='$details']" . PHP_EOL);
         }
     }

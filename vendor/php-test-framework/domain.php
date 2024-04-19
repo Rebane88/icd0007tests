@@ -27,7 +27,13 @@ function getTaskIdByDescription(string $description): ?string {
         throw new stf\FrameworkException(ERROR_D01, $message);
     }
 
-    return $element->getAttributeValue('data-task-id');
+    $taskId = $element->getAttributeValue('data-task-id');
+
+    if ($taskId !== NULL) {
+        return $taskId;
+    } else {
+        throw new stf\FrameworkException(ERROR_D01, "Did not find attribute 'data-task-id'");
+    }
 }
 
 function getProfilePictureUrl(string $employeeId): ?string {
@@ -99,6 +105,12 @@ function clickTaskFormLink(): void {
     clickLinkWithId('task-form-link');
 
     assertCorrectPageId('task-form-page');
+}
+
+function clickTaskListLink(): void {
+    clickLinkWithId('task-list-link');
+
+    assertCorrectPageId('task-list-page');
 }
 
 function clickEmployeeFormSubmitButton(): void {

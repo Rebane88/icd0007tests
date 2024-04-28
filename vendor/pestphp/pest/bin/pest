@@ -6,7 +6,7 @@ $testPath = $opts['teamcity'] ?? null;
 $filter = $opts['filter'] ?? '';
 $testName = getSelectedTestName($filter);
 
-$cmd = sprintf("php %s --testToRun '%s'", $testPath, $testName);
+$cmd = sprintf("php %s --testToRun \"%s\"", $testPath, $testName);
 
 exec($cmd, $output, $exitCode);
 

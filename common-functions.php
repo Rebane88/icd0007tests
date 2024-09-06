@@ -67,7 +67,22 @@ function readJsonFileFrom(string $path) {
         die("can't find info.json from $path" . PHP_EOL);
     }
 
-    $string = file_get_contents($infoFile);
+    $string = file_get_contents_utf8($infoFile);
 
     return json_decode($string, true);
+}
+
+function file_get_contents_utf8($fn): string {
+    $content = file_get_contents($fn);
+
+    $detected_encoding = mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true);
+    if ($detected_encoding != 'UTF-8') {
+        $content = mb_convert_encoding($content, 'UTF-8', $detected_encoding);
+    }
+
+    if (substr($content, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF)) {
+        $content = substr($content, 3);
+    }
+
+    return $content;
 }

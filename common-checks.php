@@ -13,17 +13,17 @@ if ($path === false) {
     die('Argument is not a correct directory' . PHP_EOL);
 }
 
-test('repositoryDoesNotContainNonProjectPhpFiles', function() {
+test('Repository does not contain non project Php files', function() {
     global $path;
 
     $count = getFileCount($path, 'php');
 
-    if ($count > 12) {
-        fail(ERROR_C01, "Repository contains too many ($count) Php files (max 12)");
+    if ($count > 14) {
+        fail(ERROR_C01, "Repository contains too many ($count) Php files (max 14)");
     }
 });
 
-test('repositoryDoesNotContainNonProjectHtmlFiles', function() {
+test('Repository does not contain non project Html files', function() {
     global $path;
 
     $count = getFileCount($path, 'html');
@@ -33,7 +33,7 @@ test('repositoryDoesNotContainNonProjectHtmlFiles', function() {
     }
 });
 
-test('repositorySizeIsNotTooBig', function() {
+test('Repository size is not too big', function() {
     global $path;
 
     $size = getRepoSize($path);

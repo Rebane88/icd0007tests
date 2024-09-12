@@ -60,22 +60,37 @@ namespace stf {
     }
 
     function printPestFailure($testName, $ex): void {
-        $details = $ex->getMessage();
+        $details = teamcityEncode($ex->getMessage());
+        $testName = teamcityEncode($testName);
 
         if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
-            $details = str_replace(["'", '[', ']', "\n"], ' ', $details);
             print("##teamcity[testFailed name='$testName' message='$details']" . PHP_EOL);
         }
     }
 
     function reportSuccess($testName): void {
         printf("%s: OK\n", $testName);
+        $testName = teamcityEncode($testName);
 
         if (Storage::$fromPest) {
             print("##teamcity[testStarted name='$testName']" . PHP_EOL);
             print("##teamcity[testFinished name='$testName' duration='0']" . PHP_EOL);
         }
+    }
+
+    function teamcityEncode($string): string {
+        $replacements = [
+            "'" => "|'",
+            '"' => '|"',
+            '|' => '||',
+            '[' => '|[',
+            ']' => '|]',
+            "\n" => '|n',
+            "\r" => '|r'
+        ];
+
+        return strtr($string, $replacements);
     }
 
     function printPageSourceIfNeeded(): void {
@@ -121,8 +136,8 @@ namespace stf {
 
     function getAllTestNames(): array {
         return array_map(function($entry) {
-                return $entry[0];
-            }, Storage::$collectedTestNames);
+            return $entry[0];
+        }, Storage::$collectedTestNames);
     }
 
     function getTestsToRun(): array {

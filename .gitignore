@@ -1,4 +1,4 @@
-.idea/*
+.idea/**
 !.idea/php-test-framework.xml
 
 /*.csv

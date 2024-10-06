@@ -1,15 +1,6 @@
 <?php
-/**
- *  base include file for SimpleTest
- *  @package    SimpleTest
- *  @subpackage WebTester
- */
 
-/**#@+
- *  include other SimpleTest class files
- */
-require_once(dirname(__FILE__) . '/encoding.php');
-/**#@-*/
+require_once(__DIR__ . '/encoding.php');
 
 /**
  *    URL parser to replace parse_url() PHP function which
@@ -21,8 +12,7 @@ require_once(dirname(__FILE__) . '/encoding.php');
  *    @package SimpleTest
  *    @subpackage WebTester
  */
-class SimpleUrl
-{
+class SimpleUrl {
     private $scheme;
     private $username;
     private $password;

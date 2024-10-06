@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/url.php';
+require_once __DIR__ . '/SimpleUrl.php';
 
 /**
  *    Cookie data holder. Cookie rules are full of pretty

@@ -499,7 +499,7 @@ function extendIncludePath(array $argv, string $userDefinedDir) {
 }
 
 function getProjectPath(array $argv, string $userDefinedDir) {
-    $path = count($argv) === 2 ? $argv[1] : $userDefinedDir;
+    $path = count($argv) >= 2 ? $argv[1] : $userDefinedDir;
 
     if (!$path) {
         die("Please specify your project's directory in constant PROJECT_DIRECTORY");

@@ -340,6 +340,20 @@ function getAttributeFromElementWithId(string $id, string $attributeName): strin
     return getBrowser()->getElementAttributeValue($id, $attributeName);
 }
 
+function getInnerTextFromElementWithId(string $id): string {
+    assertPageContainsElementWithId($id);
+
+    $elements = getBrowser()->getElements();
+
+    foreach ($elements as $element) {
+        if ($element->getAttributeValue('id') === $id) {
+            return $element->getInnerText();
+        }
+    }
+
+    throw new RuntimeException("programming error");
+}
+
 function clickLinkWithId($linkId): void {
     assertPageContainsLinkWithId($linkId);
 
@@ -369,6 +383,25 @@ function clickButton(string $buttonName, ?string $buttonValue = null) {
     assertPageContainsButtonWithName($buttonName);
 
     getBrowser()->submitFormByButtonPress($buttonName, $buttonValue);
+}
+
+function clickButtonWithId(string $id) {
+    assertPageContainsElementWithId($id);
+
+    $elements = getBrowser()->getElements();
+
+    foreach ($elements as $element) {
+        if ($element->getAttributeValue('id') === $id) {
+            $buttonName = $element->getAttributeValue('name');
+            $buttonValue = $element->getAttributeValue('value');
+
+            getBrowser()->submitFormByButtonPress($buttonName, $buttonValue);
+
+            return;
+        }
+    }
+
+    throw new RuntimeException("programming error");
 }
 
 function setTextFieldValue(string $fieldName, string $value) {

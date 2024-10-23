@@ -201,7 +201,7 @@ namespace stf {
 
             $allPassed = didAllTestsPass($outputString);
 
-            $result =  $allPassed ? ' OK' : " NOK";
+            $result =  $allPassed ? ' OK' : ' NOK';
 
             $testCount++;
             if ($allPassed) {

@@ -19,7 +19,7 @@ function containsPhpTags($contents): string {
 }
 
 function removeLastSlash(string $path): string {
-    return preg_replace('/\/$/', '', $path);
+    return rtrim($path, '/');
 }
 
 function getRepoSize($path): int {

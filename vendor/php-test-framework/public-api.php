@@ -277,6 +277,16 @@ function assertPageDoesNotContainElementWithId($id): void {
         sprintf("Current page should not contain element with id '%s'.", $id));
 }
 
+function assertPhpHtmlSeparated(string $path): void {
+    foreach(getProjectFiles($path) as $each) {
+        $contents = file_get_contents($each->getAbsolutePath());
+
+        if (containsHtmlTags($contents) && containsPhpTags($contents)) {
+            fail(ERROR_C01, "File {$each->getRelativePath()} contains both Php and Html code");
+        }
+    }
+}
+
 function assertFrontControllerLink(string $id): void {
     assertPageContainsLinkWithId($id);
 
@@ -532,19 +542,18 @@ function extendIncludePath(array $argv, string $userDefinedDir) {
 }
 
 function getProjectPath(array $argv, string $userDefinedDir) {
-    $path = count($argv) >= 2 ? $argv[1] : $userDefinedDir;
+    $secondArgument = $argv[1] ?? null;
+    if ($secondArgument && realpath($secondArgument)) {
+        return $secondArgument;
+    }
 
-    if (!$path) {
+    if (!$userDefinedDir) {
         die("Please specify your project's directory in constant PROJECT_DIRECTORY");
-    }
-
-    $path = realpath($path);
-
-    if (!file_exists($path)) {
+    } else if (!file_exists($userDefinedDir)) {
         die("Value in PROJECT_DIRECTORY is not correct directory");
+    } else {
+        return $userDefinedDir;
     }
-
-    return $path;
 }
 
 function getGlobals(): Globals {

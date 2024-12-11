@@ -3,14 +3,24 @@
 spl_autoload_register(function ($className) {
     $parts = explode('\\', $className);
 
-    if ($parts[0] === 'tplLib') {
+    if (str_starts_with($className, 'tplLib')) {
         $basePath = __DIR__ . '/parser';
         array_shift($parts);
-    } else if ($parts[0] === 'Facebook') {
+    } else if (str_starts_with($className, 'Facebook')) {
         $basePath = __DIR__ . '/php-webdriver/webdriver/lib';
         array_shift($parts);
         array_shift($parts);
-    } else if (str_starts_with($parts[0], 'Simple')) {
+    } else if (str_starts_with($className, 'Symfony\\Polyfill')) {
+        $basePath = __DIR__ . '/symfony/polyfill-mbstring';
+        array_shift($parts);
+        array_shift($parts);
+        array_shift($parts);
+    } else if (str_starts_with($className, 'Symfony\\Component')) {
+        $basePath = __DIR__ . '/symfony/process';
+        array_shift($parts);
+        array_shift($parts);
+        array_shift($parts);
+    } else if (str_starts_with($className, 'Simple')) {
         $basePath = __DIR__ . '/simpletest';
     } else {
         $basePath = __DIR__;
@@ -19,5 +29,10 @@ spl_autoload_register(function ($className) {
 
     $filePath = sprintf('%s/%s.php', $basePath, implode('/', $parts));
 
-    require_once $filePath;
+    try {
+        require_once $filePath;
+    } catch (Error $_) {
+        var_dump($className);
+        var_dump($filePath);
+    }
 });

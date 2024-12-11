@@ -97,6 +97,10 @@ function useWebDriver(bool $shouldUse) : void {
     getGlobals()->setUseWebDriver($shouldUse);
 }
 
+function setWebDriverPath(string $path) : void {
+    putenv('webdriver.chrome.driver=' . $path);
+}
+
 function setLogRequests(bool $flag) : void {
     getGlobals()->logRequests = $flag;
 }

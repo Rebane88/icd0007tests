@@ -9,7 +9,9 @@ use Facebook\WebDriver\Remote\RemoteWebElement;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\Chrome\ChromeOptions;
+use Facebook\WebDriver\Chrome\ChromeDriver;
 use Facebook\WebDriver\Exception\NoSuchElementException;
+
 
 use stf\browser\page\FormSet;
 use stf\browser\page\Element;
@@ -254,11 +256,10 @@ class WebDriverBrowser implements Browser {
         }
 
         $options->addArguments($arguments);
-
         $capabilities = DesiredCapabilities::chrome();
         $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        return RemoteWebDriver::create(Globals::SELENIUM_SERVER_URL, $capabilities);
+        return ChromeDriver::start($capabilities);
     }
 
     function getFormSet(): FormSet {

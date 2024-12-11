@@ -106,7 +106,6 @@ setBaseUrl(BASE_URL);
 setWebDriverPath(getWebDriverPath());
 useWebDriver(true);
 setPrintPageSourceOnError(false);
-setLeaveBrowserOpen(false);
 setShowBrowser(false);
 
 stf\runTests(getPassFailReporter(4));

@@ -10,7 +10,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Chrome\ChromeDriver;
-use Facebook\WebDriver\Exception\NoSuchElementException;
+use Facebook\WebDriver\Exception\WebDriverException;
 
 
 use stf\browser\page\FormSet;
@@ -228,8 +228,7 @@ class WebDriverBrowser implements Browser {
                 WebDriverExpectedCondition::presenceOfElementLocated($selector)
             );
 
-        } catch (NoSuchElementException $e) {
-
+        } catch (WebDriverException $e) {
             return null;
         }
 

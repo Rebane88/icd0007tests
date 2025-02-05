@@ -21,9 +21,9 @@ $fullName = $json['firstName'] . ' ' . $json['lastName'];
 if (nameExistsInDeclaredNames($fullName, $namesCsv)) {
     printf(RESULT_PATTERN_SHORT, RESULT_PASSED);
 } else {
-    print "There is no declaration with the name '$fullName' in Õis (as of 03.09.2024). 
+    print "There is no declaration with the name '$fullName' in Õis (as of 07.02.2025). 
                  If you declared the course later and the name is correct you will get 
-                 the points on 18.09.2024";
+                 the points on 23.02.2025";
 
     printf(RESULT_PATTERN_SHORT, RESULT_FAILED);
 

@@ -123,7 +123,7 @@ namespace stf {
         $trace = $ex->getTrace();
 
         for ($i = 0; $i < count($trace); $i++) {
-            if ($trace[$i]['function'] === '{closure}') {
+            if (str_starts_with($trace[$i]['function'], '{closure')) {
                 $callerFile = $trace[$i - 1]['file'];
                 $callerLine = $trace[$i - 1]['line'];
 

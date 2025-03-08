@@ -10,13 +10,12 @@ class SimpleSocket extends SimpleStickyError {
     private int $block_size;
 
     public function __construct($host, $port, $timeout, $block_size = 255) {
-
-        if (! ($this->handle = $this->openSocket($host, $port, $error_number, $error, 0))) {
+        if (! ($this->handle = $this->openSocket($host, $port, $error_number, $error, $timeout))) {
             $this->setError("Cannot open [$host:$port] with [$error] within [$timeout] seconds");
             return;
         }
 
-        stream_set_timeout($this->handle, $timeout);
+        stream_set_timeout($this->handle, $timeout * 1000);
 
         $this->is_open = true;
         $this->block_size = $block_size;

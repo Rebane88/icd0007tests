@@ -85,17 +85,12 @@ class SimpleRoute
      *    @param string $host                     Hostname to connect to.
      *    @param integer $port                    Remote port.
      *    @param integer $timeout                 Connection timeout.
-     *    @return SimpleSocket/SimpleSecureSocket New socket.
-     *    @access protected
      */
-    protected function createSocket($scheme, $host, $port, $timeout)
-    {
-        if (in_array($scheme, array('file'))) {
-            return new SimpleFileSocket($this->url);
-        } elseif (in_array($scheme, array('https'))) {
-            return new SimpleSecureSocket($host, $port, $timeout);
-        } else {
-            return new SimpleSocket($host, $port, $timeout);
+    protected function createSocket($scheme, $host, $port, $timeout): SimpleSocket {
+        if ($scheme == 'https') {
+            $host = "tls://$host";
         }
+
+        return new SimpleSocket($host, $port, $timeout);
     }
 }

@@ -3,6 +3,8 @@
 spl_autoload_register(function ($className) {
     $parts = explode('\\', $className);
 
+    $basePath = '';
+
     if (str_starts_with($className, 'tplLib')) {
         $basePath = __DIR__ . '/parser';
         array_shift($parts);
@@ -22,17 +24,14 @@ spl_autoload_register(function ($className) {
         array_shift($parts);
     } else if (str_starts_with($className, 'Simple')) {
         $basePath = __DIR__ . '/simpletest';
-    } else {
+    } else if (str_starts_with($className, 'stf')) {
         $basePath = __DIR__;
         array_shift($parts);
     }
 
     $filePath = sprintf('%s/%s.php', $basePath, implode('/', $parts));
 
-    try {
+    if ($basePath && file_exists($filePath)) {
         require_once $filePath;
-    } catch (Error $_) {
-        var_dump($className);
-        var_dump($filePath);
     }
 });

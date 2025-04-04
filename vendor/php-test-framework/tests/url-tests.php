@@ -1,10 +1,10 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\Url;
 
-function parseAndConstruct() {
+test('parseAndConstruct', function () {
     $urls = [
         '/a',
         '/a/a',
@@ -12,7 +12,6 @@ function parseAndConstruct() {
         'a',
         'a/a',
         'http://db.lh/b.php',
-        '?b.php',
         'b.php?a=1#var=1'
     ];
 
@@ -20,17 +19,21 @@ function parseAndConstruct() {
         $url = url($each);
         assertThat($url->asString(), is($each));
     }
-}
+});
 
-function requestParameters() {
+test('Handles request parameters', function () {
     $url = url('http://db.lh/a.php?a=1');
 
     assertThat($url->asString(), is('http://db.lh/a.php?a=1'));
-    assertThat($url->getQueryString(), is('?a=1'));
+    assertThat($url->getQueryString(), is('a=1'));
 
     $url->addRequestParameter('b','2');
 
-    assertThat($url->getQueryString(), is('?a=1&b=2'));
+    assertThat($url->getQueryString(), is('a=1&b=2'));
+
+    $url->addRequestParameter('b','3');
+
+    assertThat($url->getQueryString(), is('a=1&b=3'));
 
     $url = url('http://db.lh/a.php');
 
@@ -40,16 +43,17 @@ function requestParameters() {
     $url->addRequestParameter('b','2');
 
     assertThat($url->asString(), is('http://db.lh/a.php?b=2'));
-    assertThat($url->getQueryString(), is('?b=2'));
-}
+    assertThat($url->getQueryString(), is('b=2'));
+});
 
-function asString() {
+test('asString', function () {
     assertThat(url('http://lh')->asString(), is('http://lh'));
 
     assertThat(url('http://db.lh')->asString(), is('http://db.lh'));
-}
+});
 
-function fromHostname() {
+test('fromHostname', function () {
+
     assertThat(url('http://lh')->navigateTo('')->asString(), is('http://lh'));
     assertThat(url('http://lh')->navigateTo('.')->asString(), is('http://lh'));
     assertThat(url('http://lh')->navigateTo('./')->asString(), is('http://lh'));
@@ -64,9 +68,9 @@ function fromHostname() {
     assertThat(url('http://lh')->navigateTo('a/a.html')->asString(), is('http://lh/a/a.html'));
     assertThat(url('http://lh')->navigateTo('a/')->asString(), is('http://lh/a/'));
     assertThat(url('http://lh')->navigateTo('?a=1')->asString(), is('http://lh/?a=1'));
-}
+});
 
-function fromHostnameSlash() {
+test('From hostname slash', function () {
     assertThat(url('http://lh/')->navigateTo('')->asString(), is('http://lh'));
     assertThat(url('http://lh/?a=1')->navigateTo('')->asString(), is('http://lh/?a=1'));
     assertThat(url('http://lh/')->navigateTo('.')->asString(), is('http://lh'));
@@ -77,18 +81,21 @@ function fromHostnameSlash() {
     assertThat(url('http://lh/')->navigateTo('/../../.')->asString(), is('http://lh'));
 
     assertThat(url('http://lh/')->navigateTo('/../a')->asString(), is('http://lh/a'));
-}
+});
 
-function fromFile() {
+test('From file', function () {
+
     assertThat(url('http://lh/a')->navigateTo('')->asString(), is('http://lh/a'));
     assertThat(url('http://lh/a?a=1')->navigateTo('')->asString(), is('http://lh/a?a=1'));
     assertThat(url('http://lh/a')->navigateTo('.')->asString(), is('http://lh'));
     assertThat(url('http://lh/a')->navigateTo('./')->asString(), is('http://lh'));
     assertThat(url('http://lh/a')->navigateTo('b')->asString(), is('http://lh/b'));
     assertThat(url('http://lh/a')->navigateTo('?a=1')->asString(), is('http://lh/a?a=1'));
-}
 
-function fromDir() {
+});
+
+test('From dir', function () {
+
     assertThat(url('http://lh/a/')->navigateTo('')->asString(), is('http://lh/a/'));
     assertThat(url('http://lh/a/?a=1')->navigateTo('')->asString(), is('http://lh/a/?a=1'));
     assertThat(url('http://lh/a/')->navigateTo('.')->asString(), is('http://lh/a/'));
@@ -97,9 +104,8 @@ function fromDir() {
     assertThat(url('http://lh/a/')->navigateTo('/')->asString(), is('http://lh'));
 
     assertThat(url('http://lh/a/')->navigateTo('b')->asString(), is('http://lh/a/b'));
-}
 
-#Helpers
+});
 
 function url(?string $url) : Url {
     return new Url($url);

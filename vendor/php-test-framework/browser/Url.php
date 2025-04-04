@@ -7,12 +7,13 @@ class Url {
     private string $host;
     private Path $path;
     private string $file;
-    private string $queryString;
+    private array $queryParams = [];
+    private string $fragment;
 
     public function __construct(string $url) {
         $this->extractHost($url);
         $this->extractPath($url);
-        $this->extractQueryString($url);
+        $this->extractQueryStringAndFragment($url);
     }
 
     private function extractHost($url) : void {
@@ -40,20 +41,18 @@ class Url {
         $this->file = $matches[2];
     }
 
-    private function extractQueryString($url) : void {
-        $query = parse_url($url, PHP_URL_QUERY) ?? '';
-        $fragment = parse_url($url, PHP_URL_FRAGMENT) ?? '';
+    private function extractQueryStringAndFragment($url) : void {
+        $queryString = parse_url($url, PHP_URL_QUERY) ?? '';
+        $this->fragment = parse_url($url, PHP_URL_FRAGMENT) ?? '';
 
-        $this->queryString =
-            ($query ? '?' . $query : '')
-            . ($fragment ? '#' . $fragment : '');
+        parse_str($queryString, $this->queryParams);
     }
 
     public function asString() : string {
         if ($this->host
             && ($this->path->isEmpty() || $this->path->isRoot())
             && !$this->file
-            && !$this->queryString) {
+            && empty($this->queryParams)) {
 
             return $this->host;
         }
@@ -62,14 +61,16 @@ class Url {
             . ($this->host && !$this->path->isAbsolute() ? '/' : '')
             . $this->path->asString()
             . $this->file
-            . $this->queryString;
+            . (empty($this->queryParams) ? '' : '?') . $this->getQueryString()
+            . ($this->fragment ? '#' : '') . $this->fragment;
     }
 
     private function isEmpty() : bool {
         return !$this->host
             && $this->path->isEmpty()
             && !$this->file
-            && !$this->queryString;
+            && empty($this->queryParams)
+            && !$this->fragment;
     }
 
     public function navigateTo(string $destination) : Url {
@@ -81,6 +82,7 @@ class Url {
             return $this;
         }
 
+
         $newUrl = new Url('');
         $newUrl->host = $this->host;
         $newUrl->path = $this->path->cd($dest->path);
@@ -88,22 +90,17 @@ class Url {
         $newUrl->file = ($dest->file || !$dest->path->isEmpty())
             ? $dest->file : $this->file;
 
-        $newUrl->queryString = $dest->queryString;
+        $newUrl->queryParams = $dest->queryParams;
+        $newUrl->fragment = $dest->fragment;
 
         return $newUrl;
     }
 
     public function getQueryString() : string {
-        return $this->queryString;
+        return http_build_query($this->queryParams);
     }
 
-    public function addRequestParameter(string $key, string $value) {
-        if ($this->queryString) {
-            $this->queryString .= '&';
-        } else {
-            $this->queryString .= '?';
-        }
-
-        $this->queryString .= "$key=$value";
+    public function addRequestParameter(string $key, string $value): void {
+        $this->queryParams[$key] = $value;
     }
 }

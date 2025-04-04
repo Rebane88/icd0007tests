@@ -78,10 +78,9 @@ class Url {
 
         if ($dest->host) {
             return new Url($destination);
-        } else if ($dest->isEmpty()) {
+        } else if ($dest->isEmpty() && trim($destination) !== '?') {
             return $this;
         }
-
 
         $newUrl = new Url('');
         $newUrl->host = $this->host;

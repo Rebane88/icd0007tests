@@ -87,6 +87,8 @@ test('From file', function () {
 
     assertThat(url('http://lh/a')->navigateTo('')->asString(), is('http://lh/a'));
     assertThat(url('http://lh/a?a=1')->navigateTo('')->asString(), is('http://lh/a?a=1'));
+    assertThat(url('http://lh/a?a=1')->navigateTo('?')->asString(), is('http://lh/a'));
+
     assertThat(url('http://lh/a')->navigateTo('.')->asString(), is('http://lh'));
     assertThat(url('http://lh/a')->navigateTo('./')->asString(), is('http://lh'));
     assertThat(url('http://lh/a')->navigateTo('b')->asString(), is('http://lh/b'));

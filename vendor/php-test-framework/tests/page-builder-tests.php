@@ -1,13 +1,13 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\page\NodeTree;
 use stf\browser\page\PageParser;
 use stf\browser\page\PageBuilder;
 use stf\browser\page\Page;
 
-function buildPageSimple() {
+test('Build page simple', function () {
     $html = '<a id="link1"> abc</a>';
 
     $page = getPage($html);
@@ -15,20 +15,18 @@ function buildPageSimple() {
     $link = $page->getLinkById('link1');
 
     assertThat($link->getText(), is(' abc'));
-}
+});
 
-function buildSimpleForm() {
-
-    $html = file_get_contents('../test-files/form.html');
+test('Build simple form', function () {
+    $html = file_get_contents(__DIR__ . '/../test-files/form.html');
 
     $page = getPage($html);
 
     assertThat($page->getId(), is('form-page-id'));
-}
+});
 
-function buildFormWithUncheckedInputs() {
-
-    $html = file_get_contents('../test-files/empty-controls.html');
+test('Build form with unchecked inputs', function () {
+    $html = file_get_contents(__DIR__ . '/../test-files/empty-controls.html');
 
     $form = getPage($html)->getFormSet();
 
@@ -36,10 +34,9 @@ function buildFormWithUncheckedInputs() {
     assertThat($form->getCheckboxByName('c1')->getValue(), is(null));
     assertThat($form->getRadioByName('r1')->getValue(), is(null));
     assertThat($form->getSelectByName('s1')->getValue(), is(null));
-}
+});
 
-function findElementByInnerText() {
-
+test('Find element by inner text', function () {
     $html = '<main>
                  <div data-task-id="id1">abc</div>
              </main>';
@@ -51,9 +48,7 @@ function findElementByInnerText() {
     $id = $element->getAttributeValue('data-task-id');
 
     assertThat($id, is('id1'));
-}
-
-#Helpers
+});
 
 function getPage(string $html) : Page {
     $parser = new PageParser($html);

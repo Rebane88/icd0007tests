@@ -4,7 +4,7 @@ require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\Url;
 
-test('parseAndConstruct', function () {
+test('Parse and construct', function () {
     $urls = [
         '/a',
         '/a/a',
@@ -46,13 +46,13 @@ test('Handles request parameters', function () {
     assertThat($url->getQueryString(), is('b=2'));
 });
 
-test('asString', function () {
+test('As String', function () {
     assertThat(url('http://lh')->asString(), is('http://lh'));
 
     assertThat(url('http://db.lh')->asString(), is('http://db.lh'));
 });
 
-test('fromHostname', function () {
+test('From hostname', function () {
 
     assertThat(url('http://lh')->navigateTo('')->asString(), is('http://lh'));
     assertThat(url('http://lh')->navigateTo('.')->asString(), is('http://lh'));

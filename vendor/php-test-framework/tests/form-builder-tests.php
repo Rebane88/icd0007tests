@@ -1,13 +1,13 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\page\PageParser;
 use stf\browser\page\PageBuilder;
 use stf\browser\page\FormSet;
 use stf\browser\page\NodeTree;
 
-function buildsRadioButtons() {
+test('Builds radio buttons', function () {
     $html = '<form><input name="r1" type="radio" value="v1" />
                    <input name="r1" type="radio" checked value="v2" />
                    <input name="r1" type="radio" value="v3" /></form>';
@@ -19,9 +19,9 @@ function buildsRadioButtons() {
     $radio->selectOption('v1');
 
     assertThat($radio->getValue(), is('v1'));
-}
+});
 
-function buildsCheckboxes() {
+test('Builds checkboxes', function () {
     $html = '<form><input name="c1" type="checkbox" value="v1" />
                    <input name="c2" type="checkbox" checked value="v2" /></form>';
 
@@ -30,9 +30,9 @@ function buildsCheckboxes() {
 
     assertThat($c1->getValue(), is(null));
     assertThat($c2->getValue(), is('v2'));
-}
+});
 
-function buildsFileInput() {
+test('Builds file input', function () {
     $html = '<form enctype="multipart/form-data">
         <input name="f1" type="file" /></form>';
 
@@ -43,9 +43,9 @@ function buildsFileInput() {
     $f1 = getFormSet($html)->getFileFieldByName('f1');
 
     assertThat($f1->getValue(), is(''));
-}
+});
 
-function buildsSelect() {
+test('Builds select', function () {
     $html = "<form>
              <select name='s1'>
              <option>\n Value 1 \n</option>
@@ -64,9 +64,9 @@ function buildsSelect() {
     assertThat($select->hasOptionWithLabel('Value 4'), is(false));
 
     assertThat($select->getValue(), is('v2'));
-}
+});
 
-function buildsMultiSelect() {
+test('Builds multi select', function () {
     $html = "<form>
              <select name='ms1' multiple>
              <option>Value 1</option>
@@ -77,9 +77,9 @@ function buildsMultiSelect() {
     $select = getFormSet($html)->getSelectByName('ms1');
 
     assertThat($select->isMultiple(), is(true));
-}
+});
 
-function buildsSelectOddCases() {
+test('Builds select odd cases', function () {
     $html = "<form>
              <select name='s1'>
              <OPTION value> \n Value 1 \n </OPTION>
@@ -112,14 +112,14 @@ function buildsSelectOddCases() {
 
     $select->selectOptionWithText('Value 4');
     assertThat($select->getValue(), is('Value 4'));
-}
+});
 
-function buildsButtons() {
+test('Builds buttons', function () {
     $html = '<form action="?cmd=0">
-                   <input type="submit" name="b1" 
-                          value="Button 1" 
+                   <input type="submit" name="b1"
+                          value="Button 1"
                           formaction="?cmd=1" />
-                   <button type="submit" name="b2" 
+                   <button type="submit" name="b2"
                            formaction="?cmd=2">Button 2</button></form>';
 
     $b1 = getFormSet($html)->getButtonByName('b1');
@@ -134,28 +134,28 @@ function buildsButtons() {
     assertThat($b2->getValue(), is(''));
     assertThat($b2->getLabel(), is('Button 2'));
     assertThat($b2->getFormAction(), is('?cmd=2'));
-}
+});
 
-function buildsButtonsWithValue() {
+test('Builds buttons with value', function () {
     $html = '<form>
-             <button type="submit" name="cmd" 
+             <button type="submit" name="cmd"
                      value="c1">Cmd 1</button>
-             <button type="submit" name="cmd" 
+             <button type="submit" name="cmd"
                      value="c2">Cmd 2</button></form>';
 
     $button = getFormSet($html)->getButtonByNameAndValue('cmd', 'c1');
 
     assertThat($button->getName(), is('cmd'));
     assertThat($button->getValue(), is('c1'));
-}
+});
 
-function buildsSubmitButton() {
+test('Builds submit button', function () {
     $html = '<form>
-             <button type="reset" name="cmd" 
+             <button type="reset" name="cmd"
                      value="c1">Cmd 1</button>
-             <button type="submit" name="cmd" 
+             <button type="submit" name="cmd"
                      value="c2">Cmd 2</button>
-             <button name="cmd" 
+             <button name="cmd"
                      value="c3">Cmd 3</button>
              </form>';
 
@@ -168,18 +168,18 @@ function buildsSubmitButton() {
     assertThat($button1, is(null));
     assertThat($button2, isNot(null));
     assertThat($button3, isNot(null));
-}
+});
 
-function buildsTextArea() {
+test('Builds text area', function () {
     $html = '<form><textarea name="a1"> Hello </textarea></form>';
 
     $field = getFormSet($html)->getTextFieldByName('a1');
 
     assertThat($field->getName(), is('a1'));
     assertThat($field->getValue(), is(' Hello '));
-}
+});
 
-function handlesMultipleForms() {
+test('Handles multiple forms', function () {
     $html = '<form>
                  <input name="t1" type="radio">
                  <input name="t1" type="radio">
@@ -193,19 +193,16 @@ function handlesMultipleForms() {
 
     assertThat($field1->getName(), is('t1'));
     assertThat($field2->getName(), is('t2'));
+});
 
-}
-
-function throwsWhenDifferentFormsHaveElementWithSameName() {
+test('Throws when different forms have element with same name', function () {
     $html = '<form><input name="t1"></form>
              <form><input name="t1"></form>';
 
     assertThrows(function () use ($html) {
         getFormSet($html)->getTextFieldByName('t1');
     });
-}
-
-#Helpers
+});
 
 function getFormSet(string $html) : FormSet {
     $parser = new PageParser($html);

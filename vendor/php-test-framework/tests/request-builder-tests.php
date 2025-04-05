@@ -1,6 +1,6 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\page\PageParser;
 use stf\browser\page\PageBuilder;
@@ -9,14 +9,14 @@ use stf\browser\page\NodeTree;
 use stf\browser\RequestBuilder;
 use stf\browser\Url;
 
-function buildsRequestFromForm() {
+test('Builds request from form', function () {
     $html = '<form>
                 <input name="t1" value="t1_v" />
                 <input name="r1" type="radio" value="r1_v" checked />
                 <input name="r2" type="radio" value="r2_v" />
                 <input name="c1" type="checkbox" value="c1_v" checked />
                 <input name="c2" type="checkbox" value="c2_v"  />
-                
+
                 <button name="b1" type="submit">Send</button>
              </form>';
 
@@ -32,10 +32,7 @@ function buildsRequestFromForm() {
 
     assertThat(isset($params['r2']), is(false));
     assertThat(isset($params['c2']), is(false));
-
-}
-
-#Helpers
+});
 
 function getFormSet(string $html) : FormSet {
     $parser = new PageParser($html);

@@ -1,13 +1,12 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\page\RadioGroup;
 use stf\browser\page\Checkbox;
 use stf\browser\page\Select;
 
-function radioGroupTest() {
-
+test('Radio group test', function () {
     $radio = new RadioGroup('r1');
 
     $radio->addOption("v1");
@@ -22,9 +21,9 @@ function radioGroupTest() {
     assertThat($radio->hasOption('v1'), is(true));
     assertThat($radio->hasOption('v2'), is(true));
     assertThat($radio->hasOption('v3'), is(false));
-}
+});
 
-function selectByValue() {
+test('Select by value', function () {
     $select = new Select('s1');
 
     $select->addOption("v1", "Value 1", false);
@@ -36,10 +35,9 @@ function selectByValue() {
     $select->selectOptionWithValue("v2");
 
     assertThat($select->getValue(), is('v2'));
-}
+});
 
-function selectByLabel() {
-
+test('Select by label', function () {
     $select = new Select('s1');
 
     $select->addOption("v1", "Value 1", false);
@@ -54,26 +52,26 @@ function selectByLabel() {
 
     assertThat($select->hasOptionWithLabel("Value 1"), is(true));
     assertThat($select->hasOptionWithLabel("Value 4"), is(false));
-}
+});
 
-function selectLastValueIfMultipleOptionsSelected() {
+test('Select last value if multiple options selected', function () {
     $select = new Select('s1', true);
 
     $select->addOption("v1", "Value 1", true);
     $select->addOption("v2", "Value 2", true);
 
     assertThat($select->getValue(), is('v2'));
-}
+});
 
-function multiselectHasNoDefault() {
+test('Multiselect has no default', function () {
     $select = new Select('s1', true);
 
     $select->addOption("v1", "Value 1", false);
 
     assertThat($select->getValue(), is(''));
-}
+});
 
-function checkboxWithValue() {
+test('Checkbox with value', function () {
     $checkbox = new Checkbox('c1', '1');
 
     assertThat($checkbox->isChecked(), is(false));
@@ -83,12 +81,12 @@ function checkboxWithValue() {
 
     assertThat($checkbox->isChecked(), is(true));
     assertThat($checkbox->getValue(), is('1'));
-}
+});
 
-function checkboxWithDefaultValue() {
+test('Checkbox with default value', function () {
     $checkbox = new Checkbox('c1', null, true);
 
     assertThat($checkbox->getValue(), is('on'));
-}
+});
 
 stf\runTests();

@@ -1,11 +1,10 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\page\PageParser;
 
-function parserErrors() {
-
+test('Parser errors', function () {
     $html = <<<END
             <html>
             <body>
@@ -26,7 +25,6 @@ function parserErrors() {
     assertThat($result->getSource(), containsString('002 <body>'));
     assertThat($result->getSource(), containsString('003 <input value="m=2"' . PHP_EOL));
     assertThat($result->getSource(), containsString('                      ^' . PHP_EOL));
-}
-
+});
 
 stf\runTests();

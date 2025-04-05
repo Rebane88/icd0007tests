@@ -1,8 +1,8 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
-function containsMatcher() {
+test('Contains matcher', function () {
     $text = 'abc 123 dcf';
 
     assertThat($text, containsString('123'));
@@ -10,9 +10,9 @@ function containsMatcher() {
     assertThrows(function () use ($text) {
         assertThat($text, containsString('123a'));
     });
-}
+});
 
-function doesNotContainStringMather() {
+test('Does not contain string matcher', function () {
     $text = 'abc 123 dcf';
 
     assertThat($text, doesNotContainString('123a'));
@@ -20,9 +20,9 @@ function doesNotContainStringMather() {
     assertThrows(function () use ($text) {
         assertThat($text, doesNotContainString('123'));
     });
-}
+});
 
-function isMatcher() {
+test('Is matcher', function () {
     $text = 'abc';
 
     assertThat($text, is('abc'));
@@ -30,9 +30,9 @@ function isMatcher() {
     assertThrows(function () use ($text) {
         assertThat($text, is('ab'));
     });
-}
+});
 
-function containsOnceMatcher() {
+test('Contains once matcher', function () {
     $text = 'abcb';
 
     assertThat($text, containsStringOnce('a'));
@@ -40,9 +40,9 @@ function containsOnceMatcher() {
     assertThrows(function () use ($text) {
         assertThat($text, containsStringOnce('b'));
     });
-}
+});
 
-function containsInAnyOrderMatcher() {
+test('Contains in any order matcher', function () {
     $actual = [1, 2, 3];
 
     assertThat($actual, containsInAnyOrder([1, 2, 3]));
@@ -55,6 +55,6 @@ function containsInAnyOrderMatcher() {
     assertThrows(function () use ($actual) {
         assertThat($actual, containsInAnyOrder([1, 2, 4]));
     });
-}
+});
 
 stf\runTests();

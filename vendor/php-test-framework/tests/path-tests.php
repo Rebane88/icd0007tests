@@ -1,11 +1,10 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 use stf\browser\Path;
 
-function absolute() {
-
+test('Absolute', function () {
     assertThat(path('/')->isAbsolute(), is(true));
 
     assertThat(path('a')->isAbsolute(), is(false));
@@ -13,18 +12,18 @@ function absolute() {
     assertThat(path('/a')->isAbsolute(), is(true));
 
     assertThat(path('a/')->isAbsolute(), is(false));
-}
+});
 
-function asString() {
+test('As string', function () {
     assertThat(path('')->asString(), is(''));
     assertThat(path('a')->asString(), is('a'));
     assertThat(path('/')->asString(), is('/'));
     assertThat(path('/a')->asString(), is('/a'));
     assertThat(path('/a/')->asString(), is('/a/'));
     assertThat(path('a/')->asString(), is('a/'));
-}
+});
 
-function normalize() {
+test('Normalize', function () {
     assertThat(Path::normalize(path(''))->asString(), is(''));
 
     assertThat(Path::normalize(path('.'))->asString(), is(''));
@@ -37,9 +36,9 @@ function normalize() {
     assertThat(Path::normalize(path('../../'))->asString(), is('/'));
 
     assertThat(Path::normalize(path('../'))->isAbsolute(), is(true));
-}
+});
 
-function cd() {
+test('CD', function () {
     assertThat(path('')->cd(path(''))->asString(), is(''));
     assertThat(path('a')->cd(path(''))->asString(), is('a'));
     assertThat(path('/')->cd(path(''))->asString(), is('/'));
@@ -59,10 +58,7 @@ function cd() {
     assertThat(path('a/')->cd(path('./'))->asString(), is('a/'));
     assertThat(path('/a')->cd(path('..'))->asString(), is('/'));
     assertThat(path('/a')->cd(path('../'))->asString(), is('/'));
-}
-
-
-#Helpers
+});
 
 function path(?string $path) : Path {
     return new Path($path);

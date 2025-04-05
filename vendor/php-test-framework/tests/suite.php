@@ -1,5 +1,5 @@
 <?php
 
-require_once '../public-api.php';
+require_once __DIR__ . '/../public-api.php';
 
 stf\runAllTestsInDirectory(__DIR__, __FILE__);

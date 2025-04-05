@@ -52,7 +52,7 @@ class HttpRequest {
         }
 
         foreach ($this->parameters as $key => $value) {
-            $url->addRequestParameter($key, urlencode($value));
+            $url->addRequestParameter($key, $value);
         }
 
         return $url;

@@ -11,7 +11,7 @@ function getProjectDirectory(): string {
 }
 
 function containsHtmlTags($contents): string {
-    return preg_match('/<\w+(>|\s+)/', $contents);
+    return preg_match('/<[a-zA-Z]+(>|\s+)/', $contents);
 }
 
 function containsPhpTags($contents): string {
